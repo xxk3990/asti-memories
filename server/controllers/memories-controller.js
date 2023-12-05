@@ -17,7 +17,8 @@ const createMemory = async (req, res) => {
         uuid: uuidv4(),
         name: req.body.name,
         occasion: req.body.occasion,
-        experience: req.body.experience
+        experience: req.body.experience,
+        num_likes: 0
     }
 
     await models.Memory.create(newMemory)

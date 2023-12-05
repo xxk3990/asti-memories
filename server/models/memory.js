@@ -11,6 +11,7 @@ const memoryModel = (sequelize, DataTypes) => {
         name: DataTypes.STRING,
         occasion: DataTypes.STRING,
         experience: DataTypes.STRING,
+        num_likes: DataTypes.INTEGER,
         },
         {
             sequelize,

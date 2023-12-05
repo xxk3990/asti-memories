@@ -73,7 +73,7 @@ function App() {
           <span className='memory-form-question' id="responder-name">Your name (First name and last initial only): 
             <input type="text" name="name" className='user-input' value={newMemory.name} onChange={e => handleChange(e.target.name, e.target.value)} />
           </span>
-          <span className='memory-form-question' id="responder-occasion">Was your visit to the Asti a special occasion? If yes, feel free to describe it. If no, put "no" in the response field. 
+          <span className='memory-form-question' id="responder-occasion">Was your visit to the Asti a special occasion (birthday, date, anniversary, rehearsal dinner, etc.)? If no, put "no" in the response field. 
             <input type="text" name="occasion" className='user-input' value={newMemory.occasion} onChange={e => handleChange(e.target.name, e.target.value)} />
           </span>
           <span className='memory-form-question' id="responder-experience">Describe your experience! 
@@ -100,7 +100,7 @@ function App() {
           <span className='memory-form-question' id="responder-name">Your name (First name and last initial only): 
             <input type="text" name="name" className='user-input' value={newMemory.name} onChange={e => handleChange(e.target.name, e.target.value)} />
           </span>
-          <span className='memory-form-question' id="responder-occasion">Was your visit to the Asti a special occasion? If yes, feel free to describe it. If no, put "no" in the response field. 
+          <span className='memory-form-question' id="responder-occasion">Was your visit to the Asti a special occasion (birthday, date, anniversary, rehearsal dinner, etc.)? If no, put "no" in the response field. 
             <input type="text" name="occasion" className='user-input' value={newMemory.occasion} onChange={e => handleChange(e.target.name, e.target.value)} />
           </span>
           <span className='memory-form-question' id="responder-experience">Describe your experience! 

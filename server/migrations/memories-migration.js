@@ -12,6 +12,7 @@ module.exports = {
       name: Sequelize.STRING,
       occasion: Sequelize.STRING,
       experience: Sequelize.STRING,
+      num_likes: Sequelize.INTEGER,
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
