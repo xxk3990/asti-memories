@@ -1,0 +1,20 @@
+.Memories {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.memories-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.memory-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.memory {
+    border: 1px solid black;
+}
