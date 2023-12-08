@@ -21,3 +21,17 @@ export const handlePost = (endpoint, body) => {
     }
     return fetch(url, requestParams)
 }
+
+export const handlePut = async (endpoint, body) => {
+    const url = `http://localhost:3000/${endpoint}`;
+    const requestParams = {
+        method: "PUT",
+        headers: {
+            "Content-Type": 'application/json',
+            //"Authorization": `Bearer ${token}` 
+        },
+        // credentials: 'include',
+        body: JSON.stringify(body)
+    }
+    return fetch(url, requestParams)
+}

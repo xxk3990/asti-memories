@@ -8,7 +8,7 @@ const memoryModel = (sequelize, DataTypes) => {
             allowNull: false,
             autoIncrementIdentity: true
         },
-        name: DataTypes.STRING,
+        user_uuid: DataTypes.UUID,
         occasion: DataTypes.STRING,
         experience: DataTypes.STRING,
         num_likes: DataTypes.INTEGER,
