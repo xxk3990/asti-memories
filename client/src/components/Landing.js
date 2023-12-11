@@ -56,7 +56,7 @@ export default function Landing() {
         <div className='Landing'>
             <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
             <section className='memory-form'>
-                <h4>Have a memory of the Asti Restaurant you'd like to share? </h4>
+                <h4>Have a memory of the Asti Restaurant you'd like to share? Posts that are unrelated to the <em>Asti</em>Restaurant may be deleted. </h4>
                 <span className='memory-form-question' id="responder-name">Your name (First name and last initial only): 
                     <input type="text" name="name" className='user-input' value={newMemory.name} onChange={e => handleChange(e.target.name, e.target.value)} />
                 </span>
