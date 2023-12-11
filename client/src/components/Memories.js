@@ -1,15 +1,12 @@
 import '../styles/memories.css'
-import { React, useState, useEffect} from 'react'
+import { React, useState, useEffect, memo} from 'react'
 import { handleGet, handlePost, handlePut } from '../services/requests-service'
 import {Snackbar} from '@mui/material'
+import {v4 as uuidv4} from 'uuid'
 
 export default function Memories() {
   const [memories, setMemories] = useState([]);
-  const [newMemory, setNewMemory] = useState({
-    name: '',
-    occasion: '',
-    experience: '',
-  })
+  
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("")
 
@@ -21,47 +18,7 @@ export default function Memories() {
     document.title = "Asti Memories"
     getMemories();
   }, [])
-  const handleChange = (name, value) => {
-    setNewMemory({...newMemory, [name]:value})
-  }
-  const submitMemory = async() => {
-    const endpont = `memories`;
-    const userID = sessionStorage.getItem("user_uuid")
-    const requestBody = {
-      user_uuid: userID,
-      name: newMemory.name,
-      occasion: newMemory.occasion,
-      experience: newMemory.experience
-    }
-    try {
-      const response = await handlePost(endpont, requestBody);
-      console.log("POST response:", response)
-      const data = await response.json();
-      if(response.status === 200 || response.status === 201) {
-        setMemories([...memories, data.newMemory]);
-        if(userID === null) {
-            sessionStorage.setItem("user_uuid", data.user_uuid)
-        }
-        setOpenSnackbar(true);
-        setSnackbarMessage("Memory added successfully!")
-        setTimeout(() => {
-            setOpenSnackbar(false);
-            setSnackbarMessage("")
-            setNewMemory({
-              name: '',
-              occasion: '',
-              experience: ''
-            })
-        }, 1500)
-        getMemories();
-      } else {
-        alert("Memory could not be saved, try again.")
-      }
-    } catch {
-      alert("Memory could not be saved, try again.")
-    }
-    
-  }
+  
   const likePost = async(memory) => {
     const endpoint = `memories`;
     const requestBody = {
@@ -75,25 +32,41 @@ export default function Memories() {
       alert("post like failed.")
     }
   }
+  const submitComment = async (comment, setNewComment) => {
+    const endpoint = `comments`
+    const requestBody = {
+      comment: comment
+    }
+    try {
+      const response = await handlePost(endpoint, requestBody)
+      if(response.status === 200) {
+        setOpenSnackbar(true);
+        setSnackbarMessage("Comment added successfully!")
+        setTimeout(() => {
+          setOpenSnackbar(false);
+          setSnackbarMessage("")
+          //clear comment form on comment submit success
+          setNewComment({
+            memory_uuid: "",
+            user_uuid: "",
+            comment_text: "",
+          });
+          getMemories()
+        }, 1500)
+                
+      } else {
+        alert("Comment could not be saved, try again.")
+      }
+    } catch {
+      alert("comment could not be added.")
+    }
+  } 
   if(memories.length === 0) {
     return (
       <div className="Memories">
         <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
         <section className='memories-grid'>
           <h4>No memories yet.</h4>
-        </section>
-        <section className='memory-form'>
-          <h4>Have a memory of the Asti Restaurant you'd like to share? </h4>
-          <span className='memory-form-question' id="responder-name">Your name (First name and last initial only): 
-            <input type="text" name="name" className='user-input' value={newMemory.name} onChange={e => handleChange(e.target.name, e.target.value)} />
-          </span>
-          <span className='memory-form-question' id="responder-occasion">Was your visit to the Asti a special occasion (birthday, date, anniversary, rehearsal dinner, etc.)? If no, put "no" in the response field. 
-            <input type="text" name="occasion" className='user-input' value={newMemory.occasion} onChange={e => handleChange(e.target.name, e.target.value)} />
-          </span>
-          <span className='memory-form-question' id="responder-experience">Describe your experience! 
-            <textarea name="experience" className='user-input' value={newMemory.experience} onChange={e => handleChange(e.target.name, e.target.value)}></textarea>
-          </span>
-          <button type="button" onClick={submitMemory}>Submit</button>
         </section>
       </div>
     );
@@ -104,21 +77,8 @@ export default function Memories() {
         <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
         <section className='memories-grid'>
           {memories.map(m => {
-            return <MemoryTile m={m} likePost={likePost}/>
+            return <MemoryTile m={m} likePost={likePost} submitComment={submitComment}/>
           })}
-        </section>
-        <section className='memory-form'>
-          <h4>Have a memory of the Asti Restaurant you'd like to share? </h4>
-          <span className='memory-form-question' id="responder-name">Your name (First name and last initial only): 
-            <input type="text" name="name" className='user-input' value={newMemory.name} onChange={e => handleChange(e.target.name, e.target.value)} />
-          </span>
-          <span className='memory-form-question' id="responder-occasion">Was your visit to the Asti a special occasion (birthday, date, anniversary, rehearsal dinner, etc.)? If no, put "no" in the response field. 
-            <input type="text" name="occasion" className='user-input' value={newMemory.occasion} onChange={e => handleChange(e.target.name, e.target.value)} />
-          </span>
-          <span className='memory-form-question' id="responder-experience">Describe your experience! 
-            <textarea name="experience" className='user-input' value={newMemory.experience} onChange={e => handleChange(e.target.name, e.target.value)}></textarea>
-          </span>
-          <button type="button" onClick={submitMemory}>Submit</button>
         </section>
       </div>
     );
@@ -130,8 +90,12 @@ export default function Memories() {
 const MemoryTile = (props) => {
   const m = props.m;
   const likePost = props.likePost;
+  const [likeDisabled, setLikeDisabled] = useState(false)
+  const [showComments, setShowComments] = useState(false); //show and hide comment view
+  const submitComment = props.submitComment;
   const handleClick = () => {
     likePost(m);
+    setLikeDisabled(!likeDisabled)
   }
   if(m.num_likes === 0) {
     return (
@@ -144,30 +108,79 @@ const MemoryTile = (props) => {
       </section>
     )
   } else {
-    for(const user of m.liked_by) {
-      console.log("like:",user)
-      const sessionUser = sessionStorage.getItem("user_uuid")
-      if(user === sessionUser) {
-        return (
-          <section className='memory'>
-            <h4>Name: {m.name}</h4>
-            <h4>Special Occasion: {m.occasion}</h4>
-            <h4>Experience: {m.experience}</h4>
-            <h4>Likes: {m.num_likes}</h4>
-            <button onClick = {handleClick} disabled>+</button>
-          </section>
-        )
-      } else {
-        return (
-          <section className='memory'>
-            <h4>Name: {m.name}</h4>
-            <h4>Special Occasion: {m.occasion}</h4>
-            <h4>Experience: {m.experience}</h4>
-            <h4>Likes: {m.num_likes}</h4>
-            <button onClick = {handleClick}>+</button>
-          </section>
-        )
-      }
-    }
+    return (
+      <section className='memory'>
+        <h4>Name: {m.name}</h4>
+        <h4>Special Occasion: {m.occasion}</h4>
+        <h4>Experience: {m.experience}</h4>
+        <h4>Likes: {m.num_likes}</h4>
+        <button onClick = {handleClick} disabled={likeDisabled}>+</button>
+        <button onClick ={() => setShowComments(!showComments)}>{showComments ? `Hide ${String.fromCharCode(8593)}` : `View Comments (${m.comments.length}) ${String.fromCharCode(8595)}`}</button>
+        {showComments ? 
+        <ViewComments
+          m = {m}
+          submitComment={submitComment} 
+        /> 
+        : null}
+      </section>
+    )
   }
 }
+
+
+
+const ViewComments = (props) => {
+  const m = props.m;
+  const submitComment = props.submitComment;
+  const [newComment, setNewComment] = useState({
+    memory_uuid: m.uuid,
+    user_uuid: sessionStorage.getItem("user_uuid"),
+    comment_text: ""
+  })
+  const handleSubmit = () => {
+    //if they hit submit but haven't entered a comment, don't do anything
+    if(newComment.comment_text === "") { 
+      return;
+    } else {
+      submitComment(newComment, setNewComment)
+    }
+  }
+  const handleChange = (name, value) => {
+    setNewComment({...newComment, [name]:value})
+  }
+  if(m.comments.length === 0) {
+    return (
+      <section className='comments-container'>
+        <h4>No comments yet, be the first to comment!</h4>
+        <span className='new-comment'>
+          <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value)}/>
+          <button onClick = {handleSubmit}>Post comment</button>
+        </span>
+      </section>
+    )
+  } else {
+    return (
+      <section className='comments-container'>
+        <h4>Comments</h4>
+        <ul className='comments-list'>
+          {
+            m.comments.map(com => {
+              return (
+                <li key={uuidv4()}>{com.commenter_name}: {com.comment_text}</li>
+              )
+            })
+          }
+        </ul>
+        <span className='new-comment'>
+          <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/>
+          <button onClick = {handleSubmit}>Post comment</button>
+        </span>
+      </section>
+    )
+  
+  }
+  
+  
+}
+
+

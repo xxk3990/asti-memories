@@ -1,7 +1,7 @@
 'use strict';
 
-const likeModel = (sequelize, DataTypes) => {
-    const Like = sequelize.define('Like', {
+const commentModel = (sequelize, DataTypes) => {
+    const Comment = sequelize.define('Comment', {
         uuid: {
             type: DataTypes.UUID,
             primaryKey: true,
@@ -10,15 +10,16 @@ const likeModel = (sequelize, DataTypes) => {
         },
         memory_uuid: DataTypes.UUID,
         user_uuid: DataTypes.UUID,
+        comment_text: DataTypes.STRING,
         },
         {
             sequelize,
-            modelName: "Like",
-            tableName: "likes",
+            modelName: "Comment",
+            tableName: "comments",
             underscored: true
         }
     )
-    return Like;
+    return Comment;
 }
 
-module.exports = {likeModel}
+module.exports = {commentModel}
