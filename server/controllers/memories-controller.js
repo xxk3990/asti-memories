@@ -35,7 +35,7 @@ const getMemories = async (req, res) => {
                         comment_text: com.comment_text
                     }
                     frontEndComments.push({...postComment})
-                    //add list of people who liked a post to the FE object
+                    //add list of people who commented on a post to the FE object
                     posts[i].comments = frontEndComments;
                     console.log(posts)
                 }
