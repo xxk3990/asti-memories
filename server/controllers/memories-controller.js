@@ -90,7 +90,7 @@ const createMemory = async (req, res) => {
 
         })
     } catch {
-
+        return res.status(400).send();
     }
 }
 
