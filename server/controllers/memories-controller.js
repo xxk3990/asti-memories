@@ -10,22 +10,37 @@ const getMemories = async (req, res) => {
     if (memories.length !== 0) {
         const posts = [...memories]
         for (let i = 0; i < posts.length; i++) {
-            const likes = await models.Like.findAll({
+            const comments = await models.Comment.findAll({
                 where: {
                     'memory_uuid': posts[i].uuid
                 },
                 raw: true
             })
-            const op = await models.User.findOne({ where: {'uuid': posts[i].user_uuid}})
+            const op = await models.User.findOne({
+                where: {
+                    'uuid': posts[i].user_uuid
+                }
+            })
+            const frontEndComments = []
             posts[i].name = op.display_name; //add OP's display name to post info
-            if (likes.length !== 0) {
-                likes.map(like => {
+            if (comments.length !== 0) {
+                for(const com of comments) {
+                    const commentUser = await models.User.findOne({
+                        where: {
+                            'uuid': com.user_uuid
+                        }
+                    })
+                    const postComment = {
+                        commenter_name: commentUser.display_name,
+                        comment_text: com.comment_text
+                    }
+                    frontEndComments.push({...postComment})
                     //add list of people who liked a post to the FE object
-                    posts[i].liked_by = [like.user_uuid]
+                    posts[i].comments = frontEndComments;
                     console.log(posts)
-                })
+                }
             } else {
-                posts[i].liked_by = []
+                posts[i].comments = []
             }
         }
         return res.status(200).json(posts);
@@ -71,7 +86,7 @@ const createMemory = async (req, res) => {
                     user_uuid: user,
                 });
             }
-            
+
 
         })
     } catch {
@@ -83,24 +98,36 @@ const likeMemory = async (req, res) => {
     const memoryToLike = await models.Memory.findOne({
         where: {
             'uuid': req.body.memory_uuid
-        }
+        },
     })
-    const matchingUser = await models.User.findOne({ where: {'uuid': memoryToLike.user_uuid}})
-    models.sequelize.transaction(async () => {
+    if (memoryToLike !== null) {
         memoryToLike.num_likes = req.body.num_likes;
         await memoryToLike.save();
-        const newLike = {
-            uuid: uuidv4(),
-            memory_uuid: req.body.memory_uuid,
-            user_uuid: matchingUser.uuid
-        }
-        models.Like.create(newLike)
         return res.status(200).send()
-    })
+    } else {
+        return res.status(400).send()
+    }
+}
+
+const addComment = async (req, res) => {
+    const comment = req.body.comment;
+    try {
+        const newComment = {
+            uuid: uuidv4(),
+            memory_uuid: comment.memory_uuid,
+            user_uuid: comment.user_uuid,
+            comment_text: comment.comment_text
+        }
+        await models.Comment.create(newComment);
+        return res.status(200).send();
+    } catch {
+        return res.status(400).send();
+    }
 }
 
 module.exports = {
     getMemories,
     createMemory,
-    likeMemory
+    likeMemory,
+    addComment
 }

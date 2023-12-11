@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('likes', {
+    await queryInterface.createTable('comments', {
       uuid: {
         type: Sequelize.UUID,
         primaryKey: true,
@@ -11,6 +11,7 @@ module.exports = {
       },
       memory_uuid: Sequelize.UUID,
       user_uuid: Sequelize.UUID,
+      comment_text: Sequelize.STRING,
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
@@ -22,6 +23,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('likes');
+    await queryInterface.dropTable('comments');
   }
 };
