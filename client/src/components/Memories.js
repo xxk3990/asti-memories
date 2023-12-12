@@ -19,7 +19,11 @@ export default function Memories() {
     document.title = "Asti Memories"
     getMemories();
   }, [])
-  
+  /* 
+    This method – and the submitComment fn below it – is called from the ViewComments child-component 
+    in MemoryTile.js. The parameters come from there. 
+    Had to call them here (rather than inside that file) because on success both call getMemories().
+  */
   const likePost = async(memory) => {
     const endpoint = `memories`;
     const requestBody = {
@@ -35,12 +39,7 @@ export default function Memories() {
   }
 
 
-  const submitComment = async (comment, setNewComment) => {
-  /* 
-    This method is called from the ViewComments child-component in MemoryTile.js. 
-    The parameters come from there. Had to call it here (rather than inside that file) because 
-    on success it has to call getMemories().
-  */
+  const submitComment = async (comment, setNewComment, getComments) => {
     const endpoint = `comments`
     const requestBody = {
       comment: comment
@@ -59,7 +58,7 @@ export default function Memories() {
             user_uuid: "",
             comment_text: "",
           });
-          getMemories()
+          getComments(); //call get comments GET request method declared in memoryTile.js and passed in here
         }, 1500)
                 
       } else {

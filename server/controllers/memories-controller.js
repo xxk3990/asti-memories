@@ -10,38 +10,12 @@ const getMemories = async (req, res) => {
     if (memories.length !== 0) {
         const posts = [...memories]
         for (let i = 0; i < posts.length; i++) {
-            const comments = await models.Comment.findAll({
-                where: {
-                    'memory_uuid': posts[i].uuid
-                },
-                raw: true
-            })
             const op = await models.User.findOne({
                 where: {
                     'uuid': posts[i].user_uuid
                 }
             })
-            const frontEndComments = []
             posts[i].name = op.display_name; //add OP's display name to post info
-            if (comments.length !== 0) {
-                for(const com of comments) {
-                    const commentUser = await models.User.findOne({
-                        where: {
-                            'uuid': com.user_uuid
-                        }
-                    })
-                    const postComment = {
-                        commenter_name: commentUser.display_name,
-                        comment_text: com.comment_text
-                    }
-                    frontEndComments.push({...postComment})
-                    //add list of people who commented on a post to the FE object
-                    posts[i].comments = frontEndComments;
-                    console.log(posts)
-                }
-            } else {
-                posts[i].comments = []
-            }
         }
         return res.status(200).json(posts);
     } else {
@@ -109,25 +83,10 @@ const likeMemory = async (req, res) => {
     }
 }
 
-const addComment = async (req, res) => {
-    const comment = req.body.comment;
-    try {
-        const newComment = {
-            uuid: uuidv4(),
-            memory_uuid: comment.memory_uuid,
-            user_uuid: comment.user_uuid,
-            comment_text: comment.comment_text
-        }
-        await models.Comment.create(newComment);
-        return res.status(200).send();
-    } catch {
-        return res.status(400).send();
-    }
-}
+
 
 module.exports = {
     getMemories,
     createMemory,
     likeMemory,
-    addComment
 }

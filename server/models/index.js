@@ -44,18 +44,19 @@ fs
     
   });
 
-models.User.hasMany(models.Memory, {
-  as: "shared_memories",
+
+models.Memory.belongsTo(models.User, {
+  as: "posted_by",
   foreignKey: "user_uuid"
 })
 
 models.Memory.hasMany(models.Comment, {
-  as: "memory_comments",
+  as: "comments",
   foreignKey: "memory_uuid"
 })
 
 models.Comment.belongsTo(models.User, {
-  as: "commenter",
+  as: "commenter_name",
   foreignKey: "user_uuid"
 })
 

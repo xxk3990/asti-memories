@@ -5,7 +5,7 @@ export const handleGet = async (endpoint, setDataInComponent) => {
     await axios.get(url, {
         method: 'GET',
     }).then(response => {
-        //The data for the component is the main setXXX variable (examples: setWorlds, setLocations)
+        //The data for the component is the main setXXX variable (example: setMemories)
         return setDataInComponent(response.data); //set it equal to data from API
     })
 }
