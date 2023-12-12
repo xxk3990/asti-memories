@@ -32,6 +32,8 @@ export default function Memories() {
       alert("post like failed.")
     }
   }
+
+  //this method is called from the ViewComments child-component below. The parameters come from there.
   const submitComment = async (comment, setNewComment) => {
     const endpoint = `comments`
     const requestBody = {
@@ -86,7 +88,7 @@ export default function Memories() {
  
 }
 
-
+//child component for each memory
 const MemoryTile = (props) => {
   const m = props.m;
   const likePost = props.likePost;
@@ -128,7 +130,7 @@ const MemoryTile = (props) => {
 }
 
 
-
+//child component for each memory's comments
 const ViewComments = (props) => {
   const m = props.m;
   const submitComment = props.submitComment;

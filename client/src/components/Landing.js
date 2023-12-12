@@ -27,7 +27,8 @@ export default function Landing() {
         try {
             const response = await handlePost(endpont, requestBody);
             console.log("POST response:", response)
-            const data = await response.json();
+            const data = await response.data;
+            console.log("response data:", data)
             if(response.status === 200 || response.status === 201) {
                 if(userID === null) {
                     sessionStorage.setItem("user_uuid", data.user_uuid)
