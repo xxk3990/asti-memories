@@ -13,15 +13,15 @@ export const MemoryTile = (props) => {
         setLikeDisabled(!likeDisabled)
     }
     return (
-        <section className='memory'>
-            <h4>Name: {m.name}</h4>
-            <h4>Special Occasion: {m.occasion}</h4>
-            <h4>Experience: {m.experience}</h4>
-            <h4>Likes: {m.num_likes}</h4>
-            <button onClick = {handleClick} disabled={likeDisabled}>Like</button>
-            <button onClick ={() => setShowComments(!showComments)}>{showComments ? `Hide ${String.fromCharCode(8593)}` : `View Comments (${m.comments.length}) ${String.fromCharCode(8595)}`}</button>
-            {showComments ? <ViewComments m = {m} submitComment={submitComment} /> : null}
-        </section>
+      <section className='memory'>
+          <h4>Name: {m.name}</h4>
+          <h4>Special Occasion: {m.occasion}</h4>
+          <h4>Experience: {m.experience}</h4>
+          <h4>Likes: {m.num_likes}</h4>
+          <button onClick = {handleClick} disabled={likeDisabled}>Like</button>
+          <button onClick ={() => setShowComments(!showComments)}>{showComments ? `Hide ${String.fromCharCode(8593)}` : `View Comments (${m.comments.length}) ${String.fromCharCode(8595)}`}</button>
+          {showComments ? <ViewComments m = {m} submitComment={submitComment} /> : null}
+      </section>
     )
 }
 
