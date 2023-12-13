@@ -10,6 +10,8 @@ const config = require(`${__dirname}/../config/config.js`)[environment];
 const db = {};
 const bcrypt = require("bcrypt");
 const {memoryModel} = require("./memory")
+const {userModel} = require("./user")
+const {commentModel} = require("./comment")
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {
   dialect: 'postgres',
@@ -17,7 +19,9 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 })
 
 const models = {
-  Memory: memoryModel(sequelize, Sequelize.DataTypes)
+  Memory: memoryModel(sequelize, Sequelize.DataTypes),
+  User: userModel(sequelize, Sequelize.DataTypes),
+  Comment: commentModel(sequelize, Sequelize.DataTypes)
 }
 
 fs
@@ -39,6 +43,22 @@ fs
     // })
     
   });
+
+
+models.Memory.belongsTo(models.User, {
+  as: "posted_by",
+  foreignKey: "user_uuid"
+})
+
+models.Memory.hasMany(models.Comment, {
+  as: "comments",
+  foreignKey: "memory_uuid"
+})
+
+models.Comment.belongsTo(models.User, {
+  as: "commenter_name",
+  foreignKey: "user_uuid"
+})
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
