@@ -9,3 +9,18 @@
     flex-direction: column;
     align-items: center;
 }
+
+.memory-form-question {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.memory-form-question input,
+.memory-form-question textarea {
+    margin-left: 15px;
+}
+
+.required-note {
+    color: red;
+    margin-left: 15px;
+}
