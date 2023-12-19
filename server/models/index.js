@@ -12,6 +12,7 @@ const bcrypt = require("bcrypt");
 const {memoryModel} = require("./memory")
 const {userModel} = require("./user")
 const {commentModel} = require("./comment")
+const {imageModel} = require("./image")
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {
   dialect: 'postgres',
@@ -21,7 +22,8 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 const models = {
   Memory: memoryModel(sequelize, Sequelize.DataTypes),
   User: userModel(sequelize, Sequelize.DataTypes),
-  Comment: commentModel(sequelize, Sequelize.DataTypes)
+  Comment: commentModel(sequelize, Sequelize.DataTypes),
+  Image: imageModel(sequelize, Sequelize.DataTypes)
 }
 
 fs
@@ -58,6 +60,11 @@ models.Memory.hasMany(models.Comment, {
 models.Comment.belongsTo(models.User, {
   as: "commenter_name",
   foreignKey: "user_uuid"
+})
+
+models.Image.belongsTo(models.User, {
+  as: "uploader_name",
+  foreignKey: 'user_uuid'
 })
 
 db.sequelize = sequelize;

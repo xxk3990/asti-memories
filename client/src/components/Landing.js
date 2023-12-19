@@ -4,6 +4,7 @@ import {handlePost} from '../services/requests-service'
 import { useNavigate } from 'react-router-dom'
 import {Snackbar} from '@mui/material'
 import {useForm} from "react-hook-form"
+import astiFront from "../images-static/asti-front.jpeg"
 export default function Landing() {
     const {
         register,
@@ -17,6 +18,7 @@ export default function Landing() {
     const navigate = useNavigate();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("")
+    console.log(astiFront)
     const submitMemory = async(data) => {
         const endpont = `memories`;
         const userID = sessionStorage.getItem("user_uuid")
@@ -52,10 +54,12 @@ export default function Landing() {
     }
     return (
         <div className='Landing'>
+           
             <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
             <section className = "restaurant-info">
                 <h4>The <em>Asti</em> was an Italian Restaurant in New York City famous for the opera tunes sung in the restaurant. It was located in Downtown Manhattan, New York City, and was open from 1924-2000.</h4>
             </section>
+            <img className='asti-front-img' src={astiFront} alt="asti-front"/>
             <section>
                 <h4>Have a memory of the <em>Asti</em> Restaurant you'd like to share? Posts that are unrelated to the <em>Asti</em> Restaurant will be deleted by an admin. </h4>
                 <form className='memory-form' onSubmit={handleSubmit(submitMemory)}>

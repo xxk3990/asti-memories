@@ -24,3 +24,7 @@
     color: red;
     margin-left: 15px;
 }
+
+.asti-front-img {
+    max-width: 600px;
+}
