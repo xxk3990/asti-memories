@@ -43,7 +43,7 @@ const adminLogin = async (req, res, next) => {
                 expiresIn: "30 minutes",
             }) //set session up
             const newUser = {
-                uuid: uuidv4(),
+                uuid: matchingAdmin.uuid,
                 display_name: matchingAdmin.display_name,
             }
             const dataForFE = {
