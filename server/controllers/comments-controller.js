@@ -19,18 +19,23 @@ const getComments = async (req, res) => {
 
 const addComment = async (req, res) => {
     const comment = req.body.comment;
-    try {
-        const newComment = {
-            uuid: uuidv4(),
-            memory_uuid: comment.memory_uuid,
-            user_uuid: comment.user_uuid,
-            comment_text: comment.comment_text
+    if(!comment) {
+        return res.status(400).json("Unable to post comment.");
+    } else {
+        try {
+            const newComment = {
+                uuid: uuidv4(),
+                memory_uuid: comment.memory_uuid,
+                user_uuid: comment.user_uuid,
+                comment_text: comment.comment_text
+            }
+            await models.Comment.create(newComment);
+            return res.status(200).send();
+        } catch {
+            return res.status(400).send();
         }
-        await models.Comment.create(newComment);
-        return res.status(200).send();
-    } catch {
-        return res.status(400).send();
     }
+    
 }
 
 module.exports = {

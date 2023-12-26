@@ -18,15 +18,15 @@ export default function AdminCreateAccount() {
     const postAdmin = async (data) => {
         const postURL = `http://localhost:3000/admin`
         const requestBody = {
-        display_name: data.display_name,
-        email: data.email,
-        password: data.password,
+            display_name: data.display_name,
+            email: data.email,
+            password: data.password,
         }
         console.log('Params:', requestBody)
         const requestParams = {
-        method: 'POST',
-        headers: {"Content-Type": 'application/json'},
-        body: JSON.stringify(requestBody)
+            method: 'POST',
+            headers: {"Content-Type": 'application/json'},
+            body: JSON.stringify(requestBody)
         }
         try {
             const response = await fetch(postURL, requestParams)

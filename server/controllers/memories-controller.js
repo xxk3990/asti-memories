@@ -24,48 +24,51 @@ const getMemories = async (req, res) => {
 }
 
 const createMemory = async (req, res) => {
-    try {
-        models.sequelize.transaction(async () => {
-            const user = req.body.user_uuid;
-            if (user === null) {
-                //create new user if no user_uuid was provided
-                const newUser = {
-                    uuid: uuidv4(),
-                    display_name: req.body.name,
+    const user = req.body.user_uuid;
+    if(user === undefined) {
+        return res.status(400).json("Memory creation failed.");
+    } else {
+        try {
+            models.sequelize.transaction(async () => {
+                if (user === null) {
+                    //create new user if no user_uuid was provided
+                    const newUser = {
+                        uuid: uuidv4(),
+                        display_name: req.body.name,
+                    }
+                    await models.User.create(newUser);
+                    const newMemory = {
+                        uuid: uuidv4(),
+                        user_uuid: newUser.uuid,
+                        occasion: req.body.occasion,
+                        experience: req.body.experience,
+                        num_likes: 0
+                    }
+                    await models.Memory.create(newMemory)
+                    return res.status(200).json({
+                        newMemory: newMemory,
+                        user_uuid: newUser.uuid,
+                    });
+                } else {
+                    const newMemory = {
+                        uuid: uuidv4(),
+                        user_uuid: user,
+                        occasion: req.body.occasion,
+                        experience: req.body.experience,
+                        num_likes: 0
+                    }
+                    await models.Memory.create(newMemory)
+                    return res.status(200).json({
+                        newMemory: newMemory,
+                        user_uuid: user,
+                    });
                 }
-                await models.User.create(newUser);
-                const newMemory = {
-                    uuid: uuidv4(),
-                    user_uuid: newUser.uuid,
-                    occasion: req.body.occasion,
-                    experience: req.body.experience,
-                    num_likes: 0
-                }
-                await models.Memory.create(newMemory)
-                return res.status(200).json({
-                    newMemory: newMemory,
-                    user_uuid: newUser.uuid,
-                });
-            } else {
-                const newMemory = {
-                    uuid: uuidv4(),
-                    user_uuid: user,
-                    occasion: req.body.occasion,
-                    experience: req.body.experience,
-                    num_likes: 0
-                }
-                await models.Memory.create(newMemory)
-                return res.status(200).json({
-                    newMemory: newMemory,
-                    user_uuid: user,
-                });
-            }
-
-
-        })
-    } catch {
-        return res.status(400).send();
+            })
+        } catch {
+            return res.status(400).json("Memory creation failed.");
+        }
     }
+  
 }
 
 const likeMemory = async (req, res) => {
