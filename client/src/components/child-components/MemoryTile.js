@@ -43,10 +43,11 @@ const ViewComments = (props) => {
     const m = props.m;
     const submitComment = props.submitComment;
     const comments = props.comments;
-    const getComments = props.getComments;
+    const getComments = props.getComments
+    const user = sessionStorage.getItem("user_uuid")
     const [newComment, setNewComment] = useState({
       memory_uuid: m.uuid,
-      user_uuid: sessionStorage.getItem("user_uuid"),
+      user_uuid: user,
       comment_text: ""
     })
     const handleSubmit = () => {
