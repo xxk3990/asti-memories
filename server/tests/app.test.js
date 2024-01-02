@@ -2,9 +2,11 @@ const request = require('supertest')
 const app = require("../app")
 const fixtures = require("./testFixtures")
 const {sequelize} = require("../models")
+const pre = require("./preload")
 
 beforeAll(async () => {
     await sequelize.sync({force: true})
+    pre.preload(); //preload user and memory into DB so memory and comment tests can run
 })
 
 describe("POST /memories", () => {
