@@ -46,7 +46,7 @@ export default function Memories() {
     }
     try {
       const response = await handlePost(endpoint, requestBody)
-      if(response.status === 200) {
+      if(response.status === 200 || response.status === 201) {
         setOpenSnackbar(true);
         setSnackbarMessage("Comment added successfully!")
         setTimeout(() => {

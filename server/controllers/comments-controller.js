@@ -30,7 +30,7 @@ const addComment = async (req, res) => {
                 comment_text: comment.comment_text
             }
             await models.Comment.create(newComment);
-            return res.status(200).send();
+            return res.status(201).send();
         } catch {
             return res.status(400).send();
         }

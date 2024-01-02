@@ -45,7 +45,7 @@ const createMemory = async (req, res) => {
                         num_likes: 0
                     }
                     await models.Memory.create(newMemory)
-                    return res.status(200).json({
+                    return res.status(201).json({
                         newMemory: newMemory,
                         user_uuid: newUser.uuid,
                     });
@@ -58,7 +58,7 @@ const createMemory = async (req, res) => {
                         num_likes: 0
                     }
                     await models.Memory.create(newMemory)
-                    return res.status(200).json({
+                    return res.status(201).json({
                         newMemory: newMemory,
                         user_uuid: user,
                     });

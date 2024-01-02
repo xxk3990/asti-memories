@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "nodemon": "nodemon --watch app.js",
-    "test": "jest",
+    "test": "NODE_ENV=test jest --detectOpenHandles",
     "start": "node app.js"
   },
   "repository": {
