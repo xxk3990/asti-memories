@@ -29,7 +29,7 @@ describe("GET /memories", () => {
 
 describe("POST /memories", () => {
     //happy path
-    it("should create user if user_uuid provided", async () => {
+    it("should create memory if user_uuid provided", async () => {
         const response = await request(app).post("/memories").send(fixtures.test_memory)
         expect(response.statusCode).toBe(201)
     })
@@ -99,7 +99,7 @@ describe("POST /adminCreateAccount", () => {
     //happy path
     it("should create an Admin if all data is provided", async () => {
         const response = await request(app).post("/admin").send(fixtures.admin_good)
-        expect(response.statusCode).toBe(200)
+        expect(response.statusCode).toBe(201)
     })
 
     //bad paths
@@ -139,12 +139,12 @@ describe("POST /adminLogin", () => {
         expect(response.body).toBe("Missing required info.")
     })
 
-    //bad paths – unauthorized
-    it("should return unauthorized if email does not match existing admin", async () => {
+    //bad paths – 401
+    it("should return 401 if email does not match existing admin", async () => {
         const response = await request(app).post("/adminLogin").send(fixtures.admin_login_unauthorized_email)
         expect(response.statusCode).toBe(401)
     })
-    it("should return unauthorized if password does not match existing admin", async () => {
+    it("should return 401 if password does not match existing admin", async () => {
         const response = await request(app).post("/adminLogin").send(fixtures.admin_login_unauthorized_password)
         expect(response.statusCode).toBe(401)
     })

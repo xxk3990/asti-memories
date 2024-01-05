@@ -24,7 +24,7 @@ const createAdminAccount = async (req, res) => {
             password: hash,
         }
         models.Admin.create(newAdmin);
-        return res.status(200).send()
+        return res.status(201).send()
     }
 
 }
