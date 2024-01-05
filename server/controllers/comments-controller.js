@@ -3,18 +3,29 @@ const {
 } = require('uuid')
 const models = require('../models');
 
-const getComments = async (req, res) => {
-    const comments = await models.Comment.findAll({
-        where: {
-            'memory_uuid': req.query.memory_uuid
-        },
-        include: {
-            model: models.User,
-            attributes: ["display_name"],
-            as: "commenter_name"
-        },
-    })
-    return res.status(200).send(comments)
+const getComments = async (req, res) => {   
+    if(!req.query.memory_uuid) {
+        return res.status(404).json("Memory not found.")
+    } else {
+        const comments = await models.Comment.findAll({
+            where: {
+                'memory_uuid': req.query.memory_uuid
+            },
+            include: {
+                model: models.User,
+                attributes: ["display_name"],
+                as: "commenter_name"
+            },
+        })
+        if(comments.length !== 0) {
+            return res.status(200).send(comments)
+        } else {
+            return res.status(204).json({})
+        }
+    }
+    
+    
+    
 }
 
 const addComment = async (req, res) => {
