@@ -19,7 +19,7 @@ const getMemories = async (req, res) => {
         }
         return res.status(200).json(posts);
     } else {
-        return res.send([])
+        return res.status(204).send([])
     }
 }
 
@@ -45,7 +45,7 @@ const createMemory = async (req, res) => {
                         num_likes: 0
                     }
                     await models.Memory.create(newMemory)
-                    return res.status(200).json({
+                    return res.status(201).json({
                         newMemory: newMemory,
                         user_uuid: newUser.uuid,
                     });
@@ -58,7 +58,7 @@ const createMemory = async (req, res) => {
                         num_likes: 0
                     }
                     await models.Memory.create(newMemory)
-                    return res.status(200).json({
+                    return res.status(201).json({
                         newMemory: newMemory,
                         user_uuid: user,
                     });
@@ -72,17 +72,17 @@ const createMemory = async (req, res) => {
 }
 
 const likeMemory = async (req, res) => {
-    const memoryToLike = await models.Memory.findOne({
-        where: {
-            'uuid': req.body.memory_uuid
-        },
-    })
-    if (memoryToLike !== null) {
+    if(!req.body.memory_uuid) {
+        return res.status(404).json("Memory does not exist.")
+    } else {
+        const memoryToLike = await models.Memory.findOne({
+            where: {
+                'uuid': req.body.memory_uuid
+            },
+        })
         memoryToLike.num_likes = req.body.num_likes;
         await memoryToLike.save();
         return res.status(200).send()
-    } else {
-        return res.status(400).send()
     }
 }
 

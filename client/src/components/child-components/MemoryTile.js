@@ -22,9 +22,6 @@ export const MemoryTile = (props) => {
     })
   }
   console.log("comments:", comments)
-  useEffect(() => {
-    getComments();
-  }, [])
   return (
     <section className='memory'>
         <h4>Name: {m.name}</h4>
@@ -32,7 +29,10 @@ export const MemoryTile = (props) => {
         <h4>Experience: {m.experience}</h4>
         <h4>Likes: {m.num_likes}</h4>
         <button onClick = {handleClick} disabled={likeDisabled}>Like</button>
-        <button onClick ={() => setShowComments(!showComments)}>{showComments ? `Hide ${String.fromCharCode(8593)}` : `View Comments (${comments.length}) ${String.fromCharCode(8595)}`}</button>
+        <button onClick ={() => {
+          getComments()
+          setShowComments(!showComments);
+        }}>{showComments ? `Hide ${String.fromCharCode(8593)}` : `View Comments ${String.fromCharCode(8595)}`}</button>
         {showComments ? <ViewComments m = {m} getComments={getComments} comments={comments} submitComment={submitComment} /> : null}
     </section>
   )
@@ -74,7 +74,7 @@ const ViewComments = (props) => {
     } else {
       return (
         <section className='comments-container'>
-          <h4>Comments</h4>
+          <h4>Comments ({comments.length})</h4>
           <ul className='comments-list'>
             {
               comments.map(com => {

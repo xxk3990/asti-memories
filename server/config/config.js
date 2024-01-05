@@ -10,9 +10,9 @@ module.exports = {
     "dialect": "postgres"
   },
   "test": {
-    "username": "root",
+    "username": null,
     "password": null,
-    "database": "database_test",
+    "database": "asti_memories_test",
     "host": "localhost",
     "dialect": "postgres"
   },
