@@ -6,7 +6,7 @@ const verifyRecaptcha = async(req, res) => {
     const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`
     try {
         const response = await axios.post(url)
-        console.log("recaptcha response data:", response.data)
+        console.log("reCAPTCHA response data:", response.data)
         if(response.data.success) {
             return res.json({
                 'human': true
@@ -17,7 +17,7 @@ const verifyRecaptcha = async(req, res) => {
             })
         }
     } catch (error) {
-        return res.status(500).send("Error in CAPTCHA verification")
+        return res.status(500).send("Error in reCAPTCHA verification")
     }
 
 }
