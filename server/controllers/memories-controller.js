@@ -19,67 +19,70 @@ const getMemories = async (req, res) => {
         }
         return res.status(200).json(posts);
     } else {
-        return res.send([])
+        return res.status(204).send([])
     }
 }
 
 const createMemory = async (req, res) => {
-    try {
-        models.sequelize.transaction(async () => {
-            const user = req.body.user_uuid;
-            if (user === null) {
-                //create new user if no user_uuid was provided
-                const newUser = {
-                    uuid: uuidv4(),
-                    display_name: req.body.name,
+    const user = req.body.user_uuid;
+    if(user === undefined) {
+        return res.status(400).json("Memory creation failed.");
+    } else {
+        try {
+            models.sequelize.transaction(async () => {
+                if (user === null) {
+                    //create new user if no user_uuid was provided
+                    const newUser = {
+                        uuid: uuidv4(),
+                        display_name: req.body.name,
+                    }
+                    await models.User.create(newUser);
+                    const newMemory = {
+                        uuid: uuidv4(),
+                        user_uuid: newUser.uuid,
+                        occasion: req.body.occasion,
+                        experience: req.body.experience,
+                        num_likes: 0
+                    }
+                    await models.Memory.create(newMemory)
+                    return res.status(201).json({
+                        newMemory: newMemory,
+                        user_uuid: newUser.uuid,
+                    });
+                } else {
+                    const newMemory = {
+                        uuid: uuidv4(),
+                        user_uuid: user,
+                        occasion: req.body.occasion,
+                        experience: req.body.experience,
+                        num_likes: 0
+                    }
+                    await models.Memory.create(newMemory)
+                    return res.status(201).json({
+                        newMemory: newMemory,
+                        user_uuid: user,
+                    });
                 }
-                await models.User.create(newUser);
-                const newMemory = {
-                    uuid: uuidv4(),
-                    user_uuid: newUser.uuid,
-                    occasion: req.body.occasion,
-                    experience: req.body.experience,
-                    num_likes: 0
-                }
-                await models.Memory.create(newMemory)
-                return res.status(200).json({
-                    newMemory: newMemory,
-                    user_uuid: newUser.uuid,
-                });
-            } else {
-                const newMemory = {
-                    uuid: uuidv4(),
-                    user_uuid: user,
-                    occasion: req.body.occasion,
-                    experience: req.body.experience,
-                    num_likes: 0
-                }
-                await models.Memory.create(newMemory)
-                return res.status(200).json({
-                    newMemory: newMemory,
-                    user_uuid: user,
-                });
-            }
-
-
-        })
-    } catch {
-        return res.status(400).send();
+            })
+        } catch {
+            return res.status(400).json("Memory creation failed.");
+        }
     }
+  
 }
 
 const likeMemory = async (req, res) => {
-    const memoryToLike = await models.Memory.findOne({
-        where: {
-            'uuid': req.body.memory_uuid
-        },
-    })
-    if (memoryToLike !== null) {
+    if(!req.body.memory_uuid) {
+        return res.status(404).json("Memory does not exist.")
+    } else {
+        const memoryToLike = await models.Memory.findOne({
+            where: {
+                'uuid': req.body.memory_uuid
+            },
+        })
         memoryToLike.num_likes = req.body.num_likes;
         await memoryToLike.save();
         return res.status(200).send()
-    } else {
-        return res.status(400).send()
     }
 }
 

@@ -19,7 +19,7 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
   dialect: 'postgres',
   host: 'localhost',
 })
-
+console.log("env:", environment)
 const models = {
   Memory: memoryModel(sequelize, Sequelize.DataTypes),
   User: userModel(sequelize, Sequelize.DataTypes),
