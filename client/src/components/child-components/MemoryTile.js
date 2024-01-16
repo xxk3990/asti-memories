@@ -46,7 +46,7 @@ const ViewComments = (props) => {
     const getComments = props.getComments
     const user = sessionStorage.getItem("user_uuid")
     const [newComment, setNewComment] = useState({
-      memory_uuid: m.uuid,
+      memory_uuid: m.uuid, //coming up blank on second comment
       user_uuid: user,
       comment_text: ""
     })
@@ -55,6 +55,7 @@ const ViewComments = (props) => {
       if(newComment.comment_text === "") { 
         return;
       } else {
+        
         submitComment(newComment, setNewComment, getComments)
       }
     }
