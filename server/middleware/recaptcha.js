@@ -22,4 +22,4 @@ const verifyRecaptcha = async(req, res) => {
 
 }
 
-module.exports = {verifyRecaptcha}
+module.exports = {verifyRecaptcha} 

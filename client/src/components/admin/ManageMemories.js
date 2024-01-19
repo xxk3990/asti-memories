@@ -17,7 +17,7 @@ export default function  ManageMemories() {
         if(adminID === null || adminID === "" || adminID === undefined) {
             navigate("/memories") //redirect if no admin_uuid is set
         } else {
-            const endpoint = "memories"
+            const endpoint = `memories`
             await handleGet(endpoint, setMemories)
         }
     }

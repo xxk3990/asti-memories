@@ -42,13 +42,15 @@
     "pg-hstore": "^2.3.4",
     "postgres": "^3.3.4",
     "recaptcha": "^1.2.1",
+    "ruby": "^0.6.1",
     "sequelize": "^6.31.0",
     "sequelize-cli": "^5.3.0",
     "sequelize-utils": "^0.0.14",
     "stream": "^0.0.2",
     "supertest": "^6.3.3",
     "util": "^0.12.5",
-    "uuidv4": "^6.2.13"
+    "uuidv4": "^6.2.13",
+    "wget": "^0.0.1"
   },
   "browser": {
     "crypto": false

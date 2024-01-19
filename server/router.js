@@ -1,7 +1,7 @@
 const mem = require("./controllers/memories-controller")
 const com = require("./controllers/comments-controller")
 const admin = require("./controllers/admin-controller")
-const recap = require("./controllers/recaptcha-controller")
+const recap = require("./middleware/recaptcha")
 const router = (app) => {
    app.get("/memories", mem.getMemories)
    app.post("/memories", mem.createMemory)

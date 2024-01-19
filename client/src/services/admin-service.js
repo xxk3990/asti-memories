@@ -1,6 +1,7 @@
 import axios from 'axios'
-
-export const handleAdminLogin = async (url, body) => {
+const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
+export const handleAdminLogin = async (endpoint, body) => {
+    const url = `${NODE_URL}/${endpoint}`
     axios.defaults.withCredentials = true; //required otherwise the login would not create cookie!
     const headers = {
         "Content-Type": 'application/json'
@@ -13,7 +14,7 @@ export const handleAdminLogin = async (url, body) => {
 }
 
 export const handleAdminDelete = async(endpoint) => {
-    const url = `http://localhost:3000/${endpoint}`
+    const url = `${NODE_URL}/${endpoint}`
     const requestParams = {
         method: 'DELETE',
         headers: {
