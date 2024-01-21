@@ -5,16 +5,15 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const process = require("process")
-const environment = process.env.NODE_ENV || 'development';
-const config = require(`${__dirname}/../config/config.js`)[environment];
+const environment = process.env.NODE_ENV;
+const config = require('../config/config')[environment];
 const db = {};
-const bcrypt = require("bcrypt");
 const {memoryModel} = require("./memory")
 const {userModel} = require("./user")
 const {commentModel} = require("./comment")
 const {imageModel} = require("./image")
 const {adminModel} = require("./admin")
-const rdsCa = fs.readFileSync('../server/us-east-2-bundle.pem')
+const rdsCa = fs.readFileSync(path.resolve(`${__dirname}`, "../us-east-2-bundle.pem"))
 
 const connectionOptions = {
   host: "",

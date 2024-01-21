@@ -5,7 +5,7 @@ const {
 const models = require('../models')
 const jwt = require('jsonwebtoken')
 const process = require("process")
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 
 

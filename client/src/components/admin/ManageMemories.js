@@ -51,16 +51,25 @@ export default function  ManageMemories() {
             }, 1500)
         }
     }
-    return (
-        <div className='ManageMemories'>
-            <Snackbar open={openSnackbar} autoHideDuration={2000} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
-            <h1>Manage All Memories and Comments.</h1>
-           <section className='memories-grid'>
-                {memories.map(m => {
-                    return <AdminMemoryTile m={m} deleteMemory={deleteMemory} deleteComment={deleteComment}/>
-                })}
-            </section>
-        </div>
-    )
+    if(memories.length === 0) {
+        return (
+            <div className='ManageMemories'>
+                <h4>No memories added yet!</h4>
+            </div>
+        )
+    } else {
+        return (
+            <div className='ManageMemories'>
+                <Snackbar open={openSnackbar} autoHideDuration={2000} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
+                <h1>Manage All Memories and Comments.</h1>
+               <section className='memories-grid'>
+                    {memories.map(m => {
+                        return <AdminMemoryTile m={m} deleteMemory={deleteMemory} deleteComment={deleteComment}/>
+                    })}
+                </section>
+            </div>
+        )
+    }
+    
 }
 

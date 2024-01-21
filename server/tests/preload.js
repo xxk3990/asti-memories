@@ -1,6 +1,6 @@
 const models = require("../models")
 const prefixes = require("./preloaded-fixtures")
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const preload = async() => {
     await preload_users();
