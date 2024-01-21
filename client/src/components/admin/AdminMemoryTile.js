@@ -1,6 +1,6 @@
 import { React, useState, useEffect} from 'react'
 import {v4 as uuidv4} from 'uuid'
-import axios from 'axios';
+import { handleGet } from '../../services/requests-service';
 //child component for each memory
 export const AdminMemoryTile = (props) => {
   const m = props.m;
@@ -12,12 +12,8 @@ export const AdminMemoryTile = (props) => {
   }
   const [comments, setComments] = useState([])
   const getComments = async() => {
-    const url = `http://localhost:3000/comments?memory_uuid=${m.uuid}`
-    await axios.get(url, {
-      method: 'GET',
-    }).then(response => {
-      return setComments(response.data)
-    })
+    const endpoint = `comments?memory_uuid=${m.uuid}`
+    await handleGet(endpoint, setComments)
   }
   useEffect(() => {
     getComments();
