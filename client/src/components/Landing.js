@@ -88,13 +88,11 @@ export default function Landing() {
                         a memoir about the Asti. 25 years have passed since the Asti closed, memories fade,
                         including my own, and by sharing, you will help bring the Asti story to life.
                         Whatever you choose to share will remain anonymous and you are not required to
-                        provide any personal information. Below are some prompts but please feel free to share
-                        in any way that inspires you.
+                        provide any personal information.
                     </h3>
             </section>
           
             <section>
-                <h3 className='instructions'>Have a memory of the <em>Asti</em> Restaurant you'd like to share? Your posts may appear anonymously in an upcoming book about the restaurant! </h3>
                 <h4 className='instructions'> Posts that are unrelated to the <em>Asti</em> Restaurant will be deleted by an admin.</h4>
                 <form className='memory-form' onSubmit={handleSubmit(submitMemory)}>
                     <span className='memory-form-question' id="responder-name">Your display name (SFW): 
