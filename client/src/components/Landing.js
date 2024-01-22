@@ -74,9 +74,25 @@ export default function Landing() {
            
             <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
             <section className = "restaurant-info">
-                <h4>The <em>Asti</em> was an Italian Restaurant in New York City famous for the opera tunes sung in the restaurant. It was located in Downtown Manhattan, New York City, and was open from 1924-2000.</h4>
+                <h3 className='asti-verbiage'>The <em>Asti</em>, a landmark New York City restaurant, brought opera from the uptown stage to
+                    the downtown dinner table from 1924 to 2000. Located in Greenwhich Village, back in
+                    the day when “the Village” was the creative heart of Manhattan, the Asti was known as
+                    the home of the singing waiters and the go-to hotspot to discover budding opera talents
+                    who then went on to illustrious careers. Founder Adolfo Mariani, a baritone himself,
+                    creaed the Asti with the idea that opera was not only for the elite. He was convinced,
+                    that served up with dinner, famous arias, duets, rousing choruses and a dose of
+                    audience participation anyone could and would become an opera lover. And they did.</h3>
+                    <img className='asti-front-img' src={astiFront} alt="asti-front"/>
+                    <h3 className='asti-verbiage'>
+                        This is Angela Mariani, Adolfo’s youngest daughter, and my life’s goal has been to write
+                        a memoir about the Asti. 25 years have passed since the Asti closed, memories fade,
+                        including my own, and by sharing, you will help bring the Asti story to life.
+                        Whatever you choose to share will remain anonymous and you are not required to
+                        provide any personal information. Below are some prompts but please feel free to share
+                        in any way that inspires you.
+                    </h3>
             </section>
-            <img className='asti-front-img' src={astiFront} alt="asti-front"/>
+          
             <section>
                 <h3 className='instructions'>Have a memory of the <em>Asti</em> Restaurant you'd like to share? Your posts may appear anonymously in an upcoming book about the restaurant! </h3>
                 <h4 className='instructions'> Posts that are unrelated to the <em>Asti</em> Restaurant will be deleted by an admin.</h4>

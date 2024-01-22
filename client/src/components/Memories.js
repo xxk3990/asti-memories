@@ -80,6 +80,7 @@ export default function Memories() {
     console.log(memories)
     return (
       <div className="Memories">
+        <h1>Shared Memories</h1>
         <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
         <section className='memories-grid'>
           {memories.map(m => {

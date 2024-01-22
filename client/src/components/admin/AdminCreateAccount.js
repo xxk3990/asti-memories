@@ -41,8 +41,8 @@ export default function AdminCreateAccount() {
     return (
         <div className="CreateAccount">
             <section className='add-user'>
-                <h4>Create Admin Account</h4>
-                <form onSubmit={handleSubmit(postAdmin)}>
+                <h4 className='account-page-header'>Create Admin Account</h4>
+                <form className='user-form' onSubmit={handleSubmit(postAdmin)}>
                     <span className='user-form-question' id="username">
                         Display Name: <input type='text' name='display_name' className='user-input' {...register("display_name", {required: true})}/>
                         {errors.display_name && <span className='required-note'>This field is required</span>}
