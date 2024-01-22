@@ -42,7 +42,7 @@ const ViewComments = (props) => {
     const getComments = props.getComments
     const user = sessionStorage.getItem("user_uuid")
     const [newComment, setNewComment] = useState({
-      memory_uuid: m.uuid, //coming up blank on second comment
+      memory_uuid: m.uuid,
       user_uuid: user,
       comment_text: ""
     })
@@ -51,7 +51,9 @@ const ViewComments = (props) => {
       if(newComment.comment_text === "") { 
         return;
       } else {
-        
+        //ensures memory_uuid and user_uuid are sent in each payload
+        newComment.memory_uuid = m.uuid;
+        newComment.user_uuid = user
         submitComment(newComment, setNewComment, getComments)
       }
     }
@@ -72,19 +74,21 @@ const ViewComments = (props) => {
       return (
         <section className='comments-container'>
           <h4>Comments ({comments.length})</h4>
-          <ul className='comments-list'>
-            {
-              comments.map(com => {
-                return (
-                  <li key={uuidv4()}>{com.commenter_name.display_name}: {com.comment_text}</li>
-                )
-              })
-            }
-          </ul>
-          <span className='new-comment'>
+          <section className='comments-list-container'>
+            <ul className='comments-list'>
+              {
+                comments.map(com => {
+                  return (
+                    <li key={uuidv4()}>{com.commenter_name.display_name}: {com.comment_text}</li>
+                  )
+                })
+              }
+            </ul>
+          </section>
+          <section className='new-comment'>
             <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/>
             <button onClick = {handleSubmit}>Post comment</button>
-          </span>
+          </section>
         </section>
       )
     
