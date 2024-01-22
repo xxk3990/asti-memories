@@ -3,6 +3,7 @@ import "../../styles/admin-create-account.css"
 import React, { useState, useMemo, useEffect}  from 'react';
 import { useNavigate } from 'react-router';
 import {useForm} from "react-hook-form"
+import { handlePost } from '../../services/requests-service';
 
 export default function AdminCreateAccount() {
     const navigate = useNavigate()
@@ -16,20 +17,15 @@ export default function AdminCreateAccount() {
     } = useForm()
   
     const postAdmin = async (data) => {
-        const postURL = `http://localhost:3000/admin`
+        const endpoint = `admin`
         const requestBody = {
             display_name: data.display_name,
             email: data.email,
             password: data.password,
         }
         console.log('Params:', requestBody)
-        const requestParams = {
-            method: 'POST',
-            headers: {"Content-Type": 'application/json'},
-            body: JSON.stringify(requestBody)
-        }
         try {
-            const response = await fetch(postURL, requestParams)
+            const response = await handlePost(endpoint, requestBody)
             if(response.status === 200 || response.status === 201) {
                 navigate('/adminLogin'); //redirect to admin login on successful account creation
             } else {
@@ -45,8 +41,8 @@ export default function AdminCreateAccount() {
     return (
         <div className="CreateAccount">
             <section className='add-user'>
-                <h4>Create Admin Account</h4>
-                <form onSubmit={handleSubmit(postAdmin)}>
+                <h4 className='account-page-header'>Create Admin Account</h4>
+                <form className='user-form' onSubmit={handleSubmit(postAdmin)}>
                     <span className='user-form-question' id="username">
                         Display Name: <input type='text' name='display_name' className='user-input' {...register("display_name", {required: true})}/>
                         {errors.display_name && <span className='required-note'>This field is required</span>}

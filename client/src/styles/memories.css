@@ -14,6 +14,7 @@
     border: 1px solid black;
     width: 300px;
     margin-bottom: 20px;
+    color: black;
 }
 
 .comments-container {
@@ -37,4 +38,12 @@
 .comments-list li {
     border: 1px solid black;
     width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+    section.memories-grid {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }

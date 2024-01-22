@@ -18,9 +18,9 @@ module.exports = {
   },
   "production": {
     "username": "postgres",
-    "password": "",
-    "database": "asti_memories",
-    "host": "",
+    "password": process.env.RDS_PASSWORD,
+    "database": "asti_memories_rds",
+    "host": "asti-memories.cg6tsyf9mgr3.us-east-2.rds.amazonaws.com",
     "dialect": "postgres"
   }
 }

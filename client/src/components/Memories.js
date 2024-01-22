@@ -40,6 +40,7 @@ export default function Memories() {
     I wanted to call them here (rather than inside that file) because I wanted the snackbar to work for comments.
   */
   const submitComment = async (comment, setNewComment, getComments) => {
+    console.log('comment:',comment)
     const endpoint = `comments`
     const requestBody = {
       comment: comment
@@ -54,8 +55,6 @@ export default function Memories() {
           setSnackbarMessage("")
           //clear comment form on comment submit success
           setNewComment({
-            memory_uuid: "",
-            user_uuid: "",
             comment_text: "",
           });
           getComments(); //call get comments GET request method declared in memoryTile.js and passed in here
@@ -81,6 +80,7 @@ export default function Memories() {
     console.log(memories)
     return (
       <div className="Memories">
+        <h1>Shared Memories</h1>
         <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
         <section className='memories-grid'>
           {memories.map(m => {

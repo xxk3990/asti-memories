@@ -24,7 +24,7 @@ export default function AdminLogin() {
   }
   
   const submitLogin = async (data) => {
-    const postURL = `http://localhost:3000/adminLogin`
+    const postURL = `adminLogin`
     const requestBody = {
       email: data.email,
       password: data.password,

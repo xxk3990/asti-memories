@@ -4,3 +4,15 @@
     color: red;
     margin-left: 15px;
 }
+
+@media screen and (max-width: 600px) {
+    .user-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .account-page-header {
+        text-align: center;
+    }
+}

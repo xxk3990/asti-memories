@@ -3,6 +3,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: black;
+}
+
+.restaurant-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.asti-verbiage {
+    text-align: center;
+    width: 50vw;
 }
 
 .memory-form {
@@ -11,9 +24,14 @@
     align-items: center;
 }
 
+.instructions {
+    text-align: center;
+}
+
 .memory-form-question {
     display: flex;
     justify-content: space-evenly;
+    
 }
 
 .memory-form-question input,
@@ -27,5 +45,28 @@
 }
 
 .asti-front-img {
-    max-width: 600px;
+    max-width: 500px;
+
+}
+
+.submit-btn {
+    background-color: darkred;
+    color: white;
+}
+
+@media screen and (max-width: 600px) {
+    .Landing {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .memory-form-question {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .asti-verbiage {
+        text-align: center;
+        width: 70vw;
+    }
 }
