@@ -75,11 +75,11 @@ export default function Landing() {
             <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
             <section className = "restaurant-info">
                 <h3 className='asti-verbiage'>The <em>Asti</em>, a landmark New York City restaurant, brought opera from the uptown stage to
-                    the downtown dinner table from 1924 to 2000. Located in Greenwhich Village, back in
+                    the downtown dinner table from 1924 to 2000. Located in Greenwich Village, back in
                     the day when “the Village” was the creative heart of Manhattan, the Asti was known as
                     the home of the singing waiters and the go-to hotspot to discover budding opera talents
                     who then went on to illustrious careers. Founder Adolfo Mariani, a baritone himself,
-                    creaed the Asti with the idea that opera was not only for the elite. He was convinced,
+                    created the Asti with the idea that opera was not only for the elite. He was convinced,
                     that served up with dinner, famous arias, duets, rousing choruses and a dose of
                     audience participation anyone could and would become an opera lover. And they did.</h3>
                     <img className='asti-front-img' src={astiFront} alt="asti-front"/>

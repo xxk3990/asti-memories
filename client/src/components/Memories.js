@@ -10,7 +10,7 @@ export default function Memories() {
   
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("")
-
+  const user = sessionStorage.getItem("user_uuid")
   const getMemories = async() => {
     const endpoint = `memories`
     await handleGet(endpoint, setMemories)
@@ -39,17 +39,22 @@ export default function Memories() {
     The parameters come from there. 
     I wanted to call them here (rather than inside that file) because I wanted the snackbar to work for comments.
   */
-  const submitComment = async (comment, setNewComment, getComments) => {
+  const submitComment = async (comment, commentUser, setCommentUser, setNewComment, getComments) => {
     console.log('comment:',comment)
     const endpoint = `comments`
     const requestBody = {
-      comment: comment
+      comment: comment,
+      user_display_name: commentUser
     }
     try {
       const response = await handlePost(endpoint, requestBody)
       if(response.status === 200 || response.status === 201) {
+        const serverData = await response.data;
         setOpenSnackbar(true);
         setSnackbarMessage("Comment added successfully!")
+        if(user === null) {
+          sessionStorage.setItem("user_uuid", serverData.new_user_uuid)
+        }
         setTimeout(() => {
           setOpenSnackbar(false);
           setSnackbarMessage("")
@@ -57,6 +62,7 @@ export default function Memories() {
           setNewComment({
             comment_text: "",
           });
+          setCommentUser("")
           getComments(); //call get comments GET request method declared in memoryTile.js and passed in here
         }, 1500)
                 
