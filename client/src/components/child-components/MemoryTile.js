@@ -1,7 +1,9 @@
 import { React, useState, useEffect} from 'react'
 import {v4 as uuidv4} from 'uuid'
-import { handleGet } from '../../services/requests-service';
+import { handleGet, handlePost } from '../../services/requests-service';
 import axios from 'axios';
+import ReCAPTCHA from "react-google-recaptcha"
+import "../../styles/memories.css"
 const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
 //child component for each memory
 export const MemoryTile = (props) => {
@@ -45,6 +47,8 @@ const ViewComments = (props) => {
     const user = sessionStorage.getItem("user_uuid")
     
     const [commentUser, setCommentUser] = useState("");
+    const SITE_KEY = '6LffBlMpAAAAADK37hlL29ERh8ba5EMhRtPCli6o'
+    const [recaptchaValue, setRecaptchaValue] = useState(null);
     const checkForUser = async() => {
       if(user !== null) {
         const checkUserEndpoint = `users?user_uuid=${user}`
@@ -67,16 +71,28 @@ const ViewComments = (props) => {
       user_uuid: user,
       comment_text: ""
     })
-    const handleSubmit = () => {
-      //if they hit submit but haven't entered a comment, don't do anything
-      if(newComment.comment_text === "") { 
-        return;
-      } else {
-        //ensures memory_uuid and user_uuid are sent in each payload
-        newComment.memory_uuid = m.uuid;
-        newComment.user_uuid = user
-        submitComment(newComment, commentUser, setCommentUser, setNewComment, getComments)
+    const handleSubmit = async() => {
+      const token = recaptchaValue;
+      const recaptchaEndpoint = `recaptcha`
+      const recaptchaBody = {
+        recaptcha_token: token,
       }
+      const recaptchaResponse = await handlePost(recaptchaEndpoint, recaptchaBody)
+      const recaptchaData = await recaptchaResponse.data;
+      if(recaptchaData.human) {
+        //if they hit submit but haven't entered a comment, don't do anything
+        if(newComment.comment_text === "") { 
+          return;
+        } else {
+          //ensures memory_uuid and user_uuid are sent in each payload
+          newComment.memory_uuid = m.uuid;
+          newComment.user_uuid = user
+          submitComment(newComment, commentUser, setCommentUser, setNewComment, getComments)
+        }
+      } else {
+        alert("You are a bot!")
+      }
+      
     }
     const handleChange = (name, value) => {
       setNewComment({...newComment, [name]:value})
@@ -91,7 +107,8 @@ const ViewComments = (props) => {
           <section className='new-comment'>
             <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
             <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
-            <button className='interaction-btn submit-comment-btn' onClick = {handleSubmit}>Post comment</button>
+            <ReCAPTCHA sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
+            <button disabled={!recaptchaValue} className='interaction-btn submit-comment-btn' onClick = {handleSubmit}>Post comment</button>
           </section>
         </section>
       )
@@ -113,7 +130,8 @@ const ViewComments = (props) => {
           <section className='new-comment'>
             <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
             <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
-            <button className='interaction-btn submit-comment-btn' onClick = {handleSubmit}>Post comment</button>
+            <ReCAPTCHA sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
+            <button disabled={!recaptchaValue} className='interaction-btn submit-comment-btn' onClick = {handleSubmit}>Post comment</button>
           </section>
         </section>
       )
