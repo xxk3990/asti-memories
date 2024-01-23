@@ -84,6 +84,7 @@ const ViewComments = (props) => {
     const handleUserChange = (value) => {
       setCommentUser(value)
     }
+    //TODO: ADD reCAPTCHA TO PUBLIC COMMENT FORM
     if(comments.length === 0) {
       return (
         <section className='comments-container'>
