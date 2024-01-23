@@ -1,11 +1,11 @@
-import '../../styles/manage-memories.css'
+
 import { React, useState, useEffect, memo} from 'react'
 import { handleGet } from '../../services/requests-service'
 import {Snackbar} from '@mui/material'
 import {useNavigate} from "react-router-dom"
 import { AdminMemoryTile } from './AdminMemoryTile'
 import {handleAdminDelete} from "../../services/admin-service"
-
+<link rel="stylsheet" href="../../styles/memories.css"/>
 export default function  ManageMemories() {
   
     const [memories, setMemories] = useState([]);
