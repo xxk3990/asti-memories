@@ -80,6 +80,11 @@ iframe {
     width: 95%;
 }
 
+.images-view img {
+    max-width: 275px;
+    max-height: 300px;
+}
+
 @media screen and (max-width: 600px) {
     section.memories-grid {
         display: flex;
