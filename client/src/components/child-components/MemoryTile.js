@@ -36,7 +36,7 @@ export const MemoryTile = (props) => {
         <h4>Special Occasion: {m.occasion}</h4>
         <h4>Experience: {m.experience}</h4>
         <h4>Likes: {m.num_likes}</h4>
-        <button className='interaction-btn' onClick = {handleClick} disabled={likeDisabled}>Like</button>
+        <button className='interaction-btn like-btn' onClick = {handleClick} disabled={likeDisabled}>Like</button>
         <button className='interaction-btn' onClick ={() => {
           getComments()
           setShowComments(!showComments);
