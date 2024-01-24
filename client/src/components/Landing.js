@@ -19,12 +19,12 @@ export default function Landing() {
     const [imageToUpload, setImageToUpload] = useState(null);
     const [caption, setCaption] = useState("");
 
-    let uniqueFileName = ""
+    let randomizedFileName = ""
     const randomizeFileName = async() => {
         //this endpoint generates a random unique file name for the user's image.
         const url = `${NODE_URL}/randomize`
         await axios.get(url).then(response => {
-            uniqueFileName = response.data.unique_name
+            randomizedFileName = response.data.randomized_name
         })
     }
     const {
@@ -42,7 +42,7 @@ export default function Landing() {
     }
     
     const uploadToS3 = async() => {
-        console.log("unique file:", uniqueFileName)
+        console.log("random file name:", randomizedFileName)
         const filextension = imageToUpload.type.split('/'); //get second half of mimetype
         AWS.config.update({
             accessKeyId: bucketAccessKey,
@@ -56,7 +56,7 @@ export default function Landing() {
 
         const params = {
             Bucket: bucketName,
-            Key: `${uniqueFileName}.${filextension[1]}`, //add it to end of unique file name
+            Key: `${randomizedFileName}.${filextension[1]}`, //add it to end of randomized image name
             Body: imageToUpload,
             // ContentType
         };
@@ -90,7 +90,7 @@ export default function Landing() {
                 name: data.name,
                 occasion: data.occasion,
                 experience: data.experience,
-                image_name: `${uniqueFileName}.${filextension[1]}`,
+                image_name: `${randomizedFileName}.${filextension[1]}`, //send full randomized name to DB
                 image_caption: caption
             }
             try {
@@ -108,6 +108,7 @@ export default function Landing() {
                         setOpenSnackbar(false);
                         setSnackbarMessage("")
                         setRecaptchaValue("")
+                        randomizedFileName = "" //reset random file name just in case
                         navigate("/memories")
                     }, 1500)
                     
