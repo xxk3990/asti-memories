@@ -31,7 +31,7 @@ const createMemory = async (req, res) => {
         try {
             models.sequelize.transaction(async () => {
                 if (user === null) {
-                    if(req.body.image_caption === "") {
+                    if(req.body.image_name === null) {
                         const newUser = {
                             uuid: uuidv4(),
                             display_name: req.body.name,
@@ -83,7 +83,7 @@ const createMemory = async (req, res) => {
                     
                     
                 } else {
-                    if(req.body.image_caption === "") {
+                    if(req.body.image_name === null) {
                         const newMemory = {
                             uuid: uuidv4(),
                             user_uuid: user,

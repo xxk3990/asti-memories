@@ -78,21 +78,26 @@ export default function Landing() {
         }
         const recaptchaResponse = await handlePost(recaptchaEndpoint, recaptchaBody)
         const recaptchaData = await recaptchaResponse.data;
-        const filextension = imageToUpload.type.split('/');
         if(recaptchaData.human) {
-            if(imageToUpload != null) {
-                await uploadToS3()
-            }
-            const endpont = `memories`;
             const userID = sessionStorage.getItem("user_uuid")
             const requestBody = {
                 user_uuid: userID,
                 name: data.name,
                 occasion: data.occasion,
                 experience: data.experience,
-                image_name: `${randomizedFileName}.${filextension[1]}`, //send full randomized name to DB
+                image_name: '',
                 image_caption: caption
             }
+            if(imageToUpload != null) {
+                await uploadToS3()
+                const filextension = imageToUpload.type.split('/');
+                //set image name to fully randomized name
+                requestBody.image_name = `${randomizedFileName}.${filextension[1]}` 
+            } else {
+                requestBody.image_name = null;
+            }
+            const endpont = `memories`;
+            
             try {
                 const response = await handlePost(endpont, requestBody);
                 console.log("POST response:", response)
@@ -161,8 +166,8 @@ export default function Landing() {
                         <textarea name="experience" className='user-input' {...register("experience", { required: true})}></textarea>
                         {errors.experience && <span className='required-note'>This field is required</span>}
                     </span>
-                    <span className='memory-form-question responder-image'>(Optional) Upload an image! If you upload, please add a caption!
-                        <h5>To make this completely anonymous, your image file name will be replaced with a randomized unique name. </h5>
+                    <span className='memory-form-question responder-image'>(Optional) Upload an image with a caption!
+                        <h5>To keep this anonymous, your image file name will be replaced with a randomized name. </h5>
                         <input type ="file" name='image' className='user-input' onChange={e => setImageToUpload(e.target.files[0])} />
                         Add Caption: <input type="text" name="caption" onChange={e => setCaption(e.target.value)}/>
                     </span>
