@@ -1,4 +1,4 @@
-import '../styles/landing.css'
+import '../styles/memory-form.css'
 import {React, useState, useEffect, useRef} from 'react'
 import {handleGet, handlePost} from '../services/requests-service'
 import { useNavigate } from 'react-router-dom'
@@ -8,7 +8,7 @@ import astiFront from "../images-static/asti-front.jpeg"
 import ReCAPTCHA from "react-google-recaptcha"
 import AWS from "aws-sdk"
 import axios from 'axios'
-export default function Landing() {
+export default function MemoryForm() {
     const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
     const bucketName = process.env.REACT_APP_IMAGE_BUCKET_NAME;
     const bucketRegion = process.env.REACT_APP_IMAGE_BUCKET_REGION;
@@ -126,7 +126,7 @@ export default function Landing() {
         
     }
     return (
-        <div className='Landing'>
+        <div className='MemoryForm'>
            
             <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
             <section className = "restaurant-info">
@@ -164,7 +164,7 @@ export default function Landing() {
                         {errors.experience && <span className='required-note'>This field is required</span>}
                     </span>
                     <span className='memory-form-question responder-image'>(Optional) Upload an image with a caption!
-                        <h5>To keep this anonymous, your image file name will be replaced with a randomized name. </h5>
+                        <h5 className='anonymous-note'>To keep this anonymous, your image file name will be replaced with a randomized name. </h5>
                         <input type ="file" name='image' className='user-input' onChange={e => setImageToUpload(e.target.files[0])} />
                         Add Caption: <input type="text" name="caption" onChange={e => setCaption(e.target.value)}/>
                     </span>
