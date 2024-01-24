@@ -16,7 +16,7 @@ module.exports = {
                 allowNull: true, //can be null if the image comes from the family
             },
             user_uuid: Sequelize.UUID,
-            image_url: Sequelize.STRING,
+            image_name: Sequelize.STRING,
             image_caption: Sequelize.STRING,
             family_image: Sequelize.BOOLEAN,
             created_at: {

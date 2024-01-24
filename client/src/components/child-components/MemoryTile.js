@@ -156,7 +156,7 @@ const CommentsView = (props) => {
 
 const ImageView = (props) => {
   const image = props.image;
-  
+  console.log("image:", image)
   if(!image) {
     return (
       <section className='images-view'>
@@ -165,28 +165,6 @@ const ImageView = (props) => {
     )
   } else {
     console.log(image)
-    // const bucketName = process.env.REACT_APP_IMAGE_BUCKET_NAME;
-    // const bucketRegion = process.env.REACT_APP_IMAGE_BUCKET_REGION;
-    // const bucketAccessKey = process.env.REACT_APP_IMAGE_BUCKET_ACCESS_KEY;
-    // const bucketSecretKey = process.env.REACT_APP_IMAGE_BUCKET_SECRET_KEY;
-    // const credentials = {
-    //   accessKeyId: bucketAccessKey,
-    //   secretAccessKey: bucketSecretKey,
-    // }
-    // AWS.config.update({
-    //   accessKeyId: bucketAccessKey,
-    //   secretAccessKey: bucketSecretKey,
-    // });
-    // const s3 = new AWS.S3({
-    //   credentials: credentials,
-    //   params: { Bucket: bucketName },
-    //   region: bucketRegion,
-    // });
-    // const params = {
-    //   Bucket: bucketName,
-    //   Key: image.image_url
-    // };
-    // const url = s3.getObject(image.image_url, params)
     return (
       <section className='images-view'>
         <img src = {image.image_url} alt={image.image_caption}/>

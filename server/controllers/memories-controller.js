@@ -31,7 +31,7 @@ const createMemory = async (req, res) => {
         try {
             models.sequelize.transaction(async () => {
                 if (user === null) {
-                    if(req.body.image_url === null) {
+                    if(req.body.image_caption === "") {
                         const newUser = {
                             uuid: uuidv4(),
                             display_name: req.body.name,
@@ -70,7 +70,7 @@ const createMemory = async (req, res) => {
                             uuid: uuidv4(),
                             memory_uuid: newMemory.uuid,
                             user_uuid: newUser.uuid,
-                            image_url: req.body.image_url,
+                            image_name: req.body.image_name,
                             image_caption: req.body.image_caption,
                             family_image: false //in later version, family images will be added via seeders
                         }
@@ -83,7 +83,7 @@ const createMemory = async (req, res) => {
                     
                     
                 } else {
-                    if(req.body.image_url === null) {
+                    if(req.body.image_caption === "") {
                         const newMemory = {
                             uuid: uuidv4(),
                             user_uuid: user,
@@ -109,7 +109,7 @@ const createMemory = async (req, res) => {
                             uuid: uuidv4(),
                             memory_uuid: newMemory.uuid,
                             user_uuid: user,
-                            image_url: req.body.image_url,
+                            image_name: req.body.image_name,
                             image_caption: req.body.image_caption,
                             family_image: false //in later version, family images will be added via seeders
                         }

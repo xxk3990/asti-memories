@@ -18,6 +18,7 @@ const router = (app) => {
    app.post("/recaptcha", recap.verifyRecaptcha)
    app.get("/users", user.checkForUser)
    app.get("/images", image.getImageForMemory)
+   app.get("/randomize", image.createUniqueFileName)
 }
 
 module.exports = router;
