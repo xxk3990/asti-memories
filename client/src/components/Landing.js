@@ -68,7 +68,6 @@ export default function Landing() {
     const navigate = useNavigate();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("")
-    console.log(astiFront)
 
     const submitMemory = async(data) => {
         const token = recaptchaValue;
@@ -100,9 +99,7 @@ export default function Landing() {
             
             try {
                 const response = await handlePost(endpont, requestBody);
-                console.log("POST response:", response)
                 const serverData = await response.data;
-                console.log("response data:", serverData)
                 if(response.status === 200 || response.status === 201) {
                     if(userID === null) {
                         sessionStorage.setItem("user_uuid", serverData.user_uuid)
