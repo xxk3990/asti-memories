@@ -6,9 +6,17 @@ import {Snackbar} from '@mui/material'
 import {useForm} from "react-hook-form"
 import astiFront from "../images-static/asti-front.jpeg"
 import ReCAPTCHA from "react-google-recaptcha"
+import AWS from "aws-sdk"
 export default function Landing() {
+    const bucketName = process.env.REACT_APP_IMAGE_BUCKET_NAME;
+    const bucketRegion = process.env.REACT_APP_IMAGE_BUCKET_REGION;
+    const bucketAccessKey = process.env.REACT_APP_IMAGE_BUCKET_ACCESS_KEY;
+    const bucketSecretKey = process.env.REACT_APP_IMAGE_BUCKET_SECRET_KEY;
     const SITE_KEY = '6LffBlMpAAAAADK37hlL29ERh8ba5EMhRtPCli6o'
     const [recaptchaValue, setRecaptchaValue] = useState(null);
+    const [imageToUpload, setImageToUpload] = useState(null);
+    const [caption, setCaption] = useState("");
+    let imageURL = null;
     const {
         register,
         handleSubmit,
@@ -17,7 +25,40 @@ export default function Landing() {
     useEffect(() => {
         document.title = "Asti Memories"
     })
-    
+    const credentials = {
+        accessKeyId: bucketAccessKey,
+        secretAccessKey: bucketSecretKey,
+    }
+    const uploadToS3 = async() => {
+        AWS.config.update({
+            accessKeyId: bucketAccessKey,
+            secretAccessKey: bucketSecretKey,
+        });
+        const s3 = new AWS.S3({
+            credentials: credentials,
+            params: { Bucket: bucketName },
+            region: bucketRegion,
+        });
+        const params = {
+            Bucket: bucketName,
+            Key: imageToUpload.name,
+            Body: imageToUpload,
+           // ContentType
+        };
+        const uploadParams = {
+            Bucket: bucketName,
+            Key: imageToUpload.name,
+        }
+        const upload = s3.putObject(params);
+        await upload.on("success", (e) => {
+            console.log(e)
+        }).promise().then(() => {
+            const signed = s3.getSignedUrl('getObject', uploadParams);
+            imageURL = signed;
+        })
+        
+        
+    }
     const navigate = useNavigate();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("")
@@ -32,6 +73,10 @@ export default function Landing() {
         const recaptchaResponse = await handlePost(recaptchaEndpoint, recaptchaBody)
         const recaptchaData = await recaptchaResponse.data;
         if(recaptchaData.human) {
+            if(imageToUpload != null) {
+                await uploadToS3()
+            }
+            console.log("image url:", imageURL)
             const endpont = `memories`;
             const userID = sessionStorage.getItem("user_uuid")
             const requestBody = {
@@ -39,6 +84,8 @@ export default function Landing() {
                 name: data.name,
                 occasion: data.occasion,
                 experience: data.experience,
+                image_url: imageURL,
+                image_caption: caption
             }
             try {
                 const response = await handlePost(endpont, requestBody);
@@ -107,6 +154,11 @@ export default function Landing() {
                         <textarea name="experience" className='user-input' {...register("experience", { required: true})}></textarea>
                         {errors.experience && <span className='required-note'>This field is required</span>}
                     </span>
+                    <span className='memory-form-question responder-image'>(Optional) Upload an image! If you upload, please add a caption!
+                        <input type ="file" name='image' className='user-input' onChange={e => setImageToUpload(e.target.files[0])} />
+                        Add Caption: <input type="text" name="caption" onChange={e => setCaption(e.target.value)}/>
+                    </span>
+
                     <ReCAPTCHA sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
                     <button disabled={!recaptchaValue} className='submit-btn'>Submit</button>
                 </form>

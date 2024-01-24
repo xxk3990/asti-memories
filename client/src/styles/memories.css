@@ -29,7 +29,8 @@
     margin: 5px 0 0 0;
 }
 
-.comments-container {
+.comments-container, 
+.images-view {
     border: 1px solid black;
     z-index: 1;
     position: absolute;

@@ -31,37 +31,94 @@ const createMemory = async (req, res) => {
         try {
             models.sequelize.transaction(async () => {
                 if (user === null) {
-                    //create new user if no user_uuid was provided
-                    const newUser = {
-                        uuid: uuidv4(),
-                        display_name: req.body.name,
+                    if(req.body.image_url === null) {
+                        const newUser = {
+                            uuid: uuidv4(),
+                            display_name: req.body.name,
+                        }
+                        await models.User.create(newUser);
+                        const newMemory = {
+                            uuid: uuidv4(),
+                            user_uuid: newUser.uuid,
+                            occasion: req.body.occasion,
+                            experience: req.body.experience,
+                            num_likes: 0
+                        }
+                        await models.Memory.create(newMemory)
+                        return res.status(201).json({
+                            newMemory: newMemory,
+                            user_uuid: newUser.uuid,
+                        });
+                    } else {
+                        //create new user if no user_uuid was provided
+                        const newUser = {
+                            uuid: uuidv4(),
+                            display_name: req.body.name,
+                        }
+                        await models.User.create(newUser);
+                        const newMemory = {
+                            uuid: uuidv4(),
+                            user_uuid: newUser.uuid,
+                            occasion: req.body.occasion,
+                            experience: req.body.experience,
+                            num_likes: 0
+                        }
+                        await models.Memory.create(newMemory)
+    
+                        //if they uploaded an image, save it!
+                        const newImage = {
+                            uuid: uuidv4(),
+                            memory_uuid: newMemory.uuid,
+                            user_uuid: newUser.uuid,
+                            image_url: req.body.image_url,
+                            image_caption: req.body.image_caption,
+                            family_image: false //in later version, family images will be added via seeders
+                        }
+                        await models.Image.create(newImage)
+                        return res.status(201).json({
+                            newMemory: newMemory,
+                            user_uuid: newUser.uuid,
+                        });
                     }
-                    await models.User.create(newUser);
-                    const newMemory = {
-                        uuid: uuidv4(),
-                        user_uuid: newUser.uuid,
-                        occasion: req.body.occasion,
-                        experience: req.body.experience,
-                        num_likes: 0
-                    }
-                    await models.Memory.create(newMemory)
-                    return res.status(201).json({
-                        newMemory: newMemory,
-                        user_uuid: newUser.uuid,
-                    });
+                    
+                    
                 } else {
-                    const newMemory = {
-                        uuid: uuidv4(),
-                        user_uuid: user,
-                        occasion: req.body.occasion,
-                        experience: req.body.experience,
-                        num_likes: 0
+                    if(req.body.image_url === null) {
+                        const newMemory = {
+                            uuid: uuidv4(),
+                            user_uuid: user,
+                            occasion: req.body.occasion,
+                            experience: req.body.experience,
+                            num_likes: 0
+                        }
+                        await models.Memory.create(newMemory)
+                        return res.status(201).json({
+                            newMemory: newMemory,
+                            user_uuid: user,
+                        });
+                    } else {
+                        const newMemory = {
+                            uuid: uuidv4(),
+                            user_uuid: user,
+                            occasion: req.body.occasion,
+                            experience: req.body.experience,
+                            num_likes: 0
+                        }
+                        await models.Memory.create(newMemory)
+                        const newImage = {
+                            uuid: uuidv4(),
+                            memory_uuid: newMemory.uuid,
+                            user_uuid: user,
+                            image_url: req.body.image_url,
+                            image_caption: req.body.image_caption,
+                            family_image: false //in later version, family images will be added via seeders
+                        }
+                        await models.Image.create(newImage)
+                        return res.status(201).json({
+                            newMemory: newMemory,
+                            user_uuid: user,
+                        });
                     }
-                    await models.Memory.create(newMemory)
-                    return res.status(201).json({
-                        newMemory: newMemory,
-                        user_uuid: user,
-                    });
                 }
             })
         } catch {

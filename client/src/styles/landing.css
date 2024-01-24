@@ -54,6 +54,12 @@
     color: white;
 }
 
+.responder-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 @media screen and (max-width: 600px) {
     .Landing {
         display: grid;

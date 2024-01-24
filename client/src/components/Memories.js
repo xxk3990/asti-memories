@@ -7,7 +7,6 @@ import { MemoryTile } from './child-components/MemoryTile'
 
 export default function Memories() {
   const [memories, setMemories] = useState([]);
-  
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("")
   const user = sessionStorage.getItem("user_uuid")
