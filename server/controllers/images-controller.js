@@ -35,9 +35,10 @@ const getImageForMemory = async(req, res) => {
 }
 
 const createUniqueFileName = async(req, res) => {
+    //create random image file name using crypto
     const uniquename = crypto.randomBytes(32).toString('hex')
     return res.status(200).json({
-        unique_name: uniquename
+        unique_name: uniquename //send back to FE
     })
 }
 

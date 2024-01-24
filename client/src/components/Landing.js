@@ -18,8 +18,10 @@ export default function Landing() {
     const [recaptchaValue, setRecaptchaValue] = useState(null);
     const [imageToUpload, setImageToUpload] = useState(null);
     const [caption, setCaption] = useState("");
+
     let uniqueFileName = ""
     const randomizeFileName = async() => {
+        //this endpoint generates a random unique file name for the user's image.
         const url = `${NODE_URL}/randomize`
         await axios.get(url).then(response => {
             uniqueFileName = response.data.unique_name
