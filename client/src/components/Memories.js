@@ -1,19 +1,27 @@
 import '../styles/memories.css'
 import { React, useState, useEffect, memo} from 'react'
-import { handleGet, handlePost, handlePut } from '../services/requests-service'
+import { handlePost, handlePut } from '../services/requests-service'
 import {Snackbar} from '@mui/material'
-import {v4 as uuidv4} from 'uuid'
 import { MemoryTile } from './child-components/MemoryTile'
+import axios from 'axios'
 
 export default function Memories() {
   const [memories, setMemories] = useState([]);
-  
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("")
   const user = sessionStorage.getItem("user_uuid")
+
   const getMemories = async() => {
-    const endpoint = `memories`
-    await handleGet(endpoint, setMemories)
+    const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
+    const url = `${NODE_URL}/memories`
+    await axios.get(url).then(response => {
+      if(response.data) {
+        setMemories(response.data.sort((x, y) => new Date(y.createdAt) - new Date(x.createdAt)))
+      } else {
+        setMemories([])
+      }
+      
+    })
   }
   useEffect(() => {
     document.title = "Asti Memories"

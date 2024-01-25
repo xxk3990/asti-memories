@@ -1,8 +1,17 @@
 import '../styles/gallery.css'
+import {React, useState} from 'react'
+import axios from 'axios'
 export default function Gallery() {
+
+  
+    const [images, setImages] = useState([])
+    
     return (
         <div className='Gallery'>
-            <h1>Image Gallery</h1>
+            <section className='image-upload-form'>
+                <h4>Image upload!</h4>
+                
+            </section>
         </div>
     )
 }
