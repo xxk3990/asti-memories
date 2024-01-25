@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 3%;
 }
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
 .memories-grid {
@@ -92,6 +93,9 @@ iframe {
 }
 
 @media screen and (max-width: 600px) {
+    .Memories {
+        margin-top: 15%;
+    }
     section.memories-grid {
         display: flex;
         flex-direction: column;
