@@ -17,16 +17,28 @@
     color: black;
 }
 
+.interaction-btn {
+    background: darkred;
+    color: white;
+    width: auto;
+    height: 30px;
+}
+
+.comments-count {
+    padding: 5px 0 0 0;
+    margin: 5px 0 0 0;
+}
+
 .comments-container {
     border: 1px solid black;
     z-index: 1;
     position: absolute;
     width: 300px;
     background: white;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 500px;
 }
 
 .comments-list {
@@ -36,7 +48,6 @@
 }
 
 .comments-list-container {
-    overflow-y: scroll;
     flex: 1;
     min-height: 0;
     overflow: auto;
@@ -49,11 +60,23 @@
 }
 
 .new-comment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding-top: 10px;
     padding-bottom: 10px;
     width: 100%;
     flex: 0 0 auto;
     border-top: 1px solid black;
+}
+
+.new-comment input,
+.new-comment button {
+    width: 50%;
+}
+
+iframe {
+    width: 95%;
 }
 
 @media screen and (max-width: 600px) {

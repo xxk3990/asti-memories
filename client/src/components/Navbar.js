@@ -8,9 +8,9 @@ export default function Navbar() {
         <div className='Navbar'>
             <section className='nav-loggedin'>
                 <ul className = "nav-links">
-                    <li className='nav-item'><Link to='/memories'>Memories</Link></li>
-                    <li className='nav-item'><Link to='/gallery'>Gallery</Link></li>
-                    <li className='nav-item'><Link to='/'>Home</Link></li>
+                    <li className='nav-item'><Link to='/memories'>Public Memories</Link></li>
+                    <li className='nav-item'><Link to='/gallery'>Image Gallery</Link></li>
+                    <li className='nav-item'><Link to='/'>Memory Form</Link></li>
                 </ul>
             </section>
         </div>
