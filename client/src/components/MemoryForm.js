@@ -1,27 +1,79 @@
-import '../styles/landing.css'
+import '../styles/memory-form.css'
 import {React, useState, useEffect, useRef} from 'react'
-import {handlePost} from '../services/requests-service'
+import {handleGet, handlePost} from '../services/requests-service'
 import { useNavigate } from 'react-router-dom'
 import {Snackbar} from '@mui/material'
 import {useForm} from "react-hook-form"
 import astiFront from "../images-static/asti-front.jpeg"
 import ReCAPTCHA from "react-google-recaptcha"
-export default function Landing() {
+import AWS from "aws-sdk"
+import axios from 'axios'
+export default function MemoryForm() {
+    const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
+    const bucketName = process.env.REACT_APP_IMAGE_BUCKET_NAME;
+    const bucketRegion = process.env.REACT_APP_IMAGE_BUCKET_REGION;
+    const bucketAccessKey = process.env.REACT_APP_IMAGE_BUCKET_ACCESS_KEY;
+    const bucketSecretKey = process.env.REACT_APP_IMAGE_BUCKET_SECRET_KEY;
     const SITE_KEY = '6LffBlMpAAAAADK37hlL29ERh8ba5EMhRtPCli6o'
     const [recaptchaValue, setRecaptchaValue] = useState(null);
+    const [imageToUpload, setImageToUpload] = useState(null);
+    const [caption, setCaption] = useState("");
+
+    let randomizedFileName = ""
+    const randomizeFileName = async() => {
+        //this endpoint generates a random unique file name for the user's image.
+        const url = `${NODE_URL}/randomize`
+        await axios.get(url).then(response => {
+            randomizedFileName = response.data.randomized_name
+        })
+    }
+
     const {
         register,
         handleSubmit,
         formState: {errors}
     } = useForm()
+
     useEffect(() => {
         document.title = "Asti Memories"
+        randomizeFileName()
     })
+
+    const credentials = {
+        accessKeyId: bucketAccessKey,
+        secretAccessKey: bucketSecretKey,
+    }
     
+    const uploadToS3 = async() => {
+        console.log("random file name:", randomizedFileName)
+        const filextension = imageToUpload.type.split('/'); //get second half of mimetype
+        AWS.config.update({
+            accessKeyId: bucketAccessKey,
+            secretAccessKey: bucketSecretKey,
+        });
+
+        const s3 = new AWS.S3({
+            credentials: credentials,
+            params: { Bucket: bucketName },
+            region: bucketRegion,
+        });
+
+        const params = {
+            Bucket: bucketName,
+            Key: `${randomizedFileName}.${filextension[1]}`, //add it to end of randomized image name
+            Body: imageToUpload,
+            // ContentType
+        };
+        
+        const upload = s3.putObject(params);
+        await upload.on('success', (e) => {
+            console.log(e)
+        }).promise();
+    }
+
     const navigate = useNavigate();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("")
-    console.log(astiFront)
 
     const submitMemory = async(data) => {
         const token = recaptchaValue;
@@ -32,19 +84,28 @@ export default function Landing() {
         const recaptchaResponse = await handlePost(recaptchaEndpoint, recaptchaBody)
         const recaptchaData = await recaptchaResponse.data;
         if(recaptchaData.human) {
-            const endpont = `memories`;
             const userID = sessionStorage.getItem("user_uuid")
             const requestBody = {
                 user_uuid: userID,
                 name: data.name,
                 occasion: data.occasion,
                 experience: data.experience,
+                image_name: '',
+                image_caption: caption
             }
+            if(imageToUpload != null) {
+                await uploadToS3()
+                const filextension = imageToUpload.type.split('/');
+                //set image name to fully randomized name
+                requestBody.image_name = `${randomizedFileName}.${filextension[1]}` 
+            } else {
+                requestBody.image_name = null;
+            }
+            const endpont = `memories`;
+            
             try {
                 const response = await handlePost(endpont, requestBody);
-                console.log("POST response:", response)
                 const serverData = await response.data;
-                console.log("response data:", serverData)
                 if(response.status === 200 || response.status === 201) {
                     if(userID === null) {
                         sessionStorage.setItem("user_uuid", serverData.user_uuid)
@@ -55,6 +116,7 @@ export default function Landing() {
                         setOpenSnackbar(false);
                         setSnackbarMessage("")
                         setRecaptchaValue("")
+                        randomizedFileName = "" //reset random file name just in case
                         navigate("/memories")
                     }, 1500)
                     
@@ -70,7 +132,7 @@ export default function Landing() {
         
     }
     return (
-        <div className='Landing'>
+        <div className='MemoryForm'>
            
             <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
             <section className = "restaurant-info">
@@ -107,6 +169,12 @@ export default function Landing() {
                         <textarea name="experience" className='user-input' {...register("experience", { required: true})}></textarea>
                         {errors.experience && <span className='required-note'>This field is required</span>}
                     </span>
+                    <span className='memory-form-question responder-image'>(Optional) Upload an image with a caption!
+                        <h5 className='anonymous-note'>To keep this anonymous, your image file name will be replaced with a randomized name. </h5>
+                        <input type ="file" name='image' className='user-input' onChange={e => setImageToUpload(e.target.files[0])} />
+                        Add Caption: <input type="text" name="caption" onChange={e => setCaption(e.target.value)}/>
+                    </span>
+
                     <ReCAPTCHA sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
                     <button disabled={!recaptchaValue} className='submit-btn'>Submit</button>
                 </form>

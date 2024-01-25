@@ -13,7 +13,7 @@ const imageModel = (sequelize, DataTypes) => {
             allowNull: true, //can be null if the image comes from the family
         },
         user_uuid: DataTypes.UUID,
-        image_url: DataTypes.STRING,
+        image_name: DataTypes.STRING,
         image_caption: DataTypes.STRING,
         family_image: DataTypes.BOOLEAN,
         },
