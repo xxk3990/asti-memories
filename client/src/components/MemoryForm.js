@@ -27,15 +27,18 @@ export default function MemoryForm() {
             randomizedFileName = response.data.randomized_name
         })
     }
+
     const {
         register,
         handleSubmit,
         formState: {errors}
     } = useForm()
+
     useEffect(() => {
         document.title = "Asti Memories"
         randomizeFileName()
     })
+
     const credentials = {
         accessKeyId: bucketAccessKey,
         secretAccessKey: bucketSecretKey,
@@ -48,6 +51,7 @@ export default function MemoryForm() {
             accessKeyId: bucketAccessKey,
             secretAccessKey: bucketSecretKey,
         });
+
         const s3 = new AWS.S3({
             credentials: credentials,
             params: { Bucket: bucketName },
@@ -60,11 +64,13 @@ export default function MemoryForm() {
             Body: imageToUpload,
             // ContentType
         };
+        
         const upload = s3.putObject(params);
         await upload.on('success', (e) => {
             console.log(e)
         }).promise();
     }
+
     const navigate = useNavigate();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("")
