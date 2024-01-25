@@ -1,11 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
 .Memories {
+    font-family: 'Noto Sans', sans-serif;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 3%;
 }
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+
 .memories-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
 .MemoryForm {
+    font-family: 'Noto Sans', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,6 +25,7 @@
     flex-direction: column;
     align-items: center;
     font-size: 18px;
+    text-align: left;
 }
 
 .instructions {
@@ -35,23 +37,15 @@
     margin: 0;
 }
 
-.memory-form-question {
-    display: flex;
-    justify-content: space-evenly;
-}
-
 .memory-form-question input,
-.memory-form-question textarea {
+.memory-form-question textarea,
+.responder-image input {
     margin-left: 15px;
 }
 
 .required-note {
     color: red;
     margin-left: 15px;
-}
-
-.asti-front-img {
-    max-width: 400px;
 }
 
 .submit-btn {
@@ -65,8 +59,7 @@
 
 .responder-image {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: space-evenly;
 }
 
 @media screen and (max-width: 600px) {

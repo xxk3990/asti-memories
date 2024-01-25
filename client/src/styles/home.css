@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
 
 .Home {
+    font-family: 'Noto Sans', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,7 +9,7 @@
 }
 
 .asti-verbiage {
-    font-size: 18px;
+    font-size: 17px;
 }
 
 .nav-btn {
@@ -49,6 +50,10 @@
 .asti-img-big {
     max-width: 500px;
     max-height: 500px;
+}
+
+.restaurant-info p {
+    width: 70vw;
 }
 
 @media screen and (max-width: 600px) {
