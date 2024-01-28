@@ -30,6 +30,9 @@ export const MemoryTile = (props) => {
     await handleGet(endpoint, setImage)
   }
   console.log("comments:", comments)
+  if(m.occasion === "") {
+    m.occasion = "N/A"
+  }
   return (
     <section className='memory'>
         <h4>Name: {m.name}</h4>

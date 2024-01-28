@@ -8,11 +8,13 @@ import AdminLogin from './components/admin/AdminLogin';
 import AdminCreateAccount from './components/admin/AdminCreateAccount';
 import ManageMemories from './components/admin/ManageMemories';
 import MemoryForm from './components/MemoryForm';
+import Home from './components/Home';
 function App() {
   return (
     <Routes>
       <Route element={<> <Navbar/> <Outlet /></>}>
-        <Route path="/" element={<MemoryForm/>}/>
+      <Route path="/" element={<Home/>}/>
+        <Route path="/memoryForm" element={<MemoryForm/>}/>
         <Route path="/memories" element={<Memories/>}/>
         <Route path="/gallery" element={<Gallery/>}/>
       </Route>

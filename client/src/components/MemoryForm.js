@@ -4,7 +4,6 @@ import {handleGet, handlePost} from '../services/requests-service'
 import { useNavigate } from 'react-router-dom'
 import {Snackbar} from '@mui/material'
 import {useForm} from "react-hook-form"
-import astiFront from "../images-static/asti-front.jpeg"
 import ReCAPTCHA from "react-google-recaptcha"
 import AWS from "aws-sdk"
 import axios from 'axios'
@@ -52,23 +51,25 @@ export default function MemoryForm() {
             secretAccessKey: bucketSecretKey,
         });
 
-        const s3 = new AWS.S3({
-            credentials: credentials,
+        const s3Object = new AWS.S3({
+            credentials: credentials, //authenticate s3 connection
             params: { Bucket: bucketName },
             region: bucketRegion,
         });
 
-        const params = {
+        const imagePayload = {
             Bucket: bucketName,
             Key: `${randomizedFileName}.${filextension[1]}`, //add it to end of randomized image name
             Body: imageToUpload,
             // ContentType
         };
         
-        const upload = s3.putObject(params);
-        await upload.on('success', (e) => {
+        const imageResponse = s3Object.putObject(imagePayload);
+        await imageResponse.on('success', (e) => {
             console.log(e)
         }).promise();
+        console.log("image response:", imageResponse)
+        //add .on error
     }
 
     const navigate = useNavigate();
@@ -135,46 +136,29 @@ export default function MemoryForm() {
         <div className='MemoryForm'>
            
             <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
-            <section className = "restaurant-info">
-                <h3 className='asti-verbiage'>The <em>Asti</em>, a landmark New York City restaurant, brought opera from the uptown stage to
-                    the downtown dinner table from 1924 to 2000. Located in Greenwich Village, back in
-                    the day when “the Village” was the creative heart of Manhattan, the Asti was known as
-                    the home of the singing waiters and the go-to hotspot to discover budding opera talents
-                    who then went on to illustrious careers. Founder Adolfo Mariani, a baritone himself,
-                    created the Asti with the idea that opera was not only for the elite. He was convinced,
-                    that served up with dinner, famous arias, duets, rousing choruses and a dose of
-                    audience participation anyone could and would become an opera lover. And they did.</h3>
-                    <img className='asti-front-img' src={astiFront} alt="asti-front"/>
-                    <h3 className='asti-verbiage'>
-                        This is Angela Mariani, Adolfo’s youngest daughter, and my life’s goal has been to write
-                        a memoir about the Asti. 25 years have passed since the Asti closed, memories fade,
-                        including my own, and by sharing, you will help bring the Asti story to life.
-                        Whatever you choose to share will remain anonymous and you are not required to
-                        provide any personal information.
-                    </h3>
-            </section>
-          
             <section>
-                <h4 className='instructions'> Posts that are unrelated to the <em>Asti</em> Restaurant will be deleted by an admin.</h4>
+                <h1 className='form-title'>Share Your Experience at the <em>Asti!</em></h1>
+                
                 <form className='memory-form' onSubmit={handleSubmit(submitMemory)}>
-                    <span className='memory-form-question' id="responder-name">Your display name (SFW): 
-                        <input type="text" name="name" className='user-input' {...register("name", { required: true})} />
+                    <span className='memory-form-question' id="responder-name"><label for ="name">Enter a name to use while on the site: </label>
+                        <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: true})} />
                         {errors.name && <span className='required-note'>This field is required</span>}
                     </span>
-                    <span className='memory-form-question' id="responder-occasion">Was your visit to the&nbsp;<em> Asti </em>&nbsp;a special occasion (birthday, date, anniversary, rehearsal dinner, etc.)? If no, put "no" in the response field. 
-                        <input type="text" name="occasion" className='user-input' {...register("occasion", { required: true})} />
-                        {errors.occasion && <span className='required-note'>This field is required</span>}
+                    <span className='memory-form-question' id="responder-occasion"><label for ="occasion">(Optional) Was your visit to the <em> Asti </em> a special occasion (birthday, date, anniversary, rehearsal dinner, etc.)?</label>
+                        <input type="text" name="occasion" id="occasion" className='user-input' {...register("occasion")} />
                     </span>
-                    <span className='memory-form-question' id="responder-experience">Describe your experience! 
-                        <textarea name="experience" className='user-input' {...register("experience", { required: true})}></textarea>
+                    <span className='memory-form-question' id="responder-experience"><label for="experience">Describe your experience! </label>
+                        <textarea id ="experience" name="experience" className='user-input' {...register("experience", { required: true})}></textarea>
                         {errors.experience && <span className='required-note'>This field is required</span>}
                     </span>
-                    <span className='memory-form-question responder-image'>(Optional) Upload an image with a caption!
-                        <h5 className='anonymous-note'>To keep this anonymous, your image file name will be replaced with a randomized name. </h5>
-                        <input type ="file" name='image' className='user-input' onChange={e => setImageToUpload(e.target.files[0])} />
-                        Add Caption: <input type="text" name="caption" onChange={e => setCaption(e.target.value)}/>
+                    <span className='responder-image'>
+                        (Optional) Upload an image with a caption! <input type ="file" name='image' className='user-input-image' onChange={e => setImageToUpload(e.target.files[0])} />
                     </span>
-
+                    <span className='responder-image'>
+                        <label for="caption">Add Caption:</label> <input type="text" id="caption" name="caption" onChange={e => setCaption(e.target.value)}/>   
+                    </span>
+                    <h4 className='anonymous-note'>To keep this anonymous, your image file name will be replaced with a randomized name. </h4>
+                    <h4 className='instructions'> Posts that are unrelated to the <em>Asti</em> Restaurant will be deleted by an admin.</h4>
                     <ReCAPTCHA sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
                     <button disabled={!recaptchaValue} className='submit-btn'>Submit</button>
                 </form>
