@@ -51,23 +51,25 @@ export default function MemoryForm() {
             secretAccessKey: bucketSecretKey,
         });
 
-        const s3 = new AWS.S3({
-            credentials: credentials,
+        const s3Object = new AWS.S3({
+            credentials: credentials, //authenticate s3 connection
             params: { Bucket: bucketName },
             region: bucketRegion,
         });
 
-        const params = {
+        const imagePayload = {
             Bucket: bucketName,
             Key: `${randomizedFileName}.${filextension[1]}`, //add it to end of randomized image name
             Body: imageToUpload,
             // ContentType
         };
         
-        const upload = s3.putObject(params);
-        await upload.on('success', (e) => {
+        const imageResponse = s3Object.putObject(imagePayload);
+        await imageResponse.on('success', (e) => {
             console.log(e)
         }).promise();
+        console.log("image response:", imageResponse)
+        //add .on error
     }
 
     const navigate = useNavigate();
