@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
 .MemoryForm {
+    font-family: 'Noto Sans', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     color: black;
+    margin-top: 3%;
 }
 
 .restaurant-info {
@@ -22,6 +24,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-size: 18px;
+    text-align: left;
 }
 
 .instructions {
@@ -33,13 +37,9 @@
     margin: 0;
 }
 
-.memory-form-question {
-    display: flex;
-    justify-content: space-evenly;
-}
-
 .memory-form-question input,
-.memory-form-question textarea {
+.memory-form-question textarea,
+.responder-image input {
     margin-left: 15px;
 }
 
@@ -48,26 +48,25 @@
     margin-left: 15px;
 }
 
-.asti-front-img {
-    max-width: 500px;
-
-}
-
 .submit-btn {
     background-color: darkred;
     color: white;
+    width: 70px;
+    height: 30px;
+    font-size: 16px;
+    cursor: pointer;
 }
 
 .responder-image {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: space-evenly;
 }
 
 @media screen and (max-width: 600px) {
-    .Landing {
+    .MemoryForm {
         display: grid;
         grid-template-columns: repeat(1, 1fr);
+        margin-top: 15%;
     }
 
     .memory-form-question {
