@@ -21,6 +21,11 @@ export default function MemoryForm() {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("")
     const [formUser, setFormUser] = useState("")
+    const {
+        register,
+        handleSubmit,
+        formState: {errors}
+    } = useForm()
     const user = sessionStorage.getItem("user_uuid")
     const checkForUser = async() => {
         //if the user already created a temp user (via commenting for example), grab temp display_name
@@ -47,11 +52,7 @@ export default function MemoryForm() {
         })
     }
 
-    const {
-        register,
-        handleSubmit,
-        formState: {errors}
-    } = useForm()
+    
 
     useEffect(() => {
         document.title = "Asti Memories"
