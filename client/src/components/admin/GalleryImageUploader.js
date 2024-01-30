@@ -71,6 +71,8 @@ export default function GalleryImageUploader() {
                 setTimeout(() => {
                     setOpenSnackbar(false);
                     setSnackbarMessage("")
+                    setImageToUpload(null)
+                    setCaption("")
                 }, 1500)
                 
             } else {
