@@ -60,7 +60,7 @@ export default function  ManageMemories() {
         return (
             <div className='ManageMemories'>
                 <Snackbar open={openSnackbar} autoHideDuration={2000} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
-                <h1>Manage All Memories and Comments.</h1>
+                <h1>Manage All Memories and Comments</h1>
                <section className='manage-memories-grid'>
                     {memories.map(m => {
                         return <AdminMemoryTile m={m} deleteMemory={deleteMemory} deleteComment={deleteComment}/>

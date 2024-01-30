@@ -29,13 +29,12 @@ h1 {
 
 @media screen and (max-width: 600px) {
     .Gallery {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         margin-top: 15%;
     }
 
     .gallery-grid {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 }

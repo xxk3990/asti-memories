@@ -5,6 +5,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 3%;
 }
 
 .manage-memories-grid {
@@ -45,7 +46,7 @@
 }
 
 @media screen and (max-width: 600px) {
-    section.memories-grid {
+    section.manage-memories-grid {
         display: flex;
         flex-direction: column;
         align-items: center;
