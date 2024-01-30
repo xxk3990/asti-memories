@@ -35,6 +35,8 @@
 .anonymous-note {
     padding: 0;
     margin: 0;
+    width: 50vw;
+    text-align: center;
 }
 
 .memory-form-question input,

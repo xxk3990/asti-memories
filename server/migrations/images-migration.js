@@ -11,14 +11,9 @@ module.exports = {
             },
             memory_uuid: Sequelize.UUID,
             user_uuid: Sequelize.UUID,
-            memory_uuid: {
-                type: Sequelize.STRING,
-                allowNull: true, //can be null if the image comes from the family
-            },
-            user_uuid: Sequelize.UUID,
-            image_name: Sequelize.STRING,
+            image_key: Sequelize.STRING,
             image_caption: Sequelize.STRING,
-            family_image: Sequelize.BOOLEAN,
+            source_bucket: Sequelize.STRING,
             created_at: {
                 allowNull: false,
                 type: Sequelize.DATE

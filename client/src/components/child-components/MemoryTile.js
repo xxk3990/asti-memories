@@ -15,10 +15,24 @@ export const MemoryTile = (props) => {
   const [likeDisabled, setLikeDisabled] = useState(false)
   const [showComments, setShowComments] = useState(false); //show and hide comment view
   const [showImage, setShowImage] = useState(false);
+  const [commentUser, setCommentUser] = useState("");
   const submitComment = props.submitComment;
   const handleClick = () => {
     likePost(m);
     setLikeDisabled(!likeDisabled)
+  }
+
+  const checkForUser = async() => {
+    if(user !== null) {
+      const checkUserEndpoint = `users?user_uuid=${user}`
+      const url = `${NODE_URL}/${checkUserEndpoint}`
+      await axios.get(url).then(response => {
+        const data = response.data;
+        if(data.display_name) {
+          setCommentUser(data.display_name)
+        }
+      })
+    }
   }
   const [comments, setComments] = useState([])
   const getComments = async() => {
@@ -33,6 +47,7 @@ export const MemoryTile = (props) => {
   if(m.occasion === "") {
     m.occasion = "N/A"
   }
+  const user = sessionStorage.getItem("user_uuid")
   return (
     <section className='memory'>
         <h4>Name: {m.name}</h4>
@@ -41,10 +56,11 @@ export const MemoryTile = (props) => {
         <h4>Likes: {m.num_likes}</h4>
         <button className='interaction-btn like-btn' onClick = {handleClick} disabled={likeDisabled}>Like</button>
         <button className='interaction-btn' onClick ={() => {
-          getComments()
+          checkForUser();
+          getComments();
           setShowComments(!showComments);
         }}>{showComments ? `Hide ${String.fromCharCode(8593)}` : `View Comments ${String.fromCharCode(8595)}`}</button>
-        {showComments ? <CommentsView m = {m} getComments={getComments} comments={comments} submitComment={submitComment} /> : null}
+        {showComments ? <CommentsView m = {m} commentUser={commentUser} setCommentUser={setCommentUser} getComments={getComments} comments={comments} submitComment={submitComment} /> : null}
 
         <button className='interaction-btn' onClick ={() => {
           getImage()
@@ -57,31 +73,10 @@ export const MemoryTile = (props) => {
 
 //child component for each memory's comments
 const CommentsView = (props) => {
-  const m = props.m;
-  const submitComment = props.submitComment;
-  const comments = props.comments;
-  const getComments = props.getComments
+  const {m, commentUser, setCommentUser, submitComment, comments, getComments} = props;
   const user = sessionStorage.getItem("user_uuid")
-  
-  const [commentUser, setCommentUser] = useState("");
   const SITE_KEY = '6LffBlMpAAAAADK37hlL29ERh8ba5EMhRtPCli6o'
   const [recaptchaValue, setRecaptchaValue] = useState(null);
-  const checkForUser = async() => {
-    if(user !== null) {
-      const checkUserEndpoint = `users?user_uuid=${user}`
-      const url = `${NODE_URL}/${checkUserEndpoint}`
-      await axios.get(url).then(response => {
-        const data = response.data;
-        if(data.display_name) {
-          setCommentUser(data.display_name)
-        }
-      })
-    }
-  }
-
-  useEffect(() => {
-    checkForUser();
-  }, [])
   
   const [newComment, setNewComment] = useState({
     memory_uuid: m.uuid,
@@ -117,7 +112,6 @@ const CommentsView = (props) => {
   const handleUserChange = (value) => {
     setCommentUser(value)
   }
-  //TODO: ADD reCAPTCHA TO PUBLIC COMMENT FORM
   if(comments.length === 0) {
     return (
       <section className='comments-container'>
@@ -125,7 +119,7 @@ const CommentsView = (props) => {
         <section className='new-comment'>
           <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
           <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
-          <ReCAPTCHA sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
+          <ReCAPTCHA size="compact" sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
           <button disabled={!recaptchaValue} className='interaction-btn submit-comment-btn' onClick = {handleSubmit}>Post comment</button>
         </section>
       </section>
@@ -148,7 +142,7 @@ const CommentsView = (props) => {
         <section className='new-comment'>
           <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
           <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
-          <ReCAPTCHA sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
+          <ReCAPTCHA size="compact" sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
           <button disabled={!recaptchaValue} className='interaction-btn submit-comment-btn' onClick = {handleSubmit}>Post comment</button>
         </section>
       </section>

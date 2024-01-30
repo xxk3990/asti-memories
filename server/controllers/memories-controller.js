@@ -31,7 +31,7 @@ const createMemory = async (req, res) => {
         try {
             models.sequelize.transaction(async () => {
                 if (user === null) {
-                    if(req.body.image_name === null) {
+                    if(req.body.image_key === null) {
                         const newUser = {
                             uuid: uuidv4(),
                             display_name: req.body.name,
@@ -70,9 +70,9 @@ const createMemory = async (req, res) => {
                             uuid: uuidv4(),
                             memory_uuid: newMemory.uuid,
                             user_uuid: newUser.uuid,
-                            image_name: req.body.image_name,
+                            image_key: req.body.image_key,
                             image_caption: req.body.image_caption,
-                            family_image: false //in later version, family images will be added via seeders
+                            source_bucket: process.env.IMAGE_BUCKET_NAME //photos.astimemories.com
                         }
                         await models.Image.create(newImage)
                         return res.status(201).json({
@@ -83,7 +83,7 @@ const createMemory = async (req, res) => {
                     
                     
                 } else {
-                    if(req.body.image_name === null) {
+                    if(req.body.image_key === null) {
                         const newMemory = {
                             uuid: uuidv4(),
                             user_uuid: user,
@@ -109,9 +109,9 @@ const createMemory = async (req, res) => {
                             uuid: uuidv4(),
                             memory_uuid: newMemory.uuid,
                             user_uuid: user,
-                            image_name: req.body.image_name,
+                            image_key: req.body.image_key,
                             image_caption: req.body.image_caption,
-                            family_image: false //in later version, family images will be added via seeders
+                            source_bucket: process.env.IMAGE_BUCKET_NAME //photos.astimemories.com
                         }
                         await models.Image.create(newImage)
                         return res.status(201).json({

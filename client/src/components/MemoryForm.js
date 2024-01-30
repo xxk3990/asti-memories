@@ -1,4 +1,4 @@
-import '../styles/memory-form.css'
+import styles from '../styles/memory-form.css'
 import {React, useState, useEffect, useRef} from 'react'
 import {handleGet, handlePost} from '../services/requests-service'
 import { useNavigate } from 'react-router-dom'
@@ -17,7 +17,27 @@ export default function MemoryForm() {
     const [recaptchaValue, setRecaptchaValue] = useState(null);
     const [imageToUpload, setImageToUpload] = useState(null);
     const [caption, setCaption] = useState("");
-
+    const navigate = useNavigate();
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("")
+    const [formUser, setFormUser] = useState("")
+    const user = sessionStorage.getItem("user_uuid")
+    const checkForUser = async() => {
+        //if the user already created a temp user (via commenting for example), grab temp display_name
+        if(user !== null) {
+            const checkUserEndpoint = `users?user_uuid=${user}`
+            const url = `${NODE_URL}/${checkUserEndpoint}`
+            await axios.get(url).then(response => {
+                const data = response.data;
+                if(data.display_name) {
+                    setFormUser(data.display_name)
+                }
+            })
+        }
+    }
+    useEffect(() => {
+        checkForUser();
+    })
     let randomizedFileName = ""
     const randomizeFileName = async() => {
         //this endpoint generates a random unique file name for the user's image.
@@ -72,10 +92,6 @@ export default function MemoryForm() {
         //add .on error
     }
 
-    const navigate = useNavigate();
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState("")
-
     const submitMemory = async(data) => {
         const token = recaptchaValue;
         const recaptchaEndpoint = `recaptcha`
@@ -91,16 +107,16 @@ export default function MemoryForm() {
                 name: data.name,
                 occasion: data.occasion,
                 experience: data.experience,
-                image_name: '',
+                image_key: '',
                 image_caption: caption
             }
             if(imageToUpload != null) {
                 await uploadToS3()
                 const filextension = imageToUpload.type.split('/');
                 //set image name to fully randomized name
-                requestBody.image_name = `${randomizedFileName}.${filextension[1]}` 
+                requestBody.image_key = `${randomizedFileName}.${filextension[1]}` 
             } else {
-                requestBody.image_name = null;
+                requestBody.image_key = null;
             }
             const endpont = `memories`;
             
@@ -134,15 +150,14 @@ export default function MemoryForm() {
     }
     return (
         <div className='MemoryForm'>
-           
             <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
             <section>
                 <h1 className='form-title'>Share Your Experience at the <em>Asti!</em></h1>
                 
                 <form className='memory-form' onSubmit={handleSubmit(submitMemory)}>
                     <span className='memory-form-question' id="responder-name"><label for ="name">Enter a name to use while on the site: </label>
-                        <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: true})} />
-                        {errors.name && <span className='required-note'>This field is required</span>}
+                        <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: true})} defaultValue={formUser === "" ? "" : formUser}/>
+                        {formUser === "" ? errors.name && <span className='required-note'>This field is required</span> : ''}
                     </span>
                     <span className='memory-form-question' id="responder-occasion"><label for ="occasion">(Optional) Was your visit to the <em> Asti </em> a special occasion (birthday, date, anniversary, rehearsal dinner, etc.)?</label>
                         <input type="text" name="occasion" id="occasion" className='user-input' {...register("occasion")} />
@@ -157,7 +172,7 @@ export default function MemoryForm() {
                     <span className='responder-image'>
                         <label for="caption">Add Caption:</label> <input type="text" id="caption" name="caption" onChange={e => setCaption(e.target.value)}/>   
                     </span>
-                    <h4 className='anonymous-note'>To keep this anonymous, your image file name will be replaced with a randomized name. </h4>
+                    <h4 className='anonymous-note'>To keep things anonymous, we do not require a proper login. When you close this tab in your browser, all temporary user info will be forgotten. If you uploaded an image, its file name will be replaced with a randomized one.</h4>
                     <h4 className='instructions'> Posts that are unrelated to the <em>Asti</em> Restaurant will be deleted by an admin.</h4>
                     <ReCAPTCHA sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
                     <button disabled={!recaptchaValue} className='submit-btn'>Submit</button>

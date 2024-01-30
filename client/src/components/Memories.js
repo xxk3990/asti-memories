@@ -1,4 +1,4 @@
-import '../styles/memories.css'
+import styles from '../styles/memories.css'
 import { React, useState, useEffect, memo} from 'react'
 import { handlePost, handlePut } from '../services/requests-service'
 import {Snackbar} from '@mui/material'
