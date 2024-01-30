@@ -23,6 +23,10 @@
     max-height: 400px;
 }
 
+.gallery-image-caption {
+    text-align: center;
+}
+
 h1 {
     text-align: center;
 }

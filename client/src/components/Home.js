@@ -1,6 +1,10 @@
-import {React, useState, useEffect, useRef} from 'react'
+import {React} from 'react'
 import { useNavigate } from 'react-router-dom'
 import "../styles/home.css"
+import astiQuartet from "../images-static/asti-quartet.png"
+import astiMenu from "../images-static/asti-menu-1960s.jpg"
+import astiPostcard from "../images-static/asti-postcard.PNG"
+import astiFront from "../images-static/asti-front.JPG"
 export default function Home() {
     const navigate = useNavigate();
     const navigateToForm = () => {
@@ -23,12 +27,12 @@ export default function Home() {
                     audience participation anyone could and would become an opera lover. And they did.
                 </p>
                 <section className='asti-images'>
-                    <img className='asti-img-big' src="https://s3.amazonaws.com/gallery.astimemories.com/asti-front.JPG" alt="asti-front"/>
+                    <img className='asti-img-big' src={astiFront} alt="asti-front"/>
                     <section className='asti-images-small'>
-                        <img className='asti-img-small' src="https://s3.amazonaws.com/gallery.astimemories.com/asti-quartet.png" alt="asti-quartet"/>
-                        <img className='asti-img-small' src="https://s3.amazonaws.com/gallery.astimemories.com/asti-postcard.PNG" alt="asti-postcard"/>
+                        <img className='asti-img-small' src={astiQuartet} alt="asti-quartet"/>
+                        <img className='asti-img-small' src={astiPostcard} alt="asti-postcard"/>
                     </section>
-                    <img className='asti-img' src="https://s3.amazonaws.com/gallery.astimemories.com/asti-menu-1960s.jpg" alt="asti-menu-1960s"/>
+                    <img className='asti-img' src={astiMenu} alt="asti-menu-1960s"/>
                 </section>
                 
                    
