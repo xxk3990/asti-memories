@@ -4,7 +4,7 @@ import "../styles/home.css"
 import astiQuartet from "../images-static/asti-quartet.png"
 import astiMenu from "../images-static/asti-menu-1960s.jpg"
 import astiPostcard from "../images-static/asti-postcard.PNG"
-import astiFront from "../images-static/asti-front.JPG"
+import astiFront from "../images-static/asti-front.jpeg"
 export default function Home() {
     const navigate = useNavigate();
     const navigateToForm = () => {
