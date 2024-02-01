@@ -4,8 +4,8 @@ import { handlePost, handlePut } from '../services/requests-service'
 import {Snackbar} from '@mui/material'
 import { MemoryTile } from './child-components/MemoryTile'
 import axios from 'axios'
-
 export default function Memories() {
+  <link rel="stylesheet" href="../../styles/memories.css"/>
   const [memories, setMemories] = useState([]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("")

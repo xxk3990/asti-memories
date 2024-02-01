@@ -18,10 +18,6 @@ export default function AdminLogin() {
   useEffect(() => {
     document.title = "Admin Login"
   })
-
-  const navigateCreateAccount = () => {
-    navigate('/adminCreateAccount')
-  }
   
   const submitLogin = async (data) => {
     const postURL = `adminLogin`
@@ -67,7 +63,6 @@ export default function AdminLogin() {
         <button type="submit">Submit</button>
           </form>
       </section>
-      <span>New Admin? Create Account<button className='create-account-btn' type='button' onClick={navigateCreateAccount}>Create Account</button></span>
     </div>
   );
   

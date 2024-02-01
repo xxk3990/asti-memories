@@ -102,11 +102,6 @@ models.Comment.belongsTo(models.User, {
   foreignKey: "user_uuid"
 })
 
-models.Image.belongsTo(models.User, {
-  as: "uploader_name",
-  foreignKey: 'user_uuid'
-})
-
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

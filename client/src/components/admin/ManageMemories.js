@@ -1,13 +1,12 @@
-
+import "../../styles/manage-memories.css"
 import { React, useState, useEffect, memo} from 'react'
 import { handleGet } from '../../services/requests-service'
 import {Snackbar} from '@mui/material'
 import {useNavigate} from "react-router-dom"
 import { AdminMemoryTile } from './AdminMemoryTile'
 import {handleAdminDelete} from "../../services/admin-service"
-<link rel="stylsheet" href="../../styles/memories.css"/>
 export default function  ManageMemories() {
-  
+    <link rel="stylsheet" href="../../styles/manage-memories.css"/>
     const [memories, setMemories] = useState([]);
     const navigate = useNavigate();
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -61,8 +60,8 @@ export default function  ManageMemories() {
         return (
             <div className='ManageMemories'>
                 <Snackbar open={openSnackbar} autoHideDuration={2000} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
-                <h1>Manage All Memories and Comments.</h1>
-               <section className='memories-grid'>
+                <h1>Manage All Memories and Comments</h1>
+               <section className='manage-memories-grid'>
                     {memories.map(m => {
                         return <AdminMemoryTile m={m} deleteMemory={deleteMemory} deleteComment={deleteComment}/>
                     })}

@@ -9,6 +9,7 @@ import AdminCreateAccount from './components/admin/AdminCreateAccount';
 import ManageMemories from './components/admin/ManageMemories';
 import MemoryForm from './components/MemoryForm';
 import Home from './components/Home';
+import GalleryImageUploader from './components/admin/GalleryImageUploader';
 function App() {
   return (
     <Routes>
@@ -17,10 +18,12 @@ function App() {
         <Route path="/memoryForm" element={<MemoryForm/>}/>
         <Route path="/memories" element={<Memories/>}/>
         <Route path="/gallery" element={<Gallery/>}/>
+        <Route path="/adminLogin" element={<AdminLogin/>}/>
+        <Route path="/adminCreateAccount" element={<AdminCreateAccount/>} />
+        <Route path="/manageMemories" element={<ManageMemories/>}/>
+        <Route path="/galleryUpload" element={<GalleryImageUploader/>}/>
       </Route>
-      <Route path="/adminLogin" element={<AdminLogin/>}/>
-      <Route path="/adminCreateAccount" element={<AdminCreateAccount/>} />
-      <Route path="/manageMemories" element={<ManageMemories/>}/>
+      
     </Routes>   
   );
 }

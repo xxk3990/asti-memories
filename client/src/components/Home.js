@@ -1,10 +1,10 @@
-import {React, useState, useEffect, useRef} from 'react'
+import {React} from 'react'
 import { useNavigate } from 'react-router-dom'
+import "../styles/home.css"
 import astiQuartet from "../images-static/asti-quartet.png"
 import astiMenu from "../images-static/asti-menu-1960s.jpg"
 import astiPostcard from "../images-static/asti-postcard.PNG"
-import astiFront from "../images-static/asti-front.JPG"
-import "../styles/home.css"
+import astiFront from "../images-static/asti-front.jpeg"
 export default function Home() {
     const navigate = useNavigate();
     const navigateToForm = () => {
