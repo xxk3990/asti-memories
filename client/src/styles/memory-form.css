@@ -23,7 +23,7 @@
 .memory-form {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     font-size: 18px;
     text-align: left;
 }
@@ -34,15 +34,34 @@
 
 .anonymous-note {
     padding: 0;
-    margin: 0;
+    margin: 20px 0 0 0;
     width: 50vw;
-    text-align: center;
+    text-align: left;
 }
 
-.memory-form-question input,
-.memory-form-question textarea,
-.responder-image input {
-    margin-left: 15px;
+.memory-form-question {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.memory-form-question input {
+    max-width: 300px;
+}
+
+.user-input-image {
+    font-size: 16px;
+}
+
+.user-input-image::file-selector-button {
+    background-color: darkred;
+    color: white;
+    width: 100px;
+    height: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    
 }
 
 .required-note {
@@ -57,11 +76,7 @@
     height: 30px;
     font-size: 16px;
     cursor: pointer;
-}
-
-.responder-image {
-    display: flex;
-    justify-content: space-evenly;
+    margin-top: 5px;
 }
 
 @media screen and (max-width: 600px) {
@@ -71,12 +86,19 @@
         margin-top: 15%;
     }
 
-    .memory-form-question {
+    .memory-form {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
-    .asti-verbiage {
+
+    .memory-form-question {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 90vw;
+    }
+    .anonymous-note {
         text-align: center;
         width: 70vw;
     }

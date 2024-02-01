@@ -156,7 +156,7 @@ export default function MemoryForm() {
                 <h1 className='form-title'>Share Your Experience at the <em>Asti!</em></h1>
                 
                 <form className='memory-form' onSubmit={handleSubmit(submitMemory)}>
-                    <span className='memory-form-question' id="responder-name"><label for ="name">Enter a name to use while on the site: </label>
+                    <span className='memory-form-question' id="responder-name"><label for ="name">Enter a name to use while on the site </label>
                         <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: true})} defaultValue={formUser === "" ? "" : formUser}/>
                         {formUser === "" ? errors.name && <span className='required-note'>This field is required</span> : ''}
                     </span>
@@ -167,11 +167,11 @@ export default function MemoryForm() {
                         <textarea id ="experience" name="experience" className='user-input' {...register("experience", { required: true})}></textarea>
                         {errors.experience && <span className='required-note'>This field is required</span>}
                     </span>
-                    <span className='responder-image'>
-                        (Optional) Upload an image with a caption! <input type ="file" name='image' className='user-input-image' onChange={e => setImageToUpload(e.target.files[0])} />
+                    <span className='memory-form-question responder-image'>
+                        (Optional) Upload an image <input type ="file" name='image' className='user-input-image' onChange={e => setImageToUpload(e.target.files[0])} />
                     </span>
-                    <span className='responder-image'>
-                        <label for="caption">Add Caption:</label> <input type="text" id="caption" name="caption" onChange={e => setCaption(e.target.value)}/>   
+                    <span className='memory-form-question responder-image'>
+                        <label for="caption">(Optional) Add a caption for your image</label> <input type="text" id="caption" name="caption" onChange={e => setCaption(e.target.value)}/>   
                     </span>
                     <h4 className='anonymous-note'>To keep things anonymous, we do not require a proper login. When you close this tab in your browser, all temporary user info will be forgotten. If you uploaded an image, its file name will be replaced with a randomized one.</h4>
                     <h4 className='instructions'> Posts that are unrelated to the <em>Asti</em> Restaurant will be deleted by an admin.</h4>
