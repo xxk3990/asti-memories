@@ -20,7 +20,7 @@
 }
 
 
-.comments-container {
+.admin-comments-container {
     border: 1px solid black;
     z-index: 1;
     position: absolute;
@@ -30,7 +30,7 @@
     overflow-y: scroll;
 }
 
-.comments-list {
+.admin-comments-list {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,7 +40,7 @@
 
 }
 
-.comments-list li {
+.admin-comments-list li {
     border: 1px solid black;
     width: 100%;
 }

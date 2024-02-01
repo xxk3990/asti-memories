@@ -42,15 +42,15 @@ const ViewComments = (props) => {
     }
     if(comments.length === 0) {
       return (
-        <section className='comments-container'>
+        <section className='admin-comments-container'>
           <h4>No comments yet.</h4>
         </section>
       )
     } else {
       return (
-        <section className='comments-container'>
+        <section className='admin-comments-container'>
           <h4>Comments</h4>
-          <ul className='comments-list'>
+          <ul className='admin-comments-list'>
             {
               comments.map(com => {
                 return (

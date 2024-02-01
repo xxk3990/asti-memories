@@ -47,39 +47,53 @@ export default function Memories() {
     The parameters come from there. 
     I wanted to call them here (rather than inside that file) because I wanted the snackbar to work for comments.
   */
-  const submitComment = async (comment, commentUser, setCommentUser, setNewComment, getComments) => {
+  const submitComment = async (comment, commentUser, setNewComment, getComments, recaptchaValue, setRecaptchaValue) => {
     console.log('comment:',comment)
     const endpoint = `comments`
     const requestBody = {
       comment: comment,
       user_display_name: commentUser
     }
-    try {
-      const response = await handlePost(endpoint, requestBody)
-      if(response.status === 200 || response.status === 201) {
-        const serverData = await response.data;
-        setOpenSnackbar(true);
-        setSnackbarMessage("Comment added successfully!")
-        if(user === null) {
-          sessionStorage.setItem("user_uuid", serverData.new_user_uuid)
-        }
-        setTimeout(() => {
-          setOpenSnackbar(false);
-          setSnackbarMessage("")
-          //clear comment form on comment submit success
-          setNewComment({
-            comment_text: "",
-          });
-          setCommentUser("")
-          getComments(); //call get comments GET request method declared in memoryTile.js and passed in here
-        }, 1500)
-                
-      } else {
-        alert("Comment could not be saved, try again.")
-      }
-    } catch {
-      alert("comment could not be added.")
+    const token = recaptchaValue;
+    const recaptchaEndpoint = `recaptcha`
+    const recaptchaBody = {
+      recaptcha_token: token,
     }
+    const recaptchaResponse = await handlePost(recaptchaEndpoint, recaptchaBody)
+    const recaptchaData = await recaptchaResponse.data;
+    if(recaptchaData.human) {
+      try {
+        const response = await handlePost(endpoint, requestBody)
+        if(response.status === 200 || response.status === 201) {
+          const serverData = await response.data;
+          setOpenSnackbar(true);
+          setSnackbarMessage("Comment added successfully!")
+          if(user === null) {
+            sessionStorage.setItem("user_uuid", serverData.new_user_uuid)
+          }
+          
+          setTimeout(() => {
+            setOpenSnackbar(false);
+            setSnackbarMessage("")
+            //clear comment form on comment submit success
+            setNewComment({
+              comment_text: "",
+            });
+            setRecaptchaValue("");
+            window.grecaptcha.reset(); //reset recaptcha submission on each comment
+            getComments(); //call get comments GET request method declared in memoryTile.js and passed in here
+          }, 1500)
+                  
+        } else {
+          alert("Comment could not be saved, try again.")
+        }
+      } catch {
+        alert("comment could not be added.")
+      }
+    } else {
+      alert('You are a bot.')
+    }
+    
   } 
   if(memories.length === 0) {
     return (

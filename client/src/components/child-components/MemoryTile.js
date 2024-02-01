@@ -84,25 +84,14 @@ const CommentsView = (props) => {
     comment_text: ""
   })
   const handleSubmit = async() => {
-    const token = recaptchaValue;
-    const recaptchaEndpoint = `recaptcha`
-    const recaptchaBody = {
-      recaptcha_token: token,
-    }
-    const recaptchaResponse = await handlePost(recaptchaEndpoint, recaptchaBody)
-    const recaptchaData = await recaptchaResponse.data;
-    if(recaptchaData.human) {
       //if they hit submit but haven't entered a comment, don't do anything
-      if(newComment.comment_text === "") { 
-        return;
-      } else {
-        //ensures memory_uuid and user_uuid are sent in each payload
-        newComment.memory_uuid = m.uuid;
-        newComment.user_uuid = user
-        submitComment(newComment, commentUser, setCommentUser, setNewComment, getComments)
-      }
+    if(newComment.comment_text === "") { 
+      return;
     } else {
-      alert("You are a bot!")
+      //ensures memory_uuid and user_uuid are sent in each payload
+      newComment.memory_uuid = m.uuid;
+      newComment.user_uuid = user
+      submitComment(newComment, commentUser, setNewComment, getComments, recaptchaValue, setRecaptchaValue)
     }
     
   }
@@ -115,13 +104,15 @@ const CommentsView = (props) => {
   if(comments.length === 0) {
     return (
       <section className='comments-container'>
-        <h4>No comments yet, be the first to comment!</h4>
-        <section className='new-comment'>
-          <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
-          <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
-          <ReCAPTCHA size="compact" sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
-          <button disabled={!recaptchaValue} className='interaction-btn submit-comment-btn' onClick = {handleSubmit}>Post comment</button>
+        <section className='no-comments-container'>
+          <h4>No comments yet, be the first to comment!</h4>
         </section>
+        <section className='new-comment'>
+              <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
+              <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
+              <ReCAPTCHA size="compact" sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
+              <button disabled={!recaptchaValue} className='interaction-btn submit-comment-btn' onClick = {handleSubmit}>Post comment</button>
+            </section>
       </section>
     )
   } else {
