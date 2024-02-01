@@ -7,6 +7,7 @@ const preload = async() => {
     await preload_memories();
     await preload_comment();
     await preload_admin();
+    await preload_images();
 }
 
 const preload_users = async() => {
@@ -22,6 +23,14 @@ const preload_memories = async() => {
 
 const preload_comment = async() => {
     await models.Comment.create(prefixes.preloaded_comment);
+}
+
+
+const preload_images = async() => {
+    await models.Image.create(prefixes.preloaded_memory_image)
+
+    //this one is not being saved for some reason
+    await models.Image.create(prefixes.preloaded_gallery_image)
 }
 
 const preload_admin = async() => {

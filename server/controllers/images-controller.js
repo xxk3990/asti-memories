@@ -11,7 +11,6 @@ const {
 
 const galleryBucket = process.env.GALLERY_IMAGES_BUCKET;
 
-//
 
 const getImageForMemory = async(req, res) => {
     const bucketName = process.env.IMAGE_BUCKET_NAME;
@@ -62,6 +61,7 @@ const saveGalleryImage = async(req, res) => {
 const getGalleryImages = async (req, res) => {
     const bucketAccessKey = process.env.IMAGE_BUCKET_ACCESS_KEY;
     const bucketSecretKey = process.env.IMAGE_BUCKET_SECRET_KEY;
+    const galleryBucketRegion = process.env.GALLERY_BUCKET_REGION;
     const credentials = {
         accessKeyId: bucketAccessKey,
         secretAccessKey: bucketSecretKey,
@@ -73,7 +73,7 @@ const getGalleryImages = async (req, res) => {
     } else {
         const imgs = [...images]
         const s3 = new S3Client({
-            region: `us-east-1`,
+            region: galleryBucketRegion,
             credentials: credentials,
         })
         for(const img of imgs) {

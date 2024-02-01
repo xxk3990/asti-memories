@@ -14,7 +14,7 @@ export const MemoryTile = (props) => {
   const [image, setImage] = useState();
   const [likeDisabled, setLikeDisabled] = useState(false)
   const [showComments, setShowComments] = useState(false); //show and hide comment view
-  const [showImage, setShowImage] = useState(false);
+  const [showImage, setShowImage] = useState(false); //show and hide image view
   const [commentUser, setCommentUser] = useState("");
   const submitComment = props.submitComment;
   const handleClick = () => {
@@ -45,7 +45,7 @@ export const MemoryTile = (props) => {
   }
   console.log("comments:", comments)
   if(m.occasion === "") {
-    m.occasion = "N/A"
+    m.occasion = "n/a"
   }
   const user = sessionStorage.getItem("user_uuid")
   return (

@@ -90,6 +90,11 @@ const adminDeleteMemory = async (req, res) => {
                     'memory_uuid': req.query.memory
                 }
             })
+            await models.Image.destroy({
+                where: {
+                    'memory_uuid': req.query.memory
+                }
+            })
             return res.status(200).send();
         })
     } catch {

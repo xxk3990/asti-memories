@@ -31,40 +31,20 @@ const createMemory = async (req, res) => {
         try {
             models.sequelize.transaction(async () => {
                 if (user === null) {
-                    if(req.body.image_key === null) {
-                        const newUser = {
-                            uuid: uuidv4(),
-                            display_name: req.body.name,
-                        }
-                        await models.User.create(newUser);
-                        const newMemory = {
-                            uuid: uuidv4(),
-                            user_uuid: newUser.uuid,
-                            occasion: req.body.occasion,
-                            experience: req.body.experience,
-                            num_likes: 0
-                        }
-                        await models.Memory.create(newMemory)
-                        return res.status(201).json({
-                            newMemory: newMemory,
-                            user_uuid: newUser.uuid,
-                        });
-                    } else {
-                        //create new user if no user_uuid was provided
-                        const newUser = {
-                            uuid: uuidv4(),
-                            display_name: req.body.name,
-                        }
-                        await models.User.create(newUser);
-                        const newMemory = {
-                            uuid: uuidv4(),
-                            user_uuid: newUser.uuid,
-                            occasion: req.body.occasion,
-                            experience: req.body.experience,
-                            num_likes: 0
-                        }
-                        await models.Memory.create(newMemory)
-    
+                    const newUser = {
+                        uuid: uuidv4(),
+                        display_name: req.body.name,
+                    }
+                    await models.User.create(newUser);
+                    const newMemory = {
+                        uuid: uuidv4(),
+                        user_uuid: newUser.uuid,
+                        occasion: req.body.occasion,
+                        experience: req.body.experience,
+                        num_likes: 0
+                    }
+                    await models.Memory.create(newMemory)
+                    if(req.body.image_key !== null) {
                         //if they uploaded an image, save it!
                         const newImage = {
                             uuid: uuidv4(),
@@ -79,32 +59,23 @@ const createMemory = async (req, res) => {
                             newMemory: newMemory,
                             user_uuid: newUser.uuid,
                         });
-                    }
-                    
-                    
-                } else {
-                    if(req.body.image_key === null) {
-                        const newMemory = {
-                            uuid: uuidv4(),
-                            user_uuid: user,
-                            occasion: req.body.occasion,
-                            experience: req.body.experience,
-                            num_likes: 0
-                        }
-                        await models.Memory.create(newMemory)
+                    } else {
                         return res.status(201).json({
                             newMemory: newMemory,
-                            user_uuid: user,
+                            user_uuid: newUser.uuid,
                         });
-                    } else {
-                        const newMemory = {
-                            uuid: uuidv4(),
-                            user_uuid: user,
-                            occasion: req.body.occasion,
-                            experience: req.body.experience,
-                            num_likes: 0
-                        }
-                        await models.Memory.create(newMemory)
+                    }
+                } else {
+                    const newMemory = {
+                        uuid: uuidv4(),
+                        user_uuid: user,
+                        occasion: req.body.occasion,
+                        experience: req.body.experience,
+                        num_likes: 0
+                    }
+                    await models.Memory.create(newMemory)
+                    
+                    if(req.body.image_key !== null) {
                         const newImage = {
                             uuid: uuidv4(),
                             memory_uuid: newMemory.uuid,
@@ -114,6 +85,11 @@ const createMemory = async (req, res) => {
                             source_bucket: process.env.IMAGE_BUCKET_NAME //photos.astimemories.com
                         }
                         await models.Image.create(newImage)
+                        return res.status(201).json({
+                            newMemory: newMemory,
+                            user_uuid: user,
+                        });
+                    } else {
                         return res.status(201).json({
                             newMemory: newMemory,
                             user_uuid: user,

@@ -6,6 +6,9 @@ const {
 } = require("../models")
 const pre = require("./preload")
 const prefixes = require("./preloaded-fixtures")
+const {
+    v4: uuidv4
+} = require('uuid')
 
 beforeAll(async () => {
     await sequelize.sync({
@@ -92,6 +95,45 @@ describe("POST /comments", () => {
         const response = await request(app).post("/comments").send({})
         expect(response.statusCode).toBe(400)
         expect(response.body).toBe("Unable to post comment.")
+    })
+})
+
+describe("GET /images", () => {
+    //happy path
+    it("should get user uploaded image if it exists", async () => {
+        const response = await request(app).get(`/images?memory_uuid=${prefixes.preloaded_memory_image.memory_uuid}`)
+        expect(response.statusCode).toBe(200);
+    })
+
+    /*
+        There is no 400 "bad" path for the user images as user images are optional. 
+        Instead there is a no content path for when the request for the image associated
+        with the memory is successful but the memory had no image associated with it.
+    */
+    it("should return no content if the memory has no associated image", async () => {
+        const response = await request(app).get(`/images?memory_uuid=${uuidv4()}`)
+        expect(response.statusCode).toBe(204)
+    })
+})
+
+describe("GET /gallery", () => {
+    it('should get gallery images if one or more exists', async () => {
+        const response = await request(app).get('/gallery')
+        expect(response.statusCode).toBe(200)
+    })
+})
+
+describe("POST /gallery", () => {
+    //happy path
+    it("should save image uploaded to gallery if image_key provided", async() => {
+        const response = await request(app).post("/gallery").send(fixtures.gallery_image_good)
+        expect(response.statusCode).toBe(201)
+    })
+
+    //bad path
+    it("should return 400 if image_key not provided", async () => {
+        const response = await request(app).post("/gallery").send(fixtures.gallery_image_no_key)
+        expect(response.statusCode).toBe(400)
     })
 })
 
