@@ -8,6 +8,17 @@
     margin-top: 3%;
 }
 
+
+.sorting-btns {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.sort-instructions {
+    margin: 0;
+    padding: 0;
+}
+
 .memories-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -21,15 +32,36 @@
     margin-left: 5px;
 }
 
-.interaction-btn {
+.sort-btn {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+
+.interaction-btn,
+.sort-btn {
     background: darkred;
     color: white;
     width: auto;
     height: 30px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: none;
 }
 
-.like-btn:disabled {
+.interaction-btn {
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.like-btn:disabled,
+.sort-btn:disabled {
     opacity: .75;
+    cursor: default;
 }
 
 .comments-count {
@@ -42,7 +74,8 @@
     border: 1px solid black;
     z-index: 1;
     position: absolute;
-    width: 300px;
+    max-width: 300px;
+    min-width: 300px;
     background: white;
     display: flex;
     flex-direction: column;

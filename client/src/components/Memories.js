@@ -8,10 +8,14 @@ export default function Memories() {
   <link rel="stylesheet" href="../../styles/memories.css"/>
   const [memories, setMemories] = useState([]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [sortedByNewest, setSortedByNewest] = useState(true); //starts out true because this is default
+  const [sortedByOldest, setSortedByOldest] = useState(false); //starts out true because this is default
+  const [sortedBylikes, setSortedByLikes] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("")
+  const [defaultSortBtnText, setDefaultSortBtnText] = useState("Newest (default)");
   const user = sessionStorage.getItem("user_uuid")
 
-  const getMemories = async() => {
+  const getMemoriesByNewest = async() => {
     const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
     const url = `${NODE_URL}/memories`
     await axios.get(url).then(response => {
@@ -23,12 +27,45 @@ export default function Memories() {
       
     })
   }
+
+  const getMemoriesByOldest = async() => {
+    const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
+    const url = `${NODE_URL}/memories`
+    await axios.get(url).then(response => {
+      if(response.data) {
+        setMemories(response.data.sort((x, y) => new Date(x.createdAt) - new Date(y.createdAt)))
+      } else {
+        setMemories([])
+      }
+    })
+  } 
+
+  const getMemoriesByLike = async() => {
+    //make the request again but keep the sorting by likes active
+    const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
+    const url = `${NODE_URL}/memories`
+    await axios.get(url).then(response => {
+      if(response.data) {
+        setMemories(response.data.sort((x, y) => y.num_likes - x.num_likes))
+      } else {
+        setMemories([])
+      }
+    })
+  }
   useEffect(() => {
     document.title = "Asti Memories"
-    getMemories();
+    if(sortedByNewest && !sortedBylikes && !sortedByOldest) {
+      getMemoriesByNewest();
+    }
+    if(sortedBylikes && !sortedByNewest && !sortedByOldest) {
+      getMemoriesByLike();
+    }
+    if(sortedByOldest && !sortedByNewest && !sortedBylikes) {
+      getMemoriesByOldest();
+    }
   }, [])
   
-  const likePost = async(memory) => {
+  const likePost = async(memory, setLikeDisabled) => {
     const endpoint = `memories`;
     const requestBody = {
       memory_uuid: memory.uuid,
@@ -36,10 +73,43 @@ export default function Memories() {
     }
     const response = await handlePut(endpoint, requestBody)
     if(response.status === 200 || response.status === 201) {
-      getMemories();
-    } else {
-      alert("post like failed.")
+      setLikeDisabled(true)
+      //sort the array based on whatever the current sort method is
+      if(sortedByNewest && !sortedBylikes && !sortedByOldest) {
+        getMemoriesByNewest();
+      }
+      if(sortedBylikes && !sortedByNewest && !sortedByOldest) {
+        getMemoriesByLike();
+      }
+      if(sortedByOldest && !sortedByNewest && !sortedBylikes) {
+        getMemoriesByOldest();
+      }
     }
+  }
+
+  const sortByLikes = () => {
+    getMemoriesByLike();
+    setSortedByNewest(false)
+    setDefaultSortBtnText("Newest First")
+    setSortedByLikes(true);
+    setSortedByOldest(false)
+  }
+
+  const sortByNewest = () => {
+    getMemoriesByNewest();
+    //indicate to the user that this is the default setting
+    setDefaultSortBtnText("Newest First (default)") 
+    setSortedByNewest(true)
+    setSortedByLikes(false);
+    setSortedByOldest(false);
+  }
+
+  const sortByOldest = () => {
+    getMemoriesByOldest();
+    setSortedByOldest(true)
+    setSortedByNewest(false)
+    setSortedByLikes(false)
+    setDefaultSortBtnText("Newest First")
   }
 
   /* 
@@ -47,53 +117,41 @@ export default function Memories() {
     The parameters come from there. 
     I wanted to call them here (rather than inside that file) because I wanted the snackbar to work for comments.
   */
-  const submitComment = async (comment, commentUser, setNewComment, getComments, recaptchaValue, setRecaptchaValue) => {
+  const submitComment = async (comment, commentUser, setNewComment, getComments) => {
     console.log('comment:',comment)
     const endpoint = `comments`
     const requestBody = {
       comment: comment,
       user_display_name: commentUser
     }
-    const token = recaptchaValue;
-    const recaptchaEndpoint = `recaptcha`
-    const recaptchaBody = {
-      recaptcha_token: token,
-    }
-    const recaptchaResponse = await handlePost(recaptchaEndpoint, recaptchaBody)
-    const recaptchaData = await recaptchaResponse.data;
-    if(recaptchaData.human) {
-      try {
-        const response = await handlePost(endpoint, requestBody)
-        if(response.status === 200 || response.status === 201) {
-          const serverData = await response.data;
-          setOpenSnackbar(true);
-          setSnackbarMessage("Comment added successfully!")
-          if(user === null) {
-            sessionStorage.setItem("user_uuid", serverData.new_user_uuid)
-          }
-          
-          setTimeout(() => {
-            setOpenSnackbar(false);
-            setSnackbarMessage("")
-            //clear comment form on comment submit success
-            setNewComment({
-              comment_text: "",
-            });
-            setRecaptchaValue("");
-            window.grecaptcha.reset(); //reset recaptcha submission on each comment
-            getComments(); //call get comments GET request method declared in memoryTile.js and passed in here
-          }, 1500)
-                  
-        } else {
-          alert("Comment could not be saved, try again.")
+  
+    try {
+      const response = await handlePost(endpoint, requestBody)
+      if(response.status === 200 || response.status === 201) {
+        const serverData = await response.data;
+        setOpenSnackbar(true);
+        setSnackbarMessage("Comment added successfully!")
+        if(user === null) {
+          sessionStorage.setItem("user_uuid", serverData.new_user_uuid)
         }
-      } catch {
-        alert("comment could not be added.")
+        
+        setTimeout(() => {
+          setOpenSnackbar(false);
+          setSnackbarMessage("")
+          //clear comment form on comment submit success
+          setNewComment({
+            comment_text: "",
+          });
+          getComments(); //call get comments GET request method declared in memoryTile.js and passed in here
+        }, 1500)
+                
+      } else {
+        alert("Comment could not be saved, try again.")
       }
-    } else {
-      alert('You are a bot.')
+    } catch {
+      alert("comment could not be added.")
     }
-    
+  
   } 
   if(memories.length === 0) {
     return (
@@ -108,8 +166,14 @@ export default function Memories() {
     console.log(memories)
     return (
       <div className="Memories">
-        <h1>Shared Memories</h1>
+        <h1>Shared Memories of the <em>Asti</em></h1>
         <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
+        <section className='sorting-btns'>
+          <h3 className='sort-instructions'>Sort by</h3>
+          <button disabled={sortedByNewest} className='sort-btn date-btn' onClick = {sortByNewest}>{defaultSortBtnText}</button>
+          <button disabled={sortedByOldest} className='sort-btn date-btn' onClick = {sortByOldest}> Oldest First</button>
+          <button disabled={sortedBylikes} className='sort-btn like-btn' onClick = {sortByLikes}>Most Likes</button>
+        </section>
         <section className='memories-grid'>
           {memories.map(m => {
             return <MemoryTile m={m} likePost={likePost} submitComment={submitComment}/>
