@@ -69,7 +69,7 @@ export default function Memories() {
   }, [])
   
 
-  const memoriesList = useMemo(() => {
+  const memoriesPerPage = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
     return memories.slice(firstPageIndex, lastPageIndex)
@@ -163,7 +163,7 @@ export default function Memories() {
     }
   
   } 
-  if(memoriesList.length === 0) {
+  if(memories.length === 0) {
     return (
       <div className="Memories">
         <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
@@ -192,7 +192,7 @@ export default function Memories() {
         </section>
         
         <section className='memories-grid'>
-          {memoriesList.map(m => {
+          {memoriesPerPage.map(m => {
             return <MemoryTile key={m.uuid} m={m} likePost={likePost} submitComment={submitComment}/>
           })}
         </section>
