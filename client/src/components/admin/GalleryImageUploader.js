@@ -1,8 +1,6 @@
 import { React, useState, useEffect, useRef} from 'react'
 import { useNavigate } from 'react-router-dom';
-import {v4 as uuidv4} from 'uuid'
-import { handleGet, handlePost } from '../../services/requests-service';
-import axios from 'axios';
+import { handlePost } from '../../services/requests-service';
 import AWS from "aws-sdk"
 import {Snackbar} from '@mui/material'
 import "../../styles/gallery-uploader.css"
@@ -54,7 +52,9 @@ export default function GalleryImageUploader() {
             console.log(e)
         }).promise();
         console.log("image response:", imageResponse)
-        //add .on error
+        await imageResponse.on("error", (e) => {
+            alert("Error in image upload!")
+        }).promise()
     }
 
     const submitImageToDB = async() => {

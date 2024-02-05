@@ -89,6 +89,9 @@ export default function MemoryForm() {
         await imageResponse.on('success', (e) => {
             console.log(e)
         }).promise();
+        await imageResponse.on("error", (e) => {
+            alert("Error in image upload!")
+        }).promise()
         console.log("image response:", imageResponse)
         //add .on error
     }
@@ -156,8 +159,8 @@ export default function MemoryForm() {
                 <h1 className='form-title'>Share Your Experience at the <em>Asti!</em></h1>
                 
                 <form className='memory-form' onSubmit={handleSubmit(submitMemory)}>
-                    <span className='memory-form-question' id="responder-name"><label htmlFor ="name">Enter a name to use while on the site </label>
-                        <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: true})} defaultValue={formUser === "" ? "" : formUser}/>
+                    <span className='memory-form-question' id="responder-name"><label htmlFor ="name">Enter a name to use while on the site (if you already publicly commented without closing this tab, your temporary display name is auto-filled.) </label>
+                        <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: formUser === ""})} defaultValue={formUser === "" ? "" : formUser}/>
                         {formUser === "" ? errors.name && <span className='required-note'>This field is required</span> : ''}
                     </span>
                     <span className='memory-form-question' id="responder-occasion"><label htmlFor ="occasion">(Optional) Was your visit to the <em> Asti </em> a special occasion (birthday, date, anniversary, rehearsal dinner, etc.)?</label>
