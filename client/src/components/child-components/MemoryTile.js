@@ -48,13 +48,16 @@ export const MemoryTile = (props) => {
     m.occasion = "n/a"
   }
 
-  //format like amount shown to user using local variable if it exceeds a thousand
-  if(m.num_likes % 1000 === 0) { //for when it is exactly 1000, 2000, etc
+
+  if(m.num_likes === 0) {
+    likeAmt = 0;
+    //format like amount shown to user using local variable if it exceeds a thousand
+  } else if(m.num_likes % 1000 === 0) { //for when it is exactly 1000, 2000, etc
     likeAmt = ''
-    likeAmt = `${m.num_likes / 1000}k`
+    likeAmt = `${m.num_likes / 1000}k` //just show the number plus k. 1k, 2k, 3k etc.
   } else if(m.num_likes > 1000) {
     likeAmt = ''
-    likeAmt = `${Number(m.num_likes / 1000).toFixed(2)}k` //add additional decimals for
+    likeAmt = `${Number(m.num_likes / 1000).toFixed(2)}k` //add additional decimal places for higher than 1k
   } else {
     likeAmt = m.num_likes;
   }
@@ -64,10 +67,10 @@ export const MemoryTile = (props) => {
   const user = sessionStorage.getItem("user_uuid")
   return (
     <section className='memory'>
-        <h4>Name: {m.name}</h4>
-        <h4>Special Occasion: {m.occasion}</h4>
-        <h4>Experience: {m.experience}</h4>
-        <h4>Likes: {likeAmt}</h4>
+        <p className='memory-prop'>Name: {m.name}</p>
+        <p className='memory-prop'>Special Occasion: {m.occasion}</p>
+        <p className='memory-prop'>Experience: {m.experience}</p>
+        <p className='memory-prop'>Likes: {likeAmt}</p>
         <button className='interaction-btn like-btn' onClick = {handleClick} disabled={likeDisabled}>Like</button>
         <button className='interaction-btn' onClick ={() => {
           checkForUser();
@@ -100,7 +103,7 @@ const CommentsView = (props) => {
     comment_text: ""
   })
   const handleSubmit = async() => {
-      //if they hit submit but haven't entered a comment, don't do anything
+    //if they hit submit but haven't entered a comment, don't do anything
     if(newComment.comment_text === "") { 
       return;
     } else {

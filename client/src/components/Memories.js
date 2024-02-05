@@ -1,20 +1,23 @@
 import '../styles/memories.css'
-import { React, useState, useEffect, memo} from 'react'
+import { React, useState, useEffect, useMemo} from 'react'
 import { handlePost, handlePut } from '../services/requests-service'
 import {Snackbar} from '@mui/material'
 import { MemoryTile } from './child-components/MemoryTile'
 import axios from 'axios'
+import { Pagination } from './child-components/Pagination'
 export default function Memories() {
   <link rel="stylesheet" href="../../styles/memories.css"/>
   const [memories, setMemories] = useState([]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [sortedByNewest, setSortedByNewest] = useState(true); //starts out true because this is default
-  const [sortedByOldest, setSortedByOldest] = useState(false); //starts out true because this is default
+  const [sortedByOldest, setSortedByOldest] = useState(false);
   const [sortedBylikes, setSortedByLikes] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("")
-  const [defaultSortBtnText, setDefaultSortBtnText] = useState("Newest (default)");
+  const [defaultSortBtnText, setDefaultSortBtnText] = useState("Newest First (default)");
   const user = sessionStorage.getItem("user_uuid")
-
+  const [currentPage, setCurrentPage] = useState(1)
+  let PageSize = 8;
+  
   const getMemoriesByNewest = async() => {
     const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
     const url = `${NODE_URL}/memories`
@@ -65,6 +68,13 @@ export default function Memories() {
     }
   }, [])
   
+
+  const memoriesList = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return memories.slice(firstPageIndex, lastPageIndex)
+  }, [currentPage, memories])
+
   const likePost = async(memory, setLikeDisabled) => {
     const endpoint = `memories`;
     const requestBody = {
@@ -153,7 +163,7 @@ export default function Memories() {
     }
   
   } 
-  if(memories.length === 0) {
+  if(memoriesList.length === 0) {
     return (
       <div className="Memories">
         <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
@@ -163,20 +173,27 @@ export default function Memories() {
       </div>
     );
   } else {
-    console.log(memories)
     return (
       <div className="Memories">
-        <h1>Shared Memories of the <em>Asti</em></h1>
+        <h1 className="memories-page-title">Shared Memories of the <em>Asti</em></h1>
         <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
+        <Pagination
+          className="pagination-bar"
+          currentPage={currentPage}
+          totalCount={memories.length} 
+          pageSize={PageSize}
+          onPageChange={page => setCurrentPage(page)}
+        />
         <section className='sorting-btns'>
           <h3 className='sort-instructions'>Sort by</h3>
           <button disabled={sortedByNewest} className='sort-btn date-btn' onClick = {sortByNewest}>{defaultSortBtnText}</button>
           <button disabled={sortedByOldest} className='sort-btn date-btn' onClick = {sortByOldest}> Oldest First</button>
           <button disabled={sortedBylikes} className='sort-btn like-btn' onClick = {sortByLikes}>Most Likes</button>
         </section>
+        
         <section className='memories-grid'>
-          {memories.map(m => {
-            return <MemoryTile m={m} likePost={likePost} submitComment={submitComment}/>
+          {memoriesList.map(m => {
+            return <MemoryTile key={m.uuid} m={m} likePost={likePost} submitComment={submitComment}/>
           })}
         </section>
       </div>

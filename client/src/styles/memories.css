@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+
 .Memories {
     font-family: 'Noto Sans', sans-serif;
     text-align: center;
@@ -6,6 +7,11 @@
     flex-direction: column;
     align-items: center;
     margin-top: 3%;
+}
+
+.memories-page-title {
+    text-align: center;
+    margin: 0;
 }
 
 
@@ -19,6 +25,13 @@
     padding: 0;
 }
 
+.sort-btn {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
 .memories-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -26,17 +39,97 @@
 
 .memory {
     border: 1px solid black;
-    width: 300px;
+    width: 400px;
     margin-bottom: 20px;
     color: black;
     margin-left: 5px;
 }
 
-.sort-btn {
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-bottom: 10px;
+.memory-prop {
     font-size: 18px;
+}
+
+
+
+.pagination-container {
+    display: flex;
+    justify-content: space-evenly;
+    list-style-type: none;
+    cursor: pointer;
+}
+
+.pagination-container li:hover {
+    background-color: darkred;
+    color: white;
+}
+
+
+.pagination-container {
+    display: flex;
+    list-style-type: none;
+}
+
+.pagination-container .pagination-item {
+    padding: 0 12px;
+    height: 32px;
+    text-align: center;
+    margin: auto 4px;
+    color: darkred;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    letter-spacing: 0.01071em;
+    border-radius: 16px;
+    line-height: 1.43;
+    font-size: 13px;
+    min-width: 32px;
+}
+
+.pagination-container .pagination-item.dots:hover {
+    background-color: transparent;
+    cursor: default;
+}
+
+.pagination-container .pagination-item.selected {
+    background-color: darkred;
+    color: white;
+}
+
+.pagination-container .pagination-item .arrow::before {
+    position: relative;
+    /* top: 3pt;
+    Uncomment this to lower the icons as requested in comments*/
+    content: '';
+    /* By using an em scale, the arrows will size with the font */
+    display: inline-block;
+    width: 0.4em;
+    height: 0.4em;
+    border-right: 0.12em solid darkred;
+    border-top: 0.12em solid darkred;
+}
+
+.pagination-container .pagination-item .arrow.left {
+    transform: rotate(-135deg) translate(-50%);
+    color: darkred;
+}
+
+.pagination-container .pagination-item .arrow.right {
+    transform: rotate(45deg);
+    color: darkred;
+}
+
+.pagination-container .pagination-item.disabled {
+    pointer-events: none;
+}
+
+.pagination-container .pagination-item.disabled .arrow::before {
+    border-right: 0.12em solid rgba(0, 0, 0, 0.43);
+    border-top: 0.12em solid rgba(0, 0, 0, 0.43);
+}
+
+.pagination-container .pagination-item.disabled:hover {
+    /* background-color: transparent; */
+    cursor: default;
 }
 
 
@@ -69,13 +162,13 @@
     margin: 5px 0 0 0;
 }
 
-.comments-container, 
+.comments-container,
 .images-view {
     border: 1px solid black;
     z-index: 1;
     position: absolute;
-    max-width: 300px;
-    min-width: 300px;
+    max-width: 400px;
+    min-width: 400px;
     background: white;
     display: flex;
     flex-direction: column;
@@ -123,14 +216,15 @@
 }
 
 .images-view img {
-    max-width: 275px;
-    max-height: 300px;
+    max-width: 375px;
+    max-height: 400px;
 }
 
 @media screen and (max-width: 600px) {
     .Memories {
         margin-top: 15%;
     }
+
     section.memories-grid {
         display: flex;
         flex-direction: column;

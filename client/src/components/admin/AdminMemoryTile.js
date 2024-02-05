@@ -19,7 +19,7 @@ export const AdminMemoryTile = (props) => {
     getComments();
   }, [])
   return (
-    <section className='memory'>
+    <section className='admin-memory'>
         <h4>Name: {m.name}</h4>
         <h4>Special Occasion: {m.occasion}</h4>
         <h4>Experience: {m.experience}</h4>
