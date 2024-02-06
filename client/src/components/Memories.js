@@ -5,6 +5,8 @@ import {Snackbar} from '@mui/material'
 import { MemoryTile } from './child-components/MemoryTile'
 import axios from 'axios'
 import { Pagination } from './child-components/Pagination'
+import TextField from "@mui/material/TextField";
+import { debounce } from "../utils"
 export default function Memories() {
   <link rel="stylesheet" href="../../styles/memories.css"/>
   const [memories, setMemories] = useState([]);
@@ -16,6 +18,7 @@ export default function Memories() {
   const [defaultSortBtnText, setDefaultSortBtnText] = useState("Newest First (default)");
   const user = sessionStorage.getItem("user_uuid")
   const [currentPage, setCurrentPage] = useState(1)
+  const [searchInput, setSearchInput] = useState("");
   let PageSize = 8;
   
   const getMemoriesByNewest = async() => {
@@ -68,12 +71,19 @@ export default function Memories() {
     }
   }, [])
   
+  const searchForMemoryToDelete = (e) => {
+    setCurrentPage(1)
+    setSearchInput(e.target.value);
+  }
 
+  const debouncedSearch = useMemo(() => debounce(searchForMemoryToDelete, 250), [])
+
+  const filteredMemories = memories.filter(m => m.name.toLowerCase().includes(searchInput.toLowerCase().trim()));
   const memoriesPerPage = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
-    return memories.slice(firstPageIndex, lastPageIndex)
-  }, [currentPage, memories])
+    return filteredMemories.slice(firstPageIndex, lastPageIndex)
+  }, [currentPage, filteredMemories])
 
   const likePost = async(memory, setLikeDisabled) => {
     const endpoint = `memories`;
@@ -183,6 +193,31 @@ export default function Memories() {
           totalCount={memories.length} 
           pageSize={PageSize}
           onPageChange={page => setCurrentPage(page)}
+        />
+        <TextField 
+          onChange = {debouncedSearch}
+          className="memory-search-field"
+          label='Search Memories by Name'
+          sx={{
+          //Below code is for changing color of TextField elements
+            "& .MuiFormLabel-root": {
+              color: 'darkred',
+            },
+            "& input": {
+              backgroundColor: 'white',
+              color: 'darkred'
+            },
+            "& .css-o943dk-MuiFormLabel-root-MuiInputLabel-root.Mui-focused": {
+              color: 'darkred',
+            },
+            "& .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:before": {
+              borderBottom: '1px solid darkred'
+            },
+            "& .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:after": {
+              borderBottom: '1px solid darkred'
+            }
+          }}
+          variant="filled"
         />
         <section className='sorting-btns'>
           <h3 className='sort-instructions'>Sort by</h3>

@@ -18,6 +18,7 @@
 .sorting-btns {
     display: flex;
     justify-content: space-evenly;
+    margin-top: 20px;
 }
 
 .sort-instructions {
@@ -43,6 +44,7 @@
     margin-bottom: 20px;
     color: black;
     margin-left: 5px;
+    height: 250px;
 }
 
 .memory-prop {
@@ -60,7 +62,7 @@
 }
 
 .pagination-container li:hover {
-   text-decoration: underline;
+    text-decoration: underline;
 }
 
 .pagination-container .pagination-item {
@@ -112,7 +114,7 @@
 }
 
 .pagination-container .pagination-item .arrow:hover {
-   text-decoration: underline;
+    text-decoration: underline;
 }
 
 .pagination-container .pagination-item.disabled {
@@ -127,6 +129,22 @@
 .pagination-container .pagination-item.disabled:hover {
     /* background-color: transparent; */
     cursor: default;
+}
+
+div.memory-search-field {
+    /* TextField becomes a div on page render */
+    border: 1px solid darkred;
+    width: 250px;
+}
+
+div.memory-search-field input {
+    color: darkred;
+    border: 1px solid darkred;
+}
+
+div.memory-search-field input::placeholder {
+    color: darkred;
+    opacity: 0.75;
 }
 
 
@@ -170,7 +188,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 400px;
+    height: 500px;
 }
 
 .comments-list {
