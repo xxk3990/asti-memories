@@ -140,6 +140,12 @@ div.memory-search-field {
 div.memory-search-field input {
     color: darkred;
     border: 1px solid darkred;
+    cursor: pointer;
+    background-color: white;
+}
+
+div.memory-search-field input:hover {
+    border-bottom: 1px solid darkred;
 }
 
 div.memory-search-field input::placeholder {

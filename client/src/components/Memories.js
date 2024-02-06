@@ -203,9 +203,8 @@ export default function Memories() {
             "& .MuiFormLabel-root": {
               color: 'darkred',
             },
-            "& input": {
-              backgroundColor: 'white',
-              color: 'darkred'
+            "& .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:hover:not(.Mui-disabled, .Mui-error):before": {
+              borderBottom: '1px solid darkred'
             },
             "& .css-o943dk-MuiFormLabel-root-MuiInputLabel-root.Mui-focused": {
               color: 'darkred',
