@@ -89,10 +89,10 @@ export default function GalleryImageUploader() {
             <h1>Upload to Gallery</h1>
             <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
             <section className='gallery-form'>
-                <span className='responder-image'>
-                    Upload an image to the gallery: <input type ="file" ref={imageRef} name='image' className='user-input-image' onChange={e => setImageToUpload(e.target.files[0])} />
+                <span className='gallery-form-image'>
+                    Upload an image to the gallery: <input type ="file" ref={imageRef} title=" " name='image' className='gallery-upload-image' onChange={e => setImageToUpload(e.target.files[0])} />
                 </span>
-                <span className='responder-image'>
+                <span className='gallery-form-caption'>
                     <label for="gallery-img-caption">Add Caption:</label> <input type="text" ref={captionRef} id="gallery-img-caption" name="caption" onChange={e => setCaption(e.target.value)}/>
                 </span>
                 <button className='submit-btn' onClick={submitImageToDB}>Submit</button>

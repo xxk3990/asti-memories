@@ -21,11 +21,13 @@ export default function MemoryForm() {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("")
     const [formUser, setFormUser] = useState("")
+
     const {
         register,
         handleSubmit,
         formState: {errors}
     } = useForm()
+
     const user = sessionStorage.getItem("user_uuid")
     const checkForUser = async() => {
         //if the user already created a temp user (via commenting for example), grab temp display_name
@@ -40,9 +42,13 @@ export default function MemoryForm() {
             })
         }
     }
+
     useEffect(() => {
         checkForUser();
+        document.title = "Asti Memories"
+        randomizeFileName()
     })
+
     let randomizedFileName = ""
     const randomizeFileName = async() => {
         //this endpoint generates a random unique file name for the user's image.
@@ -51,13 +57,6 @@ export default function MemoryForm() {
             randomizedFileName = response.data.randomized_name
         })
     }
-
-    
-
-    useEffect(() => {
-        document.title = "Asti Memories"
-        randomizeFileName()
-    })
 
     const credentials = {
         accessKeyId: bucketAccessKey,

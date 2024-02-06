@@ -67,29 +67,32 @@ export const MemoryTile = (props) => {
   const user = sessionStorage.getItem("user_uuid")
   return (
     <section className='memory'>
-        <p className='memory-prop'>Name: {m.name}</p>
-        <p className='memory-prop'>Special Occasion: {m.occasion}</p>
-        <p className='memory-prop'>Experience: {m.experience}</p>
-        <p className='memory-prop'>Likes: {likeAmt}</p>
-        <button className='interaction-btn like-btn' onClick = {handleClick} disabled={likeDisabled}>Like</button>
-        <button className='interaction-btn' onClick ={() => {
-          checkForUser();
-          getComments();
-          setShowComments(!showComments);
-        }}>{showComments ? `Hide ${String.fromCharCode(8593)}` : `View Comments ${String.fromCharCode(8595)}`}</button>
-        {showComments ? <CommentsView m = {m} commentUser={commentUser} setCommentUser={setCommentUser} getComments={getComments} comments={comments} submitComment={submitComment}/> : null}
+      <p className='memory-prop'>Name: {m.name}</p>
+      <p className='memory-prop'>Special Occasion: {m.occasion}</p>
+      <p className='memory-prop'>Experience: {m.experience}</p>
+      <p className='memory-prop'>Likes: {likeAmt}</p>
+      <button className='interaction-btn like-btn' onClick = {handleClick} disabled={likeDisabled}>Like</button>
+      <button className='interaction-btn' onClick ={() => {
+        checkForUser();
+        getComments();
+        setShowComments(!showComments);
+        setShowImage(false);
+      }}>{showComments ? `Hide ${String.fromCharCode(8593)}` : `View Comments ${String.fromCharCode(8595)}`}</button>
+      {showComments ? <CommentsView m = {m} commentUser={commentUser} setCommentUser={setCommentUser} getComments={getComments} comments={comments} submitComment={submitComment}/> : null}
 
-        <button className='interaction-btn' onClick ={() => {
-          getImage()
-          setShowImage(!showImage);
-        }}>{showImage ? `Hide ${String.fromCharCode(8593)}` : `View Image ${String.fromCharCode(8595)}`}</button>
-        {showImage ? <ImageView image={image} /> : null}
+      <button className='interaction-btn' onClick ={() => {
+        getImage()
+        setShowImage(!showImage);
+        setShowComments(false)
+      }}>{showImage ? `Hide ${String.fromCharCode(8593)}` : `View Image ${String.fromCharCode(8595)}`}</button>
+      {showImage ? <ImageView image={image} /> : null}
     </section>
   )
 }
 
 //child component for each memory's comments
 const CommentsView = (props) => {
+  //TODO: FIX RECAPTCHA TIMING OUT IF YOU OPEN AND CLOSE A COMMENT VIEW WITHOUT SUBMITTING.
   const recaptchaRef = useRef();
   const {m, commentUser, setCommentUser, submitComment, comments, getComments} = props;
   let commentAmt;
