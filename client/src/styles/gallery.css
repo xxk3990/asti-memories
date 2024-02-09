@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+
 .Gallery {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'didot', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -23,7 +23,7 @@ export default function Gallery() {
     } else {
         return (
             <div className='Gallery'>
-                <h1>Asti Images</h1>
+                <h1><em>Asti</em> Image Gallery</h1>
                 <section className='gallery-grid'>
                     {
                         images.map(img => {

@@ -158,7 +158,7 @@ export default function MemoryForm() {
                 <h1 className='form-title'>Share Your Experience at the <em>Asti!</em></h1>
                 
                 <form className='memory-form' onSubmit={handleSubmit(submitMemory)}>
-                    <span className='memory-form-question' id="responder-name"><label htmlFor ="name">Enter a name to use while on the site (if you already publicly commented without closing this tab, your temporary display name is auto-filled.) </label>
+                    <span className='memory-form-question' id="responder-name"><label htmlFor ="name">Enter a name to use while on the site </label>
                         <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: formUser === ""})} defaultValue={formUser === "" ? "" : formUser}/>
                         {formUser === "" ? errors.name && <span className='required-note'>This field is required</span> : ''}
                     </span>
@@ -175,8 +175,7 @@ export default function MemoryForm() {
                     <span className='memory-form-question responder-image'>
                         <label htmlFor="caption">(Optional) Add a caption for your image</label> <input type="text" id="caption" name="caption" onChange={e => setCaption(e.target.value)}/>   
                     </span>
-                    <h4 className='anonymous-note'>To keep things anonymous, we do not require a proper login. When you close this tab in your browser, all temporary user info will be forgotten. If you uploaded an image, its file name will be replaced with a randomized one.</h4>
-                    <h4 className='instructions'> Posts that are unrelated to the <em>Asti</em> Restaurant will be deleted by an admin.</h4>
+                    <p className='anonymous-note'>To protect your privacy, no user info is required except for a display name of your choice and anything you'd like to share</p>
                     <ReCAPTCHA sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
                     <button disabled={!recaptchaValue} className='submit-btn'>Submit</button>
                 </form>

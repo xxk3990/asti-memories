@@ -10,8 +10,8 @@ export default function Navbar() {
                 <span className='nav-item-home'><Link to='/'><em>Asti</em> Memories</Link></span>
                 <ul className = "nav-links">
                     <li className='nav-item'><Link to='/memoryForm'>Memory Form</Link></li>
-                    <li className='nav-item'><Link to='/memories'>Public Memories</Link></li>
-                    <li className='nav-item'><Link to='/gallery'>Image Gallery</Link></li>
+                    <li className='nav-item'><Link to='/memories'>Shared Memories</Link></li>
+                    <li className='nav-item'><Link to='/gallery'>Gallery</Link></li>
                 </ul>
             </section>
         </div>

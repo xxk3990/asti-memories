@@ -7,8 +7,8 @@ import axios from 'axios'
 import { Pagination } from './child-components/Pagination'
 import TextField from "@mui/material/TextField";
 import { debounce } from "../utils"
+
 export default function Memories() {
-  <link rel="stylesheet" href="../../styles/memories.css"/>
   const [memories, setMemories] = useState([]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [sortedByNewest, setSortedByNewest] = useState(true); //starts out true because this is default
@@ -21,53 +21,50 @@ export default function Memories() {
   const [searchInput, setSearchInput] = useState("");
   let PageSize = 8;
   
-  const getMemoriesByNewest = async() => {
+  const getMemories = async(sortMethod) => {
     const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
     const url = `${NODE_URL}/memories`
     await axios.get(url).then(response => {
       if(response.data) {
-        setMemories(response.data.sort((x, y) => new Date(y.createdAt) - new Date(x.createdAt)))
+        switch(sortMethod) {
+          case "newest": {
+            setMemories(response.data.sort((x, y) => new Date(y.createdAt) - new Date(x.createdAt)))
+            break;
+          } 
+          case 'oldest' : {
+            setMemories(response.data.sort((x, y) => new Date(x.createdAt) - new Date(y.createdAt)))
+            break;
+          }
+          case 'likes': {
+            setMemories(response.data.sort((x, y) => new Date(y.num_likes) - new Date(x.num_likes)))
+            break;
+          }
+          default: {
+            setMemories(response.data)
+            break;
+          }
+        }
+        
       } else {
         setMemories([])
       }
       
     })
+    
+   
   }
 
-  const getMemoriesByOldest = async() => {
-    const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
-    const url = `${NODE_URL}/memories`
-    await axios.get(url).then(response => {
-      if(response.data) {
-        setMemories(response.data.sort((x, y) => new Date(x.createdAt) - new Date(y.createdAt)))
-      } else {
-        setMemories([])
-      }
-    })
-  } 
-
-  const getMemoriesByLike = async() => {
-    //make the request again but keep the sorting by likes active
-    const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
-    const url = `${NODE_URL}/memories`
-    await axios.get(url).then(response => {
-      if(response.data) {
-        setMemories(response.data.sort((x, y) => y.num_likes - x.num_likes))
-      } else {
-        setMemories([])
-      }
-    })
-  }
   useEffect(() => {
     document.title = "Asti Memories"
+    
     if(sortedByNewest && !sortedBylikes && !sortedByOldest) {
-      getMemoriesByNewest();
+      getMemories("newest");
     }
     if(sortedBylikes && !sortedByNewest && !sortedByOldest) {
-      getMemoriesByLike();
+      getMemories("likes")
     }
     if(sortedByOldest && !sortedByNewest && !sortedBylikes) {
-      getMemoriesByOldest();
+      getMemories("oldest")
     }
   }, [])
   
@@ -96,19 +93,19 @@ export default function Memories() {
       setLikeDisabled(true)
       //sort the array based on whatever the current sort method is
       if(sortedByNewest && !sortedBylikes && !sortedByOldest) {
-        getMemoriesByNewest();
+        getMemories('newest');
       }
       if(sortedBylikes && !sortedByNewest && !sortedByOldest) {
-        getMemoriesByLike();
+        getMemories('likes');
       }
       if(sortedByOldest && !sortedByNewest && !sortedBylikes) {
-        getMemoriesByOldest();
+        getMemories('oldest');
       }
     }
   }
 
   const sortByLikes = () => {
-    getMemoriesByLike();
+    getMemories('likes')
     setSortedByNewest(false)
     setDefaultSortBtnText("Newest First")
     setSortedByLikes(true);
@@ -116,7 +113,7 @@ export default function Memories() {
   }
 
   const sortByNewest = () => {
-    getMemoriesByNewest();
+    getMemories('newest')
     //indicate to the user that this is the default setting
     setDefaultSortBtnText("Newest First (default)") 
     setSortedByNewest(true)
@@ -125,7 +122,7 @@ export default function Memories() {
   }
 
   const sortByOldest = () => {
-    getMemoriesByOldest();
+    getMemories('oldest')
     setSortedByOldest(true)
     setSortedByNewest(false)
     setSortedByLikes(false)
@@ -194,7 +191,9 @@ export default function Memories() {
           pageSize={PageSize}
           onPageChange={page => setCurrentPage(page)}
         />
-        <TextField 
+        <section className='textfield-container'>
+          <p>Check the activity on your shared memory</p>
+          <TextField 
           onChange = {debouncedSearch}
           className="memory-search-field"
           label='Search Memories by Name'
@@ -202,6 +201,7 @@ export default function Memories() {
           //Below code is for changing color of TextField elements
             "& .MuiFormLabel-root": {
               color: 'darkred',
+              fontFamily: 'Noto Sans'
             },
             "& .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:hover:not(.Mui-disabled, .Mui-error):before": {
               borderBottom: '1px solid darkred'
@@ -217,7 +217,10 @@ export default function Memories() {
             }
           }}
           variant="filled"
-        />
+         />
+        
+        </section>
+        
         <section className='sorting-btns'>
           <h3 className='sort-instructions'>Sort by</h3>
           <button disabled={sortedByNewest} className='sort-btn date-btn' onClick = {sortByNewest}>{defaultSortBtnText}</button>

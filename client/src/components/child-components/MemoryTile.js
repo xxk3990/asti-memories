@@ -1,4 +1,4 @@
-import { React, useState, useRef} from 'react'
+import { React, useState, useRef, useEffect} from 'react'
 import {v4 as uuidv4} from 'uuid'
 import { handleGet, handlePost } from '../../services/requests-service';
 import axios from 'axios';
@@ -17,6 +17,7 @@ export const MemoryTile = (props) => {
   const [commentUser, setCommentUser] = useState("");
 
   let likeAmt;
+  let commentAmt;
   const submitComment = props.submitComment;
   const handleClick = () => {
     likePost(m, setLikeDisabled);
@@ -44,6 +45,11 @@ export const MemoryTile = (props) => {
     await handleGet(endpoint, setImage)
   }
 
+  useEffect(() => {
+    getComments();
+    getImage();
+  }, [])
+
   if(m.occasion === "") {
     m.occasion = "n/a"
   }
@@ -62,32 +68,63 @@ export const MemoryTile = (props) => {
     likeAmt = m.num_likes;
   }
 
-
-  
+  //do the same client-side formatting for comments length
+  if(comments.length === 0) {
+    commentAmt = '';
+    commentAmt = 0;
+  } else if(comments.length % 1000 === 0) {
+    commentAmt = ''
+    commentAmt = `${comments.length / 100}k`
+  } else if(comments.length > 1000) {
+    commentAmt = '';
+    commentAmt = `${Number(comments.length).toFixed(2)}k`
+  } else {
+    commentAmt = '';
+    commentAmt = comments.length;
+  }
   const user = sessionStorage.getItem("user_uuid")
-  return (
-    <section className='memory'>
-      <p className='memory-prop'>Name: {m.name}</p>
-      <p className='memory-prop'>Special Occasion: {m.occasion}</p>
-      <p className='memory-prop'>Experience: {m.experience}</p>
-      <p className='memory-prop'>Likes: {likeAmt}</p>
-      <button className='interaction-btn like-btn' onClick = {handleClick} disabled={likeDisabled}>Like</button>
-      <button className='interaction-btn' onClick ={() => {
-        checkForUser();
-        getComments();
-        setShowComments(!showComments);
-        setShowImage(false);
-      }}>{showComments ? `Hide ${String.fromCharCode(8593)}` : `View Comments ${String.fromCharCode(8595)}`}</button>
-      {showComments ? <CommentsView m = {m} commentUser={commentUser} setCommentUser={setCommentUser} getComments={getComments} comments={comments} submitComment={submitComment}/> : null}
 
-      <button className='interaction-btn' onClick ={() => {
-        getImage()
-        setShowImage(!showImage);
-        setShowComments(false)
-      }}>{showImage ? `Hide ${String.fromCharCode(8593)}` : `View Image ${String.fromCharCode(8595)}`}</button>
-      {showImage ? <ImageView image={image} /> : null}
-    </section>
-  )
+  //only show "view image" button if an image is associated with the memory
+  if(image) {
+    return (
+      <section className='memory'>
+        <p className='memory-prop'>Name: {m.name}</p>
+        <p className='memory-prop'>Special Occasion: {m.occasion}</p>
+        <p className='memory-prop'>Experience: {m.experience}</p>
+        <p className='memory-prop'>Likes: {likeAmt}</p>
+        <button className='interaction-btn like-btn' onClick = {handleClick} disabled={likeDisabled}>Like</button>
+        <button className='interaction-btn' onClick ={() => {
+          checkForUser();
+          setShowComments(!showComments);
+          setShowImage(false);
+        }}>{showComments ? `Hide ${String.fromCharCode(8593)}` : `View Comments (${commentAmt}) ${String.fromCharCode(8595)}`}</button>
+        {showComments ? <CommentsView m = {m} commentUser={commentUser} setCommentUser={setCommentUser} getComments={getComments} comments={comments} submitComment={submitComment}/> : null}
+
+        <button className='interaction-btn' onClick ={() => {
+          setShowImage(!showImage);
+          setShowComments(false)
+        }}>{showImage ? `Hide ${String.fromCharCode(8593)}` : `View Image ${String.fromCharCode(8595)}`}</button>
+        {showImage ? <ImageView image={image} /> : null}
+      </section>
+    ) 
+  } else {
+    return (
+      <section className='memory'>
+        <p className='memory-prop'>Name: {m.name}</p>
+        <p className='memory-prop'>Special Occasion: {m.occasion}</p>
+        <p className='memory-prop'>Experience: {m.experience}</p>
+        <p className='memory-prop'>Likes: {likeAmt}</p>
+        <button className='interaction-btn like-btn' onClick = {handleClick} disabled={likeDisabled}>Like</button>
+        <button className='interaction-btn' onClick ={() => {
+          checkForUser();
+          setShowComments(!showComments);
+        }}>{showComments ? `Hide ${String.fromCharCode(8593)}` : `View Comments (${commentAmt}) ${String.fromCharCode(8595)}`}</button>
+        {showComments ? <CommentsView m = {m} commentUser={commentUser} setCommentUser={setCommentUser} getComments={getComments} comments={comments} submitComment={submitComment}/> : null}
+      </section>
+    )
+  }
+ 
+  
 }
 
 //child component for each memory's comments
@@ -95,16 +132,24 @@ const CommentsView = (props) => {
   //TODO: FIX RECAPTCHA TIMING OUT IF YOU OPEN AND CLOSE A COMMENT VIEW WITHOUT SUBMITTING.
   const recaptchaRef = useRef();
   const {m, commentUser, setCommentUser, submitComment, comments, getComments} = props;
-  let commentAmt;
+
   const user = sessionStorage.getItem("user_uuid")
   const SITE_KEY = '6LffBlMpAAAAADK37hlL29ERh8ba5EMhRtPCli6o'
-  const recaptchaId = uuidv4();
+  const recaptchaId1 = uuidv4();
+  const recaptchaId2 = uuidv4();
   const [recaptchaValue, setRecaptchaValue] = useState(null);
   const [newComment, setNewComment] = useState({
     memory_uuid: m.uuid,
     user_uuid: user,
     comment_text: ""
   })
+
+
+  const clearRecaptcha = () => {
+    setRecaptchaValue(null);
+   // recaptchaRef.current.reset(recaptchaId)
+  }
+  setInterval(() => clearRecaptcha(), 90 * 1000)
   const handleSubmit = async() => {
     //if they hit submit but haven't entered a comment, don't do anything
     if(newComment.comment_text === "") { 
@@ -122,7 +167,9 @@ const CommentsView = (props) => {
         newComment.memory_uuid = m.uuid;
         newComment.user_uuid = user
         submitComment(newComment, commentUser, setNewComment, getComments, setRecaptchaValue)
-        recaptchaRef.current.reset(recaptchaId)
+        //reset recaptcha using its id
+        recaptchaRef.current.reset(recaptchaId1)
+        recaptchaRef.current.reset(recaptchaId2);
         
       } else {
         alert("You are a bot!")
@@ -146,26 +193,15 @@ const CommentsView = (props) => {
         <section className='new-comment'>
           <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
           <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
-          <ReCAPTCHA size="compact" ref={recaptchaRef} id={recaptchaId} sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
+          <ReCAPTCHA size="compact" ref={recaptchaRef} id={recaptchaId1} sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
           <button disabled={!recaptchaValue} className='interaction-btn submit-comment-btn' onClick = {handleSubmit}>Post comment</button>
         </section>
       </section>
     )
   } else {
-    //do the same client-side formatting for comments length
-    if(comments.length % 1000 === 0) {
-      commentAmt = ''
-      commentAmt = `${comments.length / 100}k`
-    } else if(comments.length > 1000) {
-      commentAmt = '';
-      commentAmt = `${Number(comments.length).toFixed(2)}k`
-    } else {
-      commentAmt = '';
-      commentAmt = comments.length;
-    }
     return (
       <section className='comments-container'>
-        <h4 className='comments-count'>Comments ({commentAmt})</h4>
+        <h4 className='comments-count'>Comments</h4>
         <section className='comments-list-container'>
           <ul className='comments-list'>
             {
@@ -180,7 +216,7 @@ const CommentsView = (props) => {
         <section className='new-comment'>
           <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
           <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
-          <ReCAPTCHA size="compact" ref={recaptchaRef} id={recaptchaId} sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
+          <ReCAPTCHA size="compact" ref={recaptchaRef} id={recaptchaId2} sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
           <button disabled={!recaptchaValue} className='interaction-btn submit-comment-btn' onClick = {handleSubmit}>Post comment</button>
         </section>
       </section>

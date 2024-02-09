@@ -1,6 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
 .ManageMemories {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'didot', sans-serif;
     text-align: center;
     display: flex;
     flex-direction: column;

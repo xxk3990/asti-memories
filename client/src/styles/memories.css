@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;300;400&display=swap');
 
 .Memories {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'didot', 'sans-serif';
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -50,8 +50,6 @@
 .memory-prop {
     font-size: 18px;
 }
-
-
 
 .pagination-container {
     display: flex;
@@ -131,6 +129,16 @@
     cursor: default;
 }
 
+.textfield-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.textfield-container p {
+    margin: 0;
+    font-size: 18px;
+}
+
 div.memory-search-field {
     /* TextField becomes a div on page render */
     border: 1px solid darkred;
@@ -163,6 +171,9 @@ div.memory-search-field input::placeholder {
     cursor: pointer;
     border-radius: 10px;
     border: none;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 18px;
+    border: 1px solid darkred;
 }
 
 .interaction-btn {
