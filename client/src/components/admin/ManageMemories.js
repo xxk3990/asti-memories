@@ -56,6 +56,20 @@ export default function  ManageMemories() {
         if(response.status === 200) {
             getComments();
             setOpenSnackbar(true);
+            setSnackbarMessage("Image deleted successfully!")
+            setTimeout(() => {
+                setOpenSnackbar(false);
+                setSnackbarMessage("")
+            }, 1500)
+        }
+    }
+
+    const deleteImage = async(memory_uuid, getImage) => {
+        const endpoint = `images?memory_uuid=${memory_uuid}`
+        const response = await handleAdminDelete(endpoint)
+        if(response.status === 200) {
+            getImage();
+            setOpenSnackbar(true);
             setSnackbarMessage("Comment deleted successfully!")
             setTimeout(() => {
                 setOpenSnackbar(false);
@@ -106,7 +120,7 @@ export default function  ManageMemories() {
                 />
                 <section className='manage-memories-grid'>
                     {filteredMemories.map(m => {
-                        return <AdminMemoryTile m={m} deleteMemory={deleteMemory} deleteComment={deleteComment}/>
+                        return <AdminMemoryTile m={m} deleteMemory={deleteMemory} deleteComment={deleteComment} deleteImage={deleteImage}/>
                     })}
                 </section>
             </div>

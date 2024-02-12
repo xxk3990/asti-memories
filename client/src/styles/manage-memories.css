@@ -19,14 +19,20 @@
 }
 
 
-.admin-comments-container {
+.admin-comments-container,
+.admin-image-view {
     border: 1px solid black;
     z-index: 1;
     position: absolute;
     width: 300px;
     background: white;
-    height: 200px;
+    height: 400px;
     overflow-y: scroll;
+}
+
+.admin-image-view img {
+    max-width: 300px;
+    max-height: 400px;
 }
 
 .admin-comments-list {

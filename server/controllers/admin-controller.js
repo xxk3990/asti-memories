@@ -6,7 +6,10 @@ const models = require('../models')
 const jwt = require('jsonwebtoken')
 const process = require("process")
 const bcrypt = require("bcryptjs");
-
+const {
+    S3Client,
+    DeleteObjectCommand
+} = require("@aws-sdk/client-s3")
 
 
 const saltRounds = 10;
@@ -113,9 +116,39 @@ const adminDeleteComment = async (req, res) => {
     return res.status(200).send();
 }
 
+const adminDeleteImage = async (req, res) => {
+    const bucketName = process.env.IMAGE_BUCKET_NAME;
+    const bucketRegion = `us-east-2`
+    const bucketAccessKey = process.env.IMAGE_BUCKET_ACCESS_KEY;
+    const bucketSecretKey = process.env.IMAGE_BUCKET_SECRET_KEY;
+    const credentials = {
+        accessKeyId: bucketAccessKey,
+        secretAccessKey: bucketSecretKey,
+    }
+    const image = await models.Image.findOne(({where: {"memory_uuid" : req.query.memory_uuid}, raw: true}))
+    const s3 = new S3Client({
+        region: bucketRegion,
+        credentials: credentials,
+    })
+    if(!image) {
+        return res.status(204).send();
+    } else {
+        //remove from both S3 and DB
+        const commandInput = {
+            Bucket: bucketName,
+            Key: image.image_key
+        }
+        const command = new DeleteObjectCommand(commandInput)
+        await s3.send(command);
+        await models.Image.destroy({where: {'memory_uuid' : req.query.memory_uuid}})
+        return res.status(200).send();
+    }
+}
+
 module.exports = {
     createAdminAccount,
     adminLogin,
     adminDeleteMemory,
-    adminDeleteComment
+    adminDeleteComment,
+    adminDeleteImage
 }
