@@ -35,7 +35,7 @@ export const AdminMemoryTile = (props) => {
           <button onClick = {handleDelete}>Delete (Admin)</button>
           <button onClick ={() => setShowComments(!showComments)}>{showComments ? `Hide ${String.fromCharCode(8593)}` : `View Comments (${comments.length}) ${String.fromCharCode(8595)}`}</button>
           {showComments ? <AdminCommentsView m = {m} getComments={getComments} comments={comments} deleteComment={deleteComment}/> : null}
-          <button className='interaction-btn' onClick ={() => {
+          <button onClick ={() => {
             setShowImage(!showImage);
             setShowComments(false)
           }}>{showImage ? `Hide ${String.fromCharCode(8593)}` : `View Image ${String.fromCharCode(8595)}`}</button>
