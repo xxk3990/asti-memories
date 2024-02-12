@@ -129,7 +129,6 @@ export const MemoryTile = (props) => {
 
 //child component for each memory's comments
 const CommentsView = (props) => {
-  //TODO: FIX RECAPTCHA TIMING OUT IF YOU OPEN AND CLOSE A COMMENT VIEW WITHOUT SUBMITTING.
   const recaptchaRef = useRef();
   const {m, commentUser, setCommentUser, submitComment, comments, getComments} = props;
 
@@ -143,13 +142,6 @@ const CommentsView = (props) => {
     user_uuid: user,
     comment_text: ""
   })
-
-
-  const clearRecaptcha = () => {
-    setRecaptchaValue(null);
-   // recaptchaRef.current.reset(recaptchaId)
-  }
-  setInterval(() => clearRecaptcha(), 90 * 1000)
   const handleSubmit = async() => {
     //if they hit submit but haven't entered a comment, don't do anything
     if(newComment.comment_text === "") { 
@@ -207,7 +199,10 @@ const CommentsView = (props) => {
             {
               comments.map(com => {
                 return (
-                  <li key={uuidv4()}>{com.commenter_name.display_name}: {com.comment_text}</li>
+                  <li key={uuidv4()}>
+                    <h4>{com.commenter_name.display_name}</h4>
+                    <p className='comment-text'>{com.comment_text}</p>
+                  </li>
                 )
               })
             }
@@ -228,21 +223,11 @@ const CommentsView = (props) => {
 const ImageView = (props) => {
   const image = props.image;
   console.log("image:", image)
-  if(!image) {
-    return (
-      <section className='images-view'>
-        No image uploaded with this post
-      </section>
-    )
-  } else {
-    console.log(image)
-    return (
-      <section className='images-view'>
-        <img src = {image.image_url} alt={image.image_caption}/>
-        <h4>{image.image_caption}</h4>
-      </section>
-    )
-  }
-  
+  return (
+    <section className='image-view'>
+      <img src = {image.image_url} alt={image.image_caption}/>
+      <h4>{image.image_caption}</h4>
+    </section>
+  )
 }
   
