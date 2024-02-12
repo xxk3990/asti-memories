@@ -3,6 +3,12 @@ const {
 } = require('uuid')
 const models = require('../models');
 
+
+const getNumberOfComments = async(req, res) => {
+    const comments = await models.Comment.findAll({where: {'memory_uuid': req.query.memory_uuid}, raw:true})
+    return res.status(200).json(comments.length)
+}
+
 const getComments = async (req, res) => {   
     if(!req.query.memory_uuid) {
         return res.status(404).json("Memory not found.")
@@ -78,5 +84,6 @@ const addComment = async (req, res) => {
 
 module.exports = {
     addComment,
-    getComments
+    getComments,
+    getNumberOfComments
 }

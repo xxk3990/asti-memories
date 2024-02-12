@@ -11,6 +11,7 @@ const router = (app) => {
    app.put("/memories", mem.likeMemory)
    app.delete("/memories", admin.adminDeleteMemory)
    app.get("/comments", com.getComments)
+   app.get("/commentCount", com.getNumberOfComments)
    app.post("/comments", com.addComment)
    app.delete('/comments', admin.adminDeleteComment)
    app.post("/admin", admin.createAdminAccount)
