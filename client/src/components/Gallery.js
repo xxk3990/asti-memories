@@ -33,6 +33,7 @@ export default function Gallery() {
         return (
             <div className='Gallery'>
                 <h1><em>Asti</em> Image Gallery</h1>
+                <p className='gallery-verbiage'>Many famous opera singers, musicians, actors, etc. visited the <em>Asti</em> over the years. Some posed for pictures with the staff and some gave Adolfo Mariani an autographed photo.</p>
                 <Pagination
                     className="pagination-bar"
                     currentPage={currentPage}

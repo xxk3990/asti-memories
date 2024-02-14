@@ -27,15 +27,13 @@ export default function  ManageMemories() {
     useEffect(() => {
         getMemories()
     }, [])
-
-  
     const searchForMemoryToDelete = (e) => {
         setSearchInput(e.target.value);
     }
 
     const debouncedSearch = useMemo(() => debounce(searchForMemoryToDelete, 250), [])
-
-    const filteredMemories = memories.filter(m => m.name.toLowerCase().includes(searchInput.toLowerCase().trim()));
+  
+    
 
     const deleteMemory = async(memory_uuid) => {
         const endpoint = `memories?memory=${memory_uuid}`
@@ -99,6 +97,8 @@ export default function  ManageMemories() {
             </div>
         )
     } else {
+    
+        const filteredMemories = memories.filter(m => m.name.toLowerCase().includes(searchInput.toLowerCase().trim()));
         return (
             <div className='ManageMemories'>
                 <Snackbar open={openSnackbar} autoHideDuration={2000} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>

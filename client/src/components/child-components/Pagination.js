@@ -35,15 +35,12 @@ export const Pagination = props => {
 
   let lastPage = paginationRange[paginationRange.length - 1];
   return (
-    <ul
-      className={classnames('pagination-container', { [className]: className })}
-    >
+    <ul className={classnames('pagination-container', { [className]: className })}>
       <li key={uuidv4()}
         className={classnames('pagination-item', {
           disabled: currentPage === 1
         })}
-        onClick={onPrevious}
-      >
+        onClick={onPrevious}>
         <div className="arrow left" />
       </li>
       {paginationRange.map(pageNumber => {
@@ -64,8 +61,7 @@ export const Pagination = props => {
         className={classnames('pagination-item', {
           disabled: currentPage === lastPage
         })}
-        onClick={onNext}
-      >
+        onClick={onNext}>
         <div className="arrow right" />
       </li>
     </ul>

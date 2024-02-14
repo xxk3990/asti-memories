@@ -5,7 +5,7 @@ export const GalleryTile = (props) => {
     return (
         <section className='gallery-image-view'>
             <img src = {img.image_url} alt={img.image_caption} />
-            <h4 className='gallery-image-caption'>{img.image_caption}</h4>
+            <p className='gallery-image-caption'>{img.image_caption}</p>
         </section>
     )
 }

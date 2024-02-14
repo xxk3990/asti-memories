@@ -7,6 +7,10 @@
     margin-top: 3%;
 }
 
+.gallery-verbiage {
+    font-size: 18px;
+}
+
 .pagination-container {
     display: flex;
     justify-content: space-evenly;
@@ -94,19 +98,20 @@
 .gallery-image-view {
     border: 1px solid black;
     padding: 5px;
-    max-width: 310px;
-    max-height: 500px;
+    max-width: 360px;
+    max-height: 600px;
 }
 
 .gallery-image-view img {
-    min-width: 300px;
-    max-width: 300px;
-    max-height: 400px;
+    min-width: 350px;
+    max-width: 350px;
+    max-height: 500px;
     margin: 5px 5px 0 5px;
 }
 
 .gallery-image-caption {
     text-align: center;
+    font-size: 18px;
 }
 
 h1 {
