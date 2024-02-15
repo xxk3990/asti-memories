@@ -1,10 +1,9 @@
-import { React, useState, useRef, useEffect} from 'react'
+import { React, useState, useEffect} from 'react'
 import {v4 as uuidv4} from 'uuid'
 import { handleGet, handlePost } from '../../services/requests-service';
 import ReCAPTCHA from "react-google-recaptcha"
 import "../../styles/memories.css"
 export const CommentsView = (props) => {
-  const recaptchaRef = useRef();
   const {m, commentUser, setCommentUser, submitComment} = props;
   const [comments, setComments] = useState([])
   const getComments = async() => {
@@ -14,10 +13,6 @@ export const CommentsView = (props) => {
   useEffect(() => {
     getComments();
   }, [])
-  const clearRecaptcha = () => {
-    setRecaptchaValue(null);
-  }
-  window.interval = setInterval(() => clearRecaptcha(), 90 * 1000)
   const user = sessionStorage.getItem("user_uuid")
   const SITE_KEY = '6LffBlMpAAAAADK37hlL29ERh8ba5EMhRtPCli6o'
   const recaptchaId1 = uuidv4();
@@ -48,17 +43,14 @@ export const CommentsView = (props) => {
       return;
     } else {
       if(user === null) {
-        //only require recaptcha if user is not created yet
+        //only require recaptcha if temporary user is not created yet
         const isHuman = await verifyRecaptcha()
         if(isHuman) {
           //ensures memory_uuid and user_uuid are sent in each payload
           newComment.memory_uuid = m.uuid;
-          newComment.user_uuid = user
-          submitComment(newComment, commentUser, setNewComment, getComments, setRecaptchaValue)
-          //reset all recaptchas using their id to prevent timeout
-          recaptchaRef.current.reset(recaptchaId1)
-          recaptchaRef.current.reset(recaptchaId2);
-          
+          newComment.user_uuid = user;
+          window.grecaptcha.reset();
+          submitComment(newComment, commentUser, setNewComment, getComments)
         } else {
           alert("You are a bot!")
         }
@@ -103,7 +95,7 @@ export const CommentsView = (props) => {
         <section className='new-comment'>
           <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
           <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
-          <ReCAPTCHA size="compact" ref={recaptchaRef} id={recaptchaId1} sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
+          <ReCAPTCHA size="compact" id={recaptchaId1} sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
           <button disabled={!recaptchaValue} className='interaction-btn submit-comment-btn' onClick = {handleSubmit}>Post comment</button>
         </section>
       </section>
@@ -157,7 +149,7 @@ export const CommentsView = (props) => {
           <section className='new-comment'>
             <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
             <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
-            <ReCAPTCHA size="compact" ref={recaptchaRef} id={recaptchaId2} sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
+            <ReCAPTCHA size="compact" id={recaptchaId2} sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
             <button disabled={!recaptchaValue} className='interaction-btn submit-comment-btn' onClick = {handleSubmit}>Post comment</button>
           </section>
         </section>
