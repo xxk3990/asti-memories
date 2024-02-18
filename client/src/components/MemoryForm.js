@@ -151,35 +151,71 @@ export default function MemoryForm() {
         }
         
     }
-    return (
-        <div className='MemoryForm'>
-            <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
-            <section>
-                <h1 className='form-title'>Share Your Experience at the <em>Asti!</em></h1>
-                
-                <form className='memory-form' onSubmit={handleSubmit(submitMemory)}>
-                    <span className='memory-form-question' id="responder-name"><label htmlFor ="name">Enter a name to use while on the site </label>
-                        <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: formUser === ""})} value={formUser === "" ? "" : formUser}/>
-                        {formUser === "" ? errors.name && <span className='required-note'>This field is required</span> : ''}
-                    </span>
-                    <span className='memory-form-question' id="responder-occasion"><label htmlFor ="occasion">(Optional) Was your visit to the <em> Asti </em> a special occasion (birthday, date, anniversary, rehearsal dinner, etc.)?</label>
-                        <input type="text" name="occasion" id="occasion" className='user-input' {...register("occasion")} />
-                    </span>
-                    <span className='memory-form-question' id="responder-experience"><label htmlFor="experience">Describe your experience! </label>
-                        <textarea id ="experience" name="experience" className='user-input' {...register("experience", { required: true})}></textarea>
-                        {errors.experience && <span className='required-note'>This field is required</span>}
-                    </span>
-                    <span className='memory-form-question responder-image'>
-                        (Optional) Upload an image <input type ="file" name='image' className='user-input-image' onChange={e => setImageToUpload(e.target.files[0])} />
-                    </span>
-                    <span className='memory-form-question responder-image'>
-                        <label htmlFor="caption">(Optional) Add a caption for your image</label> <input type="text" id="caption" name="caption" onChange={e => setCaption(e.target.value)}/>   
-                    </span>
-                    <p className='anonymous-note'>To protect your privacy, no user info is required except for a display name of your choice and anything you'd like to share</p>
-                    <ReCAPTCHA sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
-                    <button disabled={!recaptchaValue} className='submit-btn'>Submit</button>
-                </form>
-            </section>
-        </div>
-    )
+    //TODO: FIX DISPLAY NAME TYPING ISSUE
+    if(formUser === "") {
+        return (
+            <div className='MemoryForm'>
+                <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
+                <section>
+                    <h1 className='form-title'>Share Your Experience at the <em>Asti!</em></h1>
+                    
+                    <form className='memory-form' onSubmit={handleSubmit(submitMemory)}>
+                        <span className='memory-form-question' id="responder-name"><label htmlFor ="name">Enter a name to use while on the site </label>
+                            <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: true})}/>
+                            {formUser === "" ? errors.name && <span className='required-note'>This field is required</span> : ''}
+                        </span>
+                        <span className='memory-form-question' id="responder-occasion"><label htmlFor ="occasion">(Optional) Was your visit to the <em> Asti </em> a special occasion (birthday, date, anniversary, rehearsal dinner, etc.)?</label>
+                            <input type="text" name="occasion" id="occasion" className='user-input' {...register("occasion")} />
+                        </span>
+                        <span className='memory-form-question' id="responder-experience"><label htmlFor="experience">Describe your experience! </label>
+                            <textarea id ="experience" name="experience" className='user-input' {...register("experience", { required: true})}></textarea>
+                            {errors.experience && <span className='required-note'>This field is required</span>}
+                        </span>
+                        <span className='memory-form-question responder-image'>
+                            (Optional) Upload an image <input type ="file" name='image' className='user-input-image' onChange={e => setImageToUpload(e.target.files[0])} />
+                        </span>
+                        <span className='memory-form-question responder-image'>
+                            <label htmlFor="caption">(Optional) Add a caption for your image</label> <input type="text" id="caption" name="caption" onChange={e => setCaption(e.target.value)}/>   
+                        </span>
+                        <p className='anonymous-note'>To protect your privacy, no user info is required except for a display name of your choice and anything you'd like to share</p>
+                        <ReCAPTCHA sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
+                        <button disabled={!recaptchaValue} className='submit-btn'>Submit</button>
+                    </form>
+                </section>
+            </div>
+        )
+    } else {
+        return (
+            <div className='MemoryForm'>
+                <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
+                <section>
+                    <h1 className='form-title'>Share Your Experience at the <em>Asti!</em></h1>
+                    
+                    <form className='memory-form' onSubmit={handleSubmit(submitMemory)}>
+                        <span className='memory-form-question' id="responder-name"><label htmlFor ="name">Enter a name to use while on the site </label>
+                            <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: formUser === ""})} value={formUser === "" ? "" : formUser}/>
+                            {formUser === "" ? errors.name && <span className='required-note'>This field is required</span> : ''}
+                        </span>
+                        <span className='memory-form-question' id="responder-occasion"><label htmlFor ="occasion">(Optional) Was your visit to the <em> Asti </em> a special occasion (birthday, date, anniversary, rehearsal dinner, etc.)?</label>
+                            <input type="text" name="occasion" id="occasion" className='user-input' {...register("occasion")} />
+                        </span>
+                        <span className='memory-form-question' id="responder-experience"><label htmlFor="experience">Describe your experience! </label>
+                            <textarea id ="experience" name="experience" className='user-input' {...register("experience", { required: true})}></textarea>
+                            {errors.experience && <span className='required-note'>This field is required</span>}
+                        </span>
+                        <span className='memory-form-question responder-image'>
+                            (Optional) Upload an image <input type ="file" name='image' className='user-input-image' onChange={e => setImageToUpload(e.target.files[0])} />
+                        </span>
+                        <span className='memory-form-question responder-image'>
+                            <label htmlFor="caption">(Optional) Add a caption for your image</label> <input type="text" id="caption" name="caption" onChange={e => setCaption(e.target.value)}/>   
+                        </span>
+                        <p className='anonymous-note'>To protect your privacy, no user info is required except for a display name of your choice and anything you'd like to share</p>
+                        <ReCAPTCHA sitekey={SITE_KEY} type="image" onChange={(val) => setRecaptchaValue(val)}/>
+                        <button disabled={!recaptchaValue} className='submit-btn'>Submit</button>
+                    </form>
+                </section>
+            </div>
+        )
+    }
+    
 }

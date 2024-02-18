@@ -29,7 +29,6 @@ const preload_comment = async() => {
 const preload_images = async() => {
     await models.Image.create(prefixes.preloaded_memory_image)
 
-    //this one is not being saved for some reason
     await models.Image.create(prefixes.preloaded_gallery_image)
 }
 
