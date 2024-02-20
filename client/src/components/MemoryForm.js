@@ -151,7 +151,6 @@ export default function MemoryForm() {
         }
         
     }
-    //TODO: FIX DISPLAY NAME TYPING ISSUE
     if(formUser === "") {
         return (
             <div className='MemoryForm'>
@@ -161,7 +160,7 @@ export default function MemoryForm() {
                     
                     <form className='memory-form' onSubmit={handleSubmit(submitMemory)}>
                         <span className='memory-form-question' id="responder-name"><label htmlFor ="name">Enter a name to use while on the site </label>
-                            <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: true})}/>
+                            <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: true})} defaultValue=""/>
                             {formUser === "" ? errors.name && <span className='required-note'>This field is required</span> : ''}
                         </span>
                         <span className='memory-form-question' id="responder-occasion"><label htmlFor ="occasion">(Optional) Was your visit to the <em> Asti </em> a special occasion (birthday, date, anniversary, rehearsal dinner, etc.)?</label>
@@ -193,7 +192,7 @@ export default function MemoryForm() {
                     
                     <form className='memory-form' onSubmit={handleSubmit(submitMemory)}>
                         <span className='memory-form-question' id="responder-name"><label htmlFor ="name">Enter a name to use while on the site </label>
-                            <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: formUser === ""})} value={formUser === "" ? "" : formUser}/>
+                            <input type="text" name="name" id = "name" className='user-input' {...register("name", { required: formUser === ""})} defaultValue={formUser}/>
                             {formUser === "" ? errors.name && <span className='required-note'>This field is required</span> : ''}
                         </span>
                         <span className='memory-form-question' id="responder-occasion"><label htmlFor ="occasion">(Optional) Was your visit to the <em> Asti </em> a special occasion (birthday, date, anniversary, rehearsal dinner, etc.)?</label>

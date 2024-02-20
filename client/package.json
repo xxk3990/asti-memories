@@ -23,6 +23,7 @@
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.11.1",
     "react-scripts": "^5.0.1",
+    "reaptcha": "^1.12.1",
     "testing-library": "^0.0.2",
     "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
