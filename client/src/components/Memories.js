@@ -8,7 +8,6 @@ import { Pagination } from './child-components/Pagination'
 import TextField from "@mui/material/TextField";
 import { debounce } from "../utils"
 import ReCAPTCHA from "react-google-recaptcha"
-import {v4 as uuidv4} from 'uuid'
 export default function Memories() {
   const SITE_KEY = '6LffBlMpAAAAADK37hlL29ERh8ba5EMhRtPCli6o'
   const [memories, setMemories] = useState([]);
@@ -30,6 +29,7 @@ export default function Memories() {
     const url = `${NODE_URL}/memories`
     await axios.get(url).then(response => {
       if(response.data) {
+        //sort data based on current sort method
         switch(sortMethod) {
           case "newest": {
             setMemories(response.data.sort((x, y) => new Date(y.createdAt) - new Date(x.createdAt)))
@@ -78,6 +78,7 @@ export default function Memories() {
   useEffect(() => {
     document.title = "Asti Memories"
     
+    //On each data change, re-call method but with current sorting setup
     if(sortedByNewest && !sortedBylikes && !sortedByOldest) {
       getMemories("newest");
     }
@@ -166,7 +167,7 @@ export default function Memories() {
 
         //clear recaptcha before all other stuff, this prevents TIMEOUT!
         setTimeout(async() => {
-          const widget = recaptchaRef.current.getWidgetId(0)
+          const widget = recaptchaRef.current.getWidgetId(0) //since there is only one captcha widget, grab first!
           recaptchaRef.current.reset(widget)
         }, 1000)
         setTimeout(async() => {
@@ -233,7 +234,7 @@ export default function Memories() {
       </div>
     );
   } else {
-    if(user === null) {
+    if(user === null) { //include ReCAPTCHA element if no user
       return (
         <div className="Memories">
           <h1 className="memories-page-title">Shared Memories of the <em>Asti</em></h1>
@@ -262,7 +263,7 @@ export default function Memories() {
             className="memory-search-field"
             label='Search Memories by Name'
             sx={{
-            //Below code is for changing color of TextField elements
+            //Below code is for changing css for TextField elements
               "& .MuiFormLabel-root": {
                 color: 'darkred',
                 fontFamily: 'Noto Sans'
