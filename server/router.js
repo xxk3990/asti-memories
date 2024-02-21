@@ -18,6 +18,7 @@ const router = (app) => {
    app.post("/adminLogin", admin.adminLogin)
    app.post("/recaptcha", recap.verifyRecaptcha)
    app.get("/users", user.checkForUser)
+   app.post("/users", user.createTemporaryUser)
    app.get("/images", image.getImageForMemory)
    app.delete("/images", admin.adminDeleteImage)
    app.get("/gallery", image.getGalleryImages)

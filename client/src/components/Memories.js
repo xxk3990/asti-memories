@@ -1,5 +1,5 @@
 import '../styles/memories.css'
-import { React, useState, useEffect, useMemo} from 'react'
+import { React, useState, useEffect, useMemo, useRef} from 'react'
 import { handlePost, handlePut } from '../services/requests-service'
 import {Snackbar} from '@mui/material'
 import { MemoryTile } from './child-components/MemoryTile'
@@ -7,8 +7,10 @@ import axios from 'axios'
 import { Pagination } from './child-components/Pagination'
 import TextField from "@mui/material/TextField";
 import { debounce } from "../utils"
-
+import ReCAPTCHA from "react-google-recaptcha"
+import {v4 as uuidv4} from 'uuid'
 export default function Memories() {
+  const SITE_KEY = '6LffBlMpAAAAADK37hlL29ERh8ba5EMhRtPCli6o'
   const [memories, setMemories] = useState([]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [sortedByNewest, setSortedByNewest] = useState(true); //starts out true because this is default
@@ -19,6 +21,8 @@ export default function Memories() {
   const user = sessionStorage.getItem("user_uuid")
   const [currentPage, setCurrentPage] = useState(1)
   const [searchInput, setSearchInput] = useState("");
+  const recaptchaRef = useRef(null);
+  const [temporaryUsername, setTemporaryUsername] = useState("")
   let PageSize = 8;
   
   const getMemories = async(sortMethod) => {
@@ -52,6 +56,23 @@ export default function Memories() {
     })
     
    
+  }
+  useEffect(() => {
+    console.log("user set")
+  }, [temporaryUsername])
+
+  const verifyRecaptcha = async() => {
+    const recaptchaEndpoint = `recaptcha`
+    const recaptchaBody = {
+      recaptcha_token: recaptchaRef.current.getValue()
+    }
+    const recaptchaResponse = await handlePost(recaptchaEndpoint, recaptchaBody)
+    const recaptchaData = await recaptchaResponse.data;
+    if(recaptchaData.human) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   useEffect(() => {
@@ -129,6 +150,37 @@ export default function Memories() {
     setDefaultSortBtnText("Newest First")
   }
 
+  const createTempUser = async() => {
+    const isHuman = await verifyRecaptcha()
+    if(isHuman) {
+      const endpoint = 'users'
+      const body = {
+        name: temporaryUsername
+      }
+      const response = await handlePost(endpoint, body)
+      if(response.status === 201) {
+        const data = await response.data;
+        setTemporaryUsername("")
+        setOpenSnackbar(true)
+        setSnackbarMessage("User creation successful!")
+
+        //clear recaptcha before all other stuff, this prevents TIMEOUT!
+        setTimeout(async() => {
+          const widget = recaptchaRef.current.getWidgetId(0)
+          recaptchaRef.current.reset(widget)
+        }, 1000)
+        setTimeout(async() => {
+          setOpenSnackbar(false);
+          setSnackbarMessage("")
+          sessionStorage.setItem("user_uuid", data.user_uuid)
+        }, 1500)
+      }
+    } else {
+      alert("You are a bot.")
+    }
+
+  }
+
   /* 
     This method is called from the ViewComments child-component in MemoryTile.js. 
     The parameters come from there. 
@@ -180,61 +232,130 @@ export default function Memories() {
       </div>
     );
   } else {
-    return (
-      <div className="Memories">
-        <h1 className="memories-page-title">Shared Memories of the <em>Asti</em></h1>
-        <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
-        <Pagination
-          className="pagination-bar"
-          currentPage={currentPage}
-          totalCount={memories.length} 
-          pageSize={PageSize}
-          onPageChange={page => setCurrentPage(page)}
-        />
-        <section className='textfield-container'>
-          <p>Check the activity on your shared memory</p>
-          <TextField 
-          onChange = {debouncedSearch}
-          className="memory-search-field"
-          label='Search Memories by Name'
-          sx={{
-          //Below code is for changing color of TextField elements
-            "& .MuiFormLabel-root": {
-              color: 'darkred',
-              fontFamily: 'Noto Sans'
-            },
-            "& .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:hover:not(.Mui-disabled, .Mui-error):before": {
-              borderBottom: '1px solid darkred'
-            },
-            "& .css-o943dk-MuiFormLabel-root-MuiInputLabel-root.Mui-focused": {
-              color: 'darkred',
-            },
-            "& .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:before": {
-              borderBottom: '1px solid darkred'
-            },
-            "& .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:after": {
-              borderBottom: '1px solid darkred'
-            }
-          }}
-          variant="filled"
-         />
-        
-        </section>
-        
-        <section className='sorting-btns'>
-          <h3 className='sort-instructions'>Sort by</h3>
-          <button disabled={sortedByNewest} className='sort-btn date-btn' onClick = {sortByNewest}>{defaultSortBtnText}</button>
-          <button disabled={sortedByOldest} className='sort-btn date-btn' onClick = {sortByOldest}> Oldest First</button>
-          <button disabled={sortedBylikes} className='sort-btn like-btn' onClick = {sortByLikes}>Most Likes</button>
-        </section>
-        
-        <section className='memories-grid'>
-          {memoriesPerPage.map(m => {
-            return <MemoryTile key={m.uuid} m={m} likePost={likePost} submitComment={submitComment}/>
-          })}
-        </section>
-      </div>
-    );
+    if(user === null) {
+      return (
+        <div className="Memories">
+          <h1 className="memories-page-title">Shared Memories of the <em>Asti</em></h1>
+
+          <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
+          <section className="user-comments-form">
+            <h3>Create a temporary user to comment on posts!</h3>
+            <span>
+              <label htmlFor="user-name-input">Enter a display name:</label> 
+              <input id="user-name-input" type="text" onChange={(e) => setTemporaryUsername(e.target.value)}/> 
+            </span>
+            <ReCAPTCHA sitekey={SITE_KEY} type="image" ref={recaptchaRef}/>
+            <button className='interaction-btn' onClick={createTempUser}>Submit</button>
+          </section>
+          <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={memories.length} 
+            pageSize={PageSize}
+            onPageChange={page => setCurrentPage(page)}
+          />
+          <section className='textfield-container'>
+            <p>Check the activity on your shared memory</p>
+            <TextField 
+            onChange = {debouncedSearch}
+            className="memory-search-field"
+            label='Search Memories by Name'
+            sx={{
+            //Below code is for changing color of TextField elements
+              "& .MuiFormLabel-root": {
+                color: 'darkred',
+                fontFamily: 'Noto Sans'
+              },
+              "& .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:hover:not(.Mui-disabled, .Mui-error):before": {
+                borderBottom: '1px solid darkred'
+              },
+              "& .css-o943dk-MuiFormLabel-root-MuiInputLabel-root.Mui-focused": {
+                color: 'darkred',
+              },
+              "& .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:before": {
+                borderBottom: '1px solid darkred'
+              },
+              "& .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:after": {
+                borderBottom: '1px solid darkred'
+              }
+            }}
+            variant="filled"
+           />
+          
+          </section>
+          
+          <section className='sorting-btns'>
+            <h3 className='sort-instructions'>Sort by</h3>
+            <button disabled={sortedByNewest} className='sort-btn date-btn' onClick = {sortByNewest}>{defaultSortBtnText}</button>
+            <button disabled={sortedByOldest} className='sort-btn date-btn' onClick = {sortByOldest}> Oldest First</button>
+            <button disabled={sortedBylikes} className='sort-btn like-btn' onClick = {sortByLikes}>Most Likes</button>
+          </section>
+          
+          <section className='memories-grid'>
+            {memoriesPerPage.map(m => {
+              return <MemoryTile key={m.uuid} m={m} likePost={likePost} submitComment={submitComment}/>
+            })}
+          </section>
+        </div>
+      );
+    } else {
+      return (
+        <div className="Memories">
+          <h1 className="memories-page-title">Shared Memories of the <em>Asti</em></h1>
+          <Snackbar open={openSnackbar} autoHideDuration={1500} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
+          <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={memories.length} 
+            pageSize={PageSize}
+            onPageChange={page => setCurrentPage(page)}
+          />
+          <section className='textfield-container'>
+            <p>Check the activity on your shared memory</p>
+            <TextField 
+            onChange = {debouncedSearch}
+            className="memory-search-field"
+            label='Search Memories by Name'
+            sx={{
+            //Below code is for changing color of TextField elements
+              "& .MuiFormLabel-root": {
+                color: 'darkred',
+                fontFamily: 'Noto Sans'
+              },
+              "& .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:hover:not(.Mui-disabled, .Mui-error):before": {
+                borderBottom: '1px solid darkred'
+              },
+              "& .css-o943dk-MuiFormLabel-root-MuiInputLabel-root.Mui-focused": {
+                color: 'darkred',
+              },
+              "& .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:before": {
+                borderBottom: '1px solid darkred'
+              },
+              "& .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:after": {
+                borderBottom: '1px solid darkred'
+              }
+            }}
+            variant="filled"
+           />
+          
+          </section>
+          
+          <section className='sorting-btns'>
+            <h3 className='sort-instructions'>Sort by</h3>
+            <button disabled={sortedByNewest} className='sort-btn date-btn' onClick = {sortByNewest}>{defaultSortBtnText}</button>
+            <button disabled={sortedByOldest} className='sort-btn date-btn' onClick = {sortByOldest}> Oldest First</button>
+            <button disabled={sortedBylikes} className='sort-btn like-btn' onClick = {sortByLikes}>Most Likes</button>
+          </section>
+          
+          <section className='memories-grid'>
+            {memoriesPerPage.map(m => {
+              return <MemoryTile key={m.uuid} m={m} likePost={likePost} submitComment={submitComment}/>
+            })}
+          </section>
+        </div>
+      );
+    }
+    
   }
  
 }

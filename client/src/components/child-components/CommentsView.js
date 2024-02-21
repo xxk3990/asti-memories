@@ -1,10 +1,11 @@
-import { React, useState, useEffect, useRef} from 'react'
+import { React, useState, useEffect} from 'react'
 import {v4 as uuidv4} from 'uuid'
-import { handleGet, handlePost } from '../../services/requests-service';
-import ReCAPTCHA from "react-google-recaptcha"
+import { handleGet } from '../../services/requests-service';
 import "../../styles/memories.css"
+import axios from 'axios'
 export const CommentsView = (props) => {
   const {m, commentUser, setCommentUser, submitComment} = props;
+  const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
   const [comments, setComments] = useState([])
   const getComments = async() => {
     const endpoint = `comments?memory_uuid=${m.uuid}`
@@ -12,36 +13,30 @@ export const CommentsView = (props) => {
   }
   useEffect(() => {
     getComments();
+    checkForUser();
   }, [])
   const handleChange = (name, value) => {
     setNewComment({...newComment, [name]:value})
   }
   const user = sessionStorage.getItem("user_uuid")
-  const SITE_KEY = '6LffBlMpAAAAADK37hlL29ERh8ba5EMhRtPCli6o'
-  const recaptchaId1 = uuidv4();
-  const recaptchaId2 = uuidv4();
-  let captcha;
   const [newComment, setNewComment] = useState({
     memory_uuid: m.uuid,
     user_uuid: user,
     comment_text: ""
   })
-  const verifyRecaptcha = async() => {
-    const recaptchaEndpoint = `recaptcha`
-    const recaptchaBody = {
-      recaptcha_token: captcha.getValue()
+  
+  const checkForUser = async() => {
+    //if the user already created a temp user (via the form for example), grab temp display_name
+    if(user !== null) {
+      const checkUserEndpoint = `users?user_uuid=${user}`
+      const url = `${NODE_URL}/${checkUserEndpoint}`
+      await axios.get(url).then(response => {
+        const data = response.data;
+        if(data.display_name) {
+          setCommentUser(data.display_name)
+        }
+      })
     }
-    const recaptchaResponse = await handlePost(recaptchaEndpoint, recaptchaBody)
-    const recaptchaData = await recaptchaResponse.data;
-    if(recaptchaData.human) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  const handleUserChange = (value) => {
-    setCommentUser(value)
   }
 
   const handleSubmit = async(e) => {
@@ -50,33 +45,24 @@ export const CommentsView = (props) => {
     if(newComment.comment_text === "") { 
       return;
     } else {
-      if(user === null) {
-        //only require recaptcha if temporary user is not created yet
-        const isHuman = await verifyRecaptcha()
-        if(isHuman) {
-          //ensures memory_uuid and user_uuid are sent in each payload
-          newComment.memory_uuid = m.uuid;
-          newComment.user_uuid = user;
-          captcha.reset(recaptchaId1);
-          captcha.reset(recaptchaId2)
-          window.grecaptcha.reset();
-          submitComment(newComment, commentUser, setNewComment, getComments)
-        } else {
-          alert("You are a bot!")
-        }
-      } else {
-        //ensures memory_uuid and user_uuid are sent in each payload
-        newComment.memory_uuid = m.uuid;
-        newComment.user_uuid = user
-        submitComment(newComment, commentUser, setNewComment, getComments)
-      }
-      
-      
+      //ensures memory_uuid and user_uuid are sent in each payload
+      newComment.memory_uuid = m.uuid;
+      newComment.user_uuid = user
+      submitComment(newComment, commentUser, setNewComment, getComments)
     }
   }
+
   if(comments.length === 0) {
-    //don't include recaptcha if temporary user already created
-    if(user !== null) {
+    //don't show post comment form if temporary user not created
+    if(user === null) {
+      return (
+        <section className='comments-container'>
+          <section className='no-comments-container'>
+            <h4>No comments Yet! To post a comment, fill out the form above to create a temporary user for yourself.</h4>
+          </section>
+        </section>
+      )
+    } else {
       return (
         <section className='comments-container'>
           <section className='no-comments-container'>
@@ -84,33 +70,16 @@ export const CommentsView = (props) => {
           </section>
           <section className='new-comment'>
             <form onSubmit={(e) => handleSubmit(e)} className='comment-form'>
-              <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
+              <span>Display name: {commentUser}</span>
               <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
               <button className='interaction-btn submit-comment-btn'>Post comment</button>
             </form>
           </section>
         </section>
       )
+    }
   } else {
-    return (
-      <section className='comments-container'>
-        <section className='no-comments-container'>
-          <h4>No comments yet, be the first to comment!</h4>
-        </section>
-        <section className='new-comment'>
-          <form className='comment-form' onSubmit={(e) => handleSubmit(e)}>
-          <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
-            <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
-            <ReCAPTCHA size="compact" ref={(r) => captcha = r} id={recaptchaId1} sitekey={SITE_KEY}/>
-            <button className='interaction-btn submit-comment-btn'>Post comment</button>
-          </form>
-        </section>
-      </section>
-    )
-  }
-    
-  } else {
-    if(user !== null) {
+    if(user === null) {
       return (
         <section className='comments-container'>
           <h4 className='comments-count'>Comments</h4>
@@ -128,12 +97,8 @@ export const CommentsView = (props) => {
               }
             </ul>
           </section>
-          <section className='new-comment'>
-            <form onSubmit = {(e) => handleSubmit(e)} className='comment-form'>
-            <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
-              <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
-              <button className='interaction-btn submit-comment-btn'>Post comment</button>
-            </form>
+          <section className='new-comment'> 
+            <h4>To post a comment, fill out the form above to create a temporary user for yourself.</h4>
           </section>
         </section>
       )
@@ -157,14 +122,14 @@ export const CommentsView = (props) => {
           </section>
           <section className='new-comment'>
             <form className='comment-form' onSubmit={(e) => handleSubmit(e)}>
-            <span>Display name: <input type="text" value={commentUser} name="commentUser" onChange={(e) => handleUserChange(e.target.value)} /></span>
+              <span>Display name: {commentUser}</span>
               <span>Comment: <input type="text" name="comment_text" value={newComment.comment_text} onChange={(e) => handleChange(e.target.name, e.target.value) }/></span>
-              <ReCAPTCHA size="compact" ref={(r) => captcha = r} id={recaptchaId2} sitekey={SITE_KEY} type="image"/>
               <button className='interaction-btn submit-comment-btn'>Post comment</button>
-          </form>
+            </form>
           </section>
         </section>
       )
     }
+    
   }
 }

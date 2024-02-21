@@ -20,4 +20,16 @@ const checkForUser = async(req, res) => {
     }
 }
 
-module.exports = {checkForUser}
+const createTemporaryUser = async(req, res) => {
+    const newUser = {
+        uuid: uuidv4(),
+        display_name: req.body.name,
+    }
+    await models.User.create(newUser);
+
+    return res.status(201).json({
+        user_uuid: newUser.uuid
+    })
+}
+
+module.exports = {checkForUser, createTemporaryUser}
