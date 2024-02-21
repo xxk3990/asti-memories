@@ -191,7 +191,8 @@ export default function Memories() {
     const endpoint = `comments`
     const requestBody = {
       comment: comment,
-      user_display_name: commentUser
+      user_display_name: commentUser,
+      user_uuid: user
     }
   
     try {
