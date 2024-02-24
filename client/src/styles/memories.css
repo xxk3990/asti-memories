@@ -7,6 +7,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 3%;
+    height: 100vh;
 }
 
 .memories-page-title {
@@ -98,8 +99,6 @@
 
 .pagination-container .pagination-item .arrow::before {
     position: relative;
-    /* top: 3pt;
-    Uncomment this to lower the icons as requested in comments*/
     content: '';
     /* By using an em scale, the arrows will size with the font */
     display: inline-block;

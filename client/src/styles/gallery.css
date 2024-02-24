@@ -1,3 +1,8 @@
+* {
+    box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
 
 .Gallery {
     font-family: 'didot', sans-serif;
@@ -7,8 +12,16 @@
     margin-top: 3%;
 }
 
+.gallery-title {
+    padding: 0;
+    margin: 0;
+}
+
 .gallery-verbiage {
     font-size: 18px;
+    margin: 0;
+    width: 75vw;
+    text-align: center;
 }
 
 .pagination-container {
@@ -52,8 +65,6 @@
 
 .pagination-container .pagination-item .arrow::before {
     position: relative;
-    /* top: 3pt;
-    Uncomment this to lower the icons as requested in comments*/
     content: '';
     /* By using an em scale, the arrows will size with the font */
     display: inline-block;
@@ -89,29 +100,38 @@
     cursor: default;
 }
 
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+section.collage-container {
+    column-count: 4;
+    gap: 0;
+    padding: 0 4px;
+    width: 100vw;
 }
 
-.gallery-image-view {
-    border: 1px solid black;
+img.gallery-image {
+    margin-top: 8px;
+    vertical-align: middle;
+    width: 100%;
     padding: 5px;
-    max-width: 360px;
     max-height: 600px;
+    cursor: pointer;
 }
 
-.gallery-image-view img {
-    min-width: 350px;
+.image-caption-container {
+    position: absolute;
+    z-index: 1;
+    background-color: darkred;
+    color: white;
+    transform: translate(10%, -200%);
     max-width: 350px;
-    max-height: 500px;
-    margin: 5px 5px 0 5px;
 }
 
 .gallery-image-caption {
     text-align: center;
     font-size: 18px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    font-family: 'Noto Sans', sans-serif;
+    text-align: center;
 }
 
 h1 {
@@ -122,9 +142,12 @@ h1 {
         margin-top: 15%;
     }
 
-    .gallery-grid {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .gallery-image-view {
+        width: 85vw;
+    }
+
+    .collage-container {
+        display: grid;
+        grid-template-columns: 1fr;
     }
 }
