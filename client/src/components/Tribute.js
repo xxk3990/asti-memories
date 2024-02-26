@@ -11,7 +11,7 @@ import "../styles/tribute.css"
 export default function Tribute() {
     return (
         <div className='Tribute'>
-            <h4>In 1983, the WSJ released a tribute to Mariani's Son, Augie, who took leadership of the restaurant after Adolfo passed.</h4>
+            <p>In 1983, the <em>Wall Street Journal</em> released a tribute to Mariani's Son, Augie, who took leadership of the restaurant after Adolfo passed.</p>
             <section className='tribute-images'>
                 <img src={astiTributeHeader} className='asti-tribute-header' alt="asti-tribute"/>
                 <section className='tribute-text-images'>

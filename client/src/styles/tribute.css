@@ -1,4 +1,5 @@
 .Tribute {
+    font-family: 'didot', sans-serif;
     margin-top: 3%;
     display: flex;
     flex-direction: column;
@@ -6,7 +7,7 @@
 }
 
 .asti-tribute-header {
-    max-width: 71vw;
+    width: 71vw;
 }
 
 .tribute-images {
@@ -42,15 +43,21 @@
 @media screen and (max-width: 600px) {
     .Tribute {
         margin-top: 15%;
+        text-align: center;
     }
     .tribute-images {
         display: grid;
         grid-template-columns: 1fr;
+        width: 80vw;
     }
     .tribute-text-images {
         display: grid;
         grid-template-columns: 1fr;
         max-width: 80vw;
         gap: 0;
+    }
+
+    .asti-tribute-header {
+        width: 80vw;
     }
 }
