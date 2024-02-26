@@ -10,6 +10,7 @@ import ManageMemories from './components/admin/ManageMemories';
 import MemoryForm from './components/MemoryForm';
 import Home from './components/Home';
 import GalleryImageUploader from './components/admin/GalleryImageUploader';
+import Tribute from './components/Tribute';
 function App() {
   return (
     <Routes>
@@ -18,6 +19,7 @@ function App() {
         <Route path="/memoryForm" element={<MemoryForm/>}/>
         <Route path="/memories" element={<Memories/>}/>
         <Route path="/gallery" element={<Gallery/>}/>
+        <Route path ="/tribute" element={<Tribute/>}/>
         <Route path="/adminLogin" element={<AdminLogin/>}/>
         <Route path="/adminCreateAccount" element={<AdminCreateAccount/>} />
         <Route path="/manageMemories" element={<ManageMemories/>}/>

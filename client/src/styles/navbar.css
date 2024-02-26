@@ -52,5 +52,13 @@ a:focus {
 @media screen and (max-width: 600px) {
     .Navbar {
         height: 75px;
+        display: flex;
+        justify-content: space-around;
     }
+
+    .nav {
+        display: flex;
+        justify-content: space-around;
+    }
+    
 }

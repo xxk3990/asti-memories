@@ -9,6 +9,7 @@ export default function Gallery() {
         const endpoint = `gallery`
         await handleGet(endpoint, setGallery)
     }
+    
     //change order of photos on each render
     const randomized = gallery.sort(() => Math.random() - 0.5)
     useEffect(() => {
