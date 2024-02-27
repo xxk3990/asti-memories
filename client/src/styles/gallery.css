@@ -63,41 +63,7 @@ h1 {
     text-align: center;
 }
 
-a#audio-source {
-    color: darkred;
-    font-size: 18px;
-}
 
-a#audio-source:hover {
-    text-decoration: underline;
-}
-
-.audio-btn {
-    background: darkred;
-    color: white;
-    width: auto;
-    height: 30px;
-    cursor: pointer;
-    border-radius: 10px;
-    border: none;
-    font-family: 'Noto Sans', sans-serif;
-    font-size: 18px;
-    border: 1px solid darkred;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-
-.audio-player {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.play-pause-btns {
-    display: flex;
-    justify-content: space-evenly;
-}
 
 @media screen and (max-width: 600px) {
     .Gallery {

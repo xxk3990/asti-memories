@@ -5,14 +5,8 @@ import astiQuartet from "../images-static/asti-quartet.png"
 import astiMenu from "../images-static/asti-menu-1960s.jpg"
 import astiPostcard from "../images-static/asti-postcard.PNG"
 import astiFront from "../images-static/asti-front.jpeg"
+import {AudioPlayer} from './child-components/AudioPlayer'
 export default function Home() {
-    const navigate = useNavigate();
-    const navigateToForm = () => {
-        navigate('/memoryForm')
-    }
-    const navigateToPosts = () => {
-        navigate('/memories')
-    }
     return (
         <div className='Home'>
             <section className = "restaurant-info">
@@ -44,10 +38,7 @@ export default function Home() {
                     provide any personal information.
                 </p>
             </section>
-            <section className='nav-btns'>
-                <button className='nav-btn' onClick={navigateToForm}>Share Memory</button>
-                <button className='nav-btn' onClick={navigateToPosts}>View Posts</button>
-            </section>
+            <AudioPlayer/>
         </div>
     )
 }
