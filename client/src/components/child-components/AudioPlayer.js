@@ -1,7 +1,7 @@
 import {React, useState, useRef, useEffect} from "react"
 import "../../styles/gallery.css"
 import { handleGet } from "../../services/requests-service"
-export const AudioView = () => {
+export const AudioPlayer = () => {
     const [audioSource, setAudioSource] = useState("")
     const audioRef = useRef(null)
     const getAudio = async () => {

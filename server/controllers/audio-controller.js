@@ -5,7 +5,7 @@ const {
 const models = require('../models');
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
-
+//get audio file from s3 for gallery page
 const getAudioFromS3 = async(req, res) => {
     const bucketAccessKey = process.env.IMAGE_BUCKET_ACCESS_KEY;
     const bucketSecretKey = process.env.IMAGE_BUCKET_SECRET_KEY;
