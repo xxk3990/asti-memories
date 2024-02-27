@@ -4,6 +4,7 @@ const admin = require("./controllers/admin-controller")
 const recap = require("./middleware/recaptcha")
 const user = require("./controllers/users-controller")
 const image = require("./controllers/images-controller")
+const audio = require("./controllers/audio-controller")
 
 const router = (app) => {
    app.get("/memories", mem.getMemories)
@@ -21,6 +22,7 @@ const router = (app) => {
    app.post("/users", user.createTemporaryUser)
    app.get("/images", image.getImageForMemory)
    app.delete("/images", admin.adminDeleteImage)
+   app.get("/audio", audio.getAudioFromS3)
    app.get("/gallery", image.getGalleryImages)
    app.post("/gallery", image.saveGalleryImage)
    app.get("/randomize", image.createUniqueFileName)
