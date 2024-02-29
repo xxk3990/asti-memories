@@ -22,7 +22,7 @@ export const AudioPlayer = () => {
     }
     return (
         <section className="audio-player">
-            <p className="audio-verbiage">Below is the audio <em>La traviata: Act I. “Libiamo, ne’ Lieti Calici”</em>. It originally comes from Guiseppe Verdi's <em>La traviata</em>, and became the opera tune that opened up the evening at The <em>Asti</em>. This version of it is from <a className="audio-link" href="https://commons.wikimedia.org/wiki/File:La_Traviata_-_Act_1_-_Libiamo_ne%27_lieti_calici.ogg">here</a> and is available in the public domain under the <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.en" className="audio-link">Creative Commons license.</a></p>
+            <p className="audio-verbiage">Below is the audio <em>La traviata: Act I. “Libiamo, ne’ Lieti Calici”</em>. It originally comes from Guiseppe Verdi's <em>La traviata</em>, and became the opera tune that opened up the evening at The <em>Asti</em>. This version of it is from <a target="_blank" className="audio-link" href="https://commons.wikimedia.org/wiki/File:La_Traviata_-_Act_1_-_Libiamo_ne%27_lieti_calici.ogg">here</a> and is available in the public domain under the <a target="_blank" href="https://creativecommons.org/publicdomain/zero/1.0/deed.en" className="audio-link">Creative Commons license.</a></p>
             <span className="play-pause-btns">
                 <button className="audio-btn" onClick={playSound}>Start Audio</button>
                 <button className="audio-btn" onClick={pauseSound}>Stop Audio</button>
