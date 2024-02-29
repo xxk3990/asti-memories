@@ -59,12 +59,12 @@
     width: 70vw;
 }
 
-a#audio-source {
+a.audio-link{
     color: darkred;
     font-size: 18px;
 }
 
-a#audio-source:hover {
+a.audio-link:hover {
     text-decoration: underline;
 }
 
