@@ -2,9 +2,10 @@ import {React, useState} from 'react'
 export const GalleryTile = (props) => {
   const [showCaption, setShowCaption] = useState(false)
   const img = props.img;
+  const onImageLoad = props.onImageLoad;
   return (
     <section className='gallery-image-view'>
-      <img className='gallery-image' src = {img.image_url} alt={img.image_caption} onMouseEnter={() => setShowCaption(!showCaption)} onMouseLeave={() => setShowCaption(!showCaption)}/>
+      <img onLoad={onImageLoad} className='gallery-image' src = {img.image_url} alt={img.image_caption} onMouseEnter={() => setShowCaption(!showCaption)} onMouseLeave={() => setShowCaption(!showCaption)}/>
       {
       showCaption && 
         <section className='image-caption-container'>
