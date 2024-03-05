@@ -13,7 +13,7 @@
 .tribute-images {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    border: 10px solid darkred;
 }
 
 .tribute-text-images {

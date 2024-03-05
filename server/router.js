@@ -3,8 +3,7 @@ const com = require("./controllers/comments-controller")
 const admin = require("./controllers/admin-controller")
 const recap = require("./middleware/recaptcha")
 const user = require("./controllers/users-controller")
-const image = require("./controllers/images-controller")
-const audio = require("./controllers/audio-controller")
+const file = require("./controllers/files-controller")
 
 const router = (app) => {
    app.get("/memories", mem.getMemories)
@@ -20,12 +19,12 @@ const router = (app) => {
    app.post("/recaptcha", recap.verifyRecaptcha)
    app.get("/users", user.checkForUser)
    app.post("/users", user.createTemporaryUser)
-   app.get("/images", image.getImageForMemory)
+   app.get("/images", file.getImageForMemory)
    app.delete("/images", admin.adminDeleteImage)
-   app.get("/audio", audio.getAudioFromS3)
-   app.get("/gallery", image.getGalleryImages)
-   app.post("/gallery", image.saveGalleryImage)
-   app.get("/randomize", image.createUniqueFileName)
+   app.get("/audio", file.getAudioFromS3)
+   app.get("/gallery", file.getGalleryImages)
+   app.post("/gallery", file.saveGalleryImage)
+   app.get("/randomize", file.createUniqueFileName)
 }
 
 module.exports = router;
