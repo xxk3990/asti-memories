@@ -6,6 +6,10 @@
     align-items: center;
 }
 
+.tribute-text {
+    max-width: 70vw;
+}
+
 .asti-tribute-header {
     width: 71vw;
 }
@@ -45,15 +49,18 @@
         margin-top: 15%;
         text-align: center;
     }
+    .asti-tribute {
+        width: 80vw;
+    }
     .tribute-images {
         display: grid;
         grid-template-columns: 1fr;
-        width: 80vw;
+        width: 84vw;
     }
     .tribute-text-images {
         display: grid;
         grid-template-columns: 1fr;
-        max-width: 80vw;
+        width: 80vw;
         gap: 0;
     }
 
