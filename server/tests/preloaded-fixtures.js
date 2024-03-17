@@ -17,7 +17,8 @@ const preloaded_memory_with_comment = { //this one gets an associated comment
     user_uuid: memory_user.uuid, //uses uuid of preloaded memory user
     occasion: "Yes, birthday",
     experience: "I celebrated my birthday there!",
-    num_likes: 0
+    num_likes: 0,
+    approved: true,
 }
 
 const preloaded_memory_without_comment = { //no associated comment so 204 path can be tested on comments
@@ -25,7 +26,8 @@ const preloaded_memory_without_comment = { //no associated comment so 204 path c
     user_uuid: memory_user.uuid, //uses uuid of preloaded memory user
     occasion: "Yes, rehearsal",
     experience: "My wife and I did our rehearsal dinner there!",
-    num_likes: 0
+    num_likes: 0,
+    approved: true,
 }
 
 const preloaded_comment = {

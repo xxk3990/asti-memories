@@ -7,7 +7,8 @@ const test_memory = {
     user_uuid: prefixes.memory_user.uuid, //uses uuid of memory user
     occasion: "no",
     experience: "experience",
-    num_likes: 0
+    num_likes: 0,
+    approved: true,
 }
 
 const memory_new_like_good = {
