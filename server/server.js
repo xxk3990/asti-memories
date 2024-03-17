@@ -4,6 +4,7 @@ const {
 const env = process.env.NODE_ENV || "development"
 let port = 3000;
 const app = require("./app")
+//change ports for different environments
 if (env === "test") port = 8080;
 else if (env === 'production') port = 5000;
 const connectToDB = async () => {

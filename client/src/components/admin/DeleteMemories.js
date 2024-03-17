@@ -1,14 +1,13 @@
-import "../../styles/manage-memories.css"
+import "../../styles/delete-memories.css"
 import { React, useState, useEffect, useMemo} from 'react'
 import { handleGet } from '../../services/requests-service'
 import {Snackbar} from '@mui/material'
 import {useNavigate} from "react-router-dom"
-import { AdminMemoryTile } from './AdminMemoryTile'
+import { DeleteMemoryTile } from './DeleteMemoryTile'
 import {handleAdminDelete} from "../../services/admin-service"
 import TextField from "@mui/material/TextField";
 import { debounce } from "../../utils"
-export default function  ManageMemories() {
-    <link rel="stylsheet" href="../../styles/manage-memories.css"/>
+export default function  DeleteMemories() {
     const [memories, setMemories] = useState([]);
     const navigate = useNavigate();
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -36,7 +35,7 @@ export default function  ManageMemories() {
     
 
     const deleteMemory = async(memory_uuid) => {
-        const endpoint = `memories?memory=${memory_uuid}`
+        const endpoint = `memories?memory_uuid=${memory_uuid}`
         const response = await handleAdminDelete(endpoint)
         if(response.status === 200) {
             setOpenSnackbar(true);
@@ -68,7 +67,7 @@ export default function  ManageMemories() {
         if(response.status === 200) {
             getImage();
             setOpenSnackbar(true);
-            setSnackbarMessage("Comment deleted successfully!")
+            setSnackbarMessage("Image deleted successfully!")
             setTimeout(() => {
                 setOpenSnackbar(false);
                 setSnackbarMessage("")
@@ -77,7 +76,7 @@ export default function  ManageMemories() {
     }
     if(memories.length === 0) {
         return (
-            <div className='ManageMemories'>
+            <div className='DeleteMemories'>
                 <TextField 
                     onChange = {debouncedSearch}
                     className="search-field"
@@ -100,7 +99,7 @@ export default function  ManageMemories() {
     
         const filteredMemories = memories.filter(m => m.name.toLowerCase().includes(searchInput.toLowerCase().trim()));
         return (
-            <div className='ManageMemories'>
+            <div className='DeleteMemories'>
                 <Snackbar open={openSnackbar} autoHideDuration={2000} message={snackbarMessage} anchorOrigin={{horizontal: "center", vertical:"top"}}/>
                 <h1>Manage All Memories and Comments</h1>
                 <TextField 
@@ -118,9 +117,9 @@ export default function  ManageMemories() {
                     }}
                     variant="filled"
                 />
-                <section className='manage-memories-grid'>
+                <section className='delete-memories-grid'>
                     {filteredMemories.map(m => {
-                        return <AdminMemoryTile m={m} deleteMemory={deleteMemory} deleteComment={deleteComment} deleteImage={deleteImage}/>
+                        return <DeleteMemoryTile m={m} deleteMemory={deleteMemory} deleteComment={deleteComment} deleteImage={deleteImage}/>
                     })}
                 </section>
             </div>

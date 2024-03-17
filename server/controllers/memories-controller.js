@@ -5,6 +5,7 @@ const models = require('../models');
 
 const getMemories = async (req, res) => {
     const memories = await models.Memory.findAll({
+        where: {'approved': true},
         raw: true
     });
     if (memories.length !== 0) {
@@ -12,7 +13,7 @@ const getMemories = async (req, res) => {
         for (let i = 0; i < posts.length; i++) {
             const op = await models.User.findOne({
                 where: {
-                    'uuid': posts[i].user_uuid
+                    'uuid': posts[i].user_uuid,
                 }
             })
             posts[i].name = op.display_name; //add OP's display name to post info
@@ -41,7 +42,8 @@ const createMemory = async (req, res) => {
                         user_uuid: newUser.uuid,
                         occasion: req.body.occasion,
                         experience: req.body.experience,
-                        num_likes: 0
+                        num_likes: 0,
+                        approved: true,
                     }
                     await models.Memory.create(newMemory)
                     if(req.body.image_key !== null) {
@@ -71,7 +73,8 @@ const createMemory = async (req, res) => {
                         user_uuid: user,
                         occasion: req.body.occasion,
                         experience: req.body.experience,
-                        num_likes: 0
+                        num_likes: 0,
+                        approved: true,
                     }
                     await models.Memory.create(newMemory)
                     
@@ -110,7 +113,8 @@ const likeMemory = async (req, res) => {
     } else {
         const memoryToLike = await models.Memory.findOne({
             where: {
-                'uuid': req.body.memory_uuid
+                'uuid': req.body.memory_uuid,
+                'approved': true,
             },
         })
         memoryToLike.num_likes = req.body.num_likes;
