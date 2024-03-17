@@ -33,8 +33,8 @@ export default function AdminLogin() {
         sessionStorage.setItem("user_uuid", serverData.user_uuid);
         setOpenSnackbar(true)
         setTimeout(() => {
-            setOpenSnackbar(false);
-            navigate(`/manageMemories`);
+          setOpenSnackbar(false);
+          navigate(`/deleteMemories`);
         }, 1500)
       } else if(response.status === 401) {
         alert("Not authorized!")

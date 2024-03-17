@@ -2,7 +2,7 @@ import { React, useState, useEffect} from 'react'
 import {v4 as uuidv4} from 'uuid'
 import { handleGet } from '../../services/requests-service';
 //child component for each memory
-export const AdminMemoryTile = (props) => {
+export const DeleteMemoryTile = (props) => {
   const {m, deleteMemory, deleteComment, deleteImage} = props;
   const [showComments, setShowComments] = useState(false); //show and hide comment view
   const [showImage, setShowImage] = useState(false);

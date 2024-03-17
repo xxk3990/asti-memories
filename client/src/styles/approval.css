@@ -1,0 +1,26 @@
+.ApproveMemories {
+    font-family: 'didot', sans-serif;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3%;
+}
+
+.approve-memories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.unapproved-memory {
+    border: 1px solid black;
+    width: 300px;
+    margin-bottom: 20px;
+}
+
+.unapproved-memory img {
+    max-width: 200px;
+}
+.unapproved-memory button {
+    cursor: pointer;
+}

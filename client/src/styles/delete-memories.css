@@ -1,4 +1,4 @@
-.ManageMemories {
+.DeleteMemories {
     font-family: 'didot', sans-serif;
     text-align: center;
     display: flex;
@@ -7,7 +7,7 @@
     margin-top: 3%;
 }
 
-.manage-memories-grid {
+.delete-memories-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
 }
@@ -51,7 +51,7 @@
 }
 
 @media screen and (max-width: 600px) {
-    section.manage-memories-grid {
+    section.delete-memories-grid {
         display: flex;
         flex-direction: column;
         align-items: center;
