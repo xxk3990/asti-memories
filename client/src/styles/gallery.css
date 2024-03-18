@@ -1,4 +1,82 @@
+* {
+    box-sizing: border-box;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+
+.Gallery {
+    font-family: 'didot', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3%;
+}
+
+.gallery-title {
+    padding: 0;
+    margin: 0;
+}
+
+.gallery-verbiage,
+.gallery-loading {
+    font-size: 18px;
+    margin: 0;
+    width: 75vw;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+section.collage-container {
+    column-count: 4;
+    gap: 0;
+    padding: 0 4px;
+    width: 100vw;
+}
+
+img.gallery-image {
+    margin-top: 8px;
+    vertical-align: middle;
+    width: 100%;
+    padding: 5px;
+    max-height: 600px;
+    cursor: pointer;
+}
+
+.image-caption-container {
+    position: absolute;
+    z-index: 1;
+    background-color: darkred;
+    color: white;
+    transform: translate(10%, -200%);
+    max-width: 350px;
+}
+
+.gallery-image-caption {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    font-family: 'Noto Sans', sans-serif;
+    text-align: center;
+}
+
 h1 {
     text-align: center;
+}
+
+
+
+@media screen and (max-width: 600px) {
+    .Gallery {
+        margin-top: 15%;
+    }
+
+    .gallery-image-view {
+        width: 85vw;
+    }
+
+    .collage-container {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
 }

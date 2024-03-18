@@ -6,7 +6,10 @@ const models = require('../models')
 const jwt = require('jsonwebtoken')
 const process = require("process")
 const bcrypt = require("bcryptjs");
-
+const {
+    S3Client,
+    DeleteObjectCommand
+} = require("@aws-sdk/client-s3")
 
 
 const saltRounds = 10;
@@ -82,14 +85,43 @@ const adminDeleteMemory = async (req, res) => {
         models.sequelize.transaction(async () => {
             await models.Memory.destroy({
                 where: {
-                    'uuid': req.query.memory
+                    'uuid': req.query.memory_uuid
                 }
             })
+            
             await models.Comment.destroy({
                 where: {
-                    'memory_uuid': req.query.memory
+                    'memory_uuid': req.query.memory_uuid
                 }
             })
+            const image = await models.Image.findOne(({where: {"memory_uuid" : req.query.memory_uuid}, raw: true}))
+            if(image) {
+                const bucketName = process.env.IMAGE_BUCKET_NAME;
+                const bucketRegion = `us-east-2`
+                const bucketAccessKey = process.env.IMAGE_BUCKET_ACCESS_KEY;
+                const bucketSecretKey = process.env.IMAGE_BUCKET_SECRET_KEY;
+                const credentials = {
+                    accessKeyId: bucketAccessKey,
+                    secretAccessKey: bucketSecretKey,
+                }
+                const s3 = new S3Client({
+                    region: bucketRegion,
+                    credentials: credentials,
+                })
+                //remove from both S3 and DB
+                const commandInput = {
+                    Bucket: bucketName,
+                    Key: image.image_key
+                }
+                const command = new DeleteObjectCommand(commandInput)
+                await s3.send(command);
+                await models.Image.destroy({
+                    where: {
+                        'memory_uuid': req.query.memory_uuid
+                    }
+                })
+            }
+            
             return res.status(200).send();
         })
     } catch {
@@ -108,9 +140,74 @@ const adminDeleteComment = async (req, res) => {
     return res.status(200).send();
 }
 
+const adminDeleteImage = async (req, res) => {
+    const bucketName = process.env.IMAGE_BUCKET_NAME;
+    const bucketRegion = `us-east-2`
+    const bucketAccessKey = process.env.IMAGE_BUCKET_ACCESS_KEY;
+    const bucketSecretKey = process.env.IMAGE_BUCKET_SECRET_KEY;
+    const credentials = {
+        accessKeyId: bucketAccessKey,
+        secretAccessKey: bucketSecretKey,
+    }
+    const image = await models.Image.findOne(({where: {"memory_uuid" : req.query.memory_uuid}, raw: true}))
+    const s3 = new S3Client({
+        region: bucketRegion,
+        credentials: credentials,
+    })
+    if(image) {
+        //remove from both S3 and DB
+        const commandInput = {
+            Bucket: bucketName,
+            Key: image.image_key
+        }
+        const command = new DeleteObjectCommand(commandInput)
+        await s3.send(command);
+        await models.Image.destroy({where: {'memory_uuid' : req.query.memory_uuid}})
+        return res.status(200).send();
+    } else {
+        return res.status(204).send();
+    }
+}
+
+const getUnapprovedMemories = async(req, res) => {
+    const memories = await models.Memory.findAll({
+        where: {'approved': false},
+    });
+    if (memories.length !== 0) {
+        const posts = [...memories]
+        for (let i = 0; i < posts.length; i++) {
+            const op = await models.User.findOne({
+                where: {
+                    'uuid': posts[i].user_uuid,
+                }
+            })
+            posts[i].name = op.display_name; //add OP's display name to post info
+        }
+        return res.status(200).json(posts);
+    } else {
+        return res.status(204).send([])
+    }
+}
+
+const approveMemory = async(req, res) => {
+    const memory = req.body.memory_uuid;
+    const memoryToApprove = await models.Memory.findOne({
+        where: {
+            'uuid': memory,
+            'approved': false
+        },
+    })
+    memoryToApprove.approved = true;
+    await memoryToApprove.save();
+    return res.status(201).send();
+}
+
 module.exports = {
     createAdminAccount,
     adminLogin,
     adminDeleteMemory,
-    adminDeleteComment
+    adminDeleteComment,
+    adminDeleteImage,
+    getUnapprovedMemories,
+    approveMemory
 }

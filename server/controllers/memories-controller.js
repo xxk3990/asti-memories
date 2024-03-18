@@ -5,6 +5,7 @@ const models = require('../models');
 
 const getMemories = async (req, res) => {
     const memories = await models.Memory.findAll({
+        where: {'approved': true},
         raw: true
     });
     if (memories.length !== 0) {
@@ -12,7 +13,7 @@ const getMemories = async (req, res) => {
         for (let i = 0; i < posts.length; i++) {
             const op = await models.User.findOne({
                 where: {
-                    'uuid': posts[i].user_uuid
+                    'uuid': posts[i].user_uuid,
                 }
             })
             posts[i].name = op.display_name; //add OP's display name to post info
@@ -31,89 +32,67 @@ const createMemory = async (req, res) => {
         try {
             models.sequelize.transaction(async () => {
                 if (user === null) {
-                    if(req.body.image_name === null) {
-                        const newUser = {
-                            uuid: uuidv4(),
-                            display_name: req.body.name,
-                        }
-                        await models.User.create(newUser);
-                        const newMemory = {
-                            uuid: uuidv4(),
-                            user_uuid: newUser.uuid,
-                            occasion: req.body.occasion,
-                            experience: req.body.experience,
-                            num_likes: 0
-                        }
-                        await models.Memory.create(newMemory)
-                        return res.status(201).json({
-                            newMemory: newMemory,
-                            user_uuid: newUser.uuid,
-                        });
-                    } else {
-                        //create new user if no user_uuid was provided
-                        const newUser = {
-                            uuid: uuidv4(),
-                            display_name: req.body.name,
-                        }
-                        await models.User.create(newUser);
-                        const newMemory = {
-                            uuid: uuidv4(),
-                            user_uuid: newUser.uuid,
-                            occasion: req.body.occasion,
-                            experience: req.body.experience,
-                            num_likes: 0
-                        }
-                        await models.Memory.create(newMemory)
-    
+                    const newUser = {
+                        uuid: uuidv4(),
+                        display_name: req.body.name,
+                    }
+                    await models.User.create(newUser);
+                    const newMemory = {
+                        uuid: uuidv4(),
+                        user_uuid: newUser.uuid,
+                        occasion: req.body.occasion,
+                        experience: req.body.experience,
+                        num_likes: 0,
+                        approved: true,
+                    }
+                    await models.Memory.create(newMemory)
+                    if(req.body.image_key !== null) {
                         //if they uploaded an image, save it!
                         const newImage = {
                             uuid: uuidv4(),
                             memory_uuid: newMemory.uuid,
                             user_uuid: newUser.uuid,
-                            image_name: req.body.image_name,
+                            image_key: req.body.image_key,
                             image_caption: req.body.image_caption,
-                            family_image: false //in later version, family images will be added via seeders
+                            source_bucket: process.env.IMAGE_BUCKET_NAME //photos.astimemories.com
                         }
                         await models.Image.create(newImage)
                         return res.status(201).json({
                             newMemory: newMemory,
                             user_uuid: newUser.uuid,
                         });
+                    } else {
+                        return res.status(201).json({
+                            newMemory: newMemory,
+                            user_uuid: newUser.uuid,
+                        });
                     }
-                    
-                    
                 } else {
-                    if(req.body.image_name === null) {
-                        const newMemory = {
+                    const newMemory = {
+                        uuid: uuidv4(),
+                        user_uuid: user,
+                        occasion: req.body.occasion,
+                        experience: req.body.experience,
+                        num_likes: 0,
+                        approved: true,
+                    }
+                    await models.Memory.create(newMemory)
+                    
+                    if(req.body.image_key !== null) {
+                        const newImage = {
                             uuid: uuidv4(),
+                            memory_uuid: newMemory.uuid,
                             user_uuid: user,
-                            occasion: req.body.occasion,
-                            experience: req.body.experience,
-                            num_likes: 0
+                            image_key: req.body.image_key,
+                            image_caption: req.body.image_caption,
+                            source_bucket: process.env.IMAGE_BUCKET_NAME //photos.astimemories.com
                         }
-                        await models.Memory.create(newMemory)
+                        await models.Image.create(newImage)
                         return res.status(201).json({
                             newMemory: newMemory,
                             user_uuid: user,
                         });
                     } else {
-                        const newMemory = {
-                            uuid: uuidv4(),
-                            user_uuid: user,
-                            occasion: req.body.occasion,
-                            experience: req.body.experience,
-                            num_likes: 0
-                        }
-                        await models.Memory.create(newMemory)
-                        const newImage = {
-                            uuid: uuidv4(),
-                            memory_uuid: newMemory.uuid,
-                            user_uuid: user,
-                            image_name: req.body.image_name,
-                            image_caption: req.body.image_caption,
-                            family_image: false //in later version, family images will be added via seeders
-                        }
-                        await models.Image.create(newImage)
                         return res.status(201).json({
                             newMemory: newMemory,
                             user_uuid: user,
@@ -134,7 +113,8 @@ const likeMemory = async (req, res) => {
     } else {
         const memoryToLike = await models.Memory.findOne({
             where: {
-                'uuid': req.body.memory_uuid
+                'uuid': req.body.memory_uuid,
+                'approved': true,
             },
         })
         memoryToLike.num_likes = req.body.num_likes;

@@ -13,6 +13,7 @@ module.exports = {
       occasion: Sequelize.STRING,
       experience: Sequelize.STRING,
       num_likes: Sequelize.INTEGER,
+      approved: Sequelize.BOOLEAN,
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

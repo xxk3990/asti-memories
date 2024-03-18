@@ -1,0 +1,43 @@
+.GalleryImageUploader {
+    font-family: 'didot', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: black;
+    margin-top: 3%;
+}
+
+.gallery-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 17px;
+}
+
+.gallery-upload-image::file-selector-button {
+    margin-left: 10px;
+    background-color: darkred;
+    color: white;
+    width: 100px;
+    height: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    margin-left: 20px;
+}
+
+input[type="file"] {
+    font-size: 18px;
+    cursor: pointer;
+    max-width: 250px;
+}
+
+.gallery-form-image,
+.gallery-form-caption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: 18px;
+}

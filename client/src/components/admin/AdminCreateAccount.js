@@ -23,7 +23,6 @@ export default function AdminCreateAccount() {
             email: data.email,
             password: data.password,
         }
-        console.log('Params:', requestBody)
         try {
             const response = await handlePost(endpoint, requestBody)
             if(response.status === 200 || response.status === 201) {

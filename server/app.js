@@ -11,7 +11,7 @@ const router = require("./router");
 const app = express();
 app.use(cookieParser());
 app.use(cors({
-    origin: ["http://localhost:3001", "https://www.astimemories.com"],
+    origin: ["http://localhost:3001", "https://www.astimemories.com", "https://astimemories.com"],
     credentials: true
 }))
 app.use(express.json());

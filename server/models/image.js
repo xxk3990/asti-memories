@@ -8,14 +8,11 @@ const imageModel = (sequelize, DataTypes) => {
             allowNull: false,
             autoIncrementIdentity: true
         },
-        memory_uuid: {
-            type: DataTypes.STRING,
-            allowNull: true, //can be null if the image comes from the family
-        },
+        memory_uuid: DataTypes.UUID,
         user_uuid: DataTypes.UUID,
-        image_name: DataTypes.STRING,
+        image_key: DataTypes.STRING,
         image_caption: DataTypes.STRING,
-        family_image: DataTypes.BOOLEAN,
+        source_bucket: DataTypes.STRING,
         },
         {
             sequelize,
