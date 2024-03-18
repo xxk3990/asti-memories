@@ -11,7 +11,7 @@ import "../styles/tribute.css"
 export default function Tribute() {
     return (
         <div className='Tribute'>
-            <p className='tribute-text'>1983, the Wall Street Journal published a front page article “Restaurant becomes a
+            <p className='tribute-text'>In 1983, the Wall Street Journal published a front page article “Restaurant becomes a
                 legend by mixing Fettuccine with Verdi.” The article is about my brother, Augusto Mariani, and was coincidentally published on his birthday of that year.
                 Augusto stepped into our father’s un-fillable shoes when my father passed away in 1980.
                 This is a tribute to my brother Augie, who passed away in 2020, and without whom the
