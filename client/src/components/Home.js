@@ -34,9 +34,9 @@ export default function Home() {
                    
                 <p className='asti-verbiage'>
                 This is Angela Mariani, Adolfo’s youngest daughter, and I am inviting you to share your
-                    own memories on the form page so I can fulfill a very personal mission to bring the <em>Asti</em>
-                    story to life. They need not be rooted in historical accuracy - how did the <em>Asti</em>
-                    made you feel? The memoir will chronicle a time in NYC history, when Greenwich Village was the
+                    own memories on the form page so I can fulfill a very personal mission to bring the <em>Asti </em>
+                    story to life. They need not be rooted in historical accuracy – how did the <em>Asti </em> 
+                    make you feel? The memoir will chronicle a time in NYC history, when Greenwich Village was the
                     wellspring of artistic talent and possibilities, but it will also explore the collective
                     memories that all family sagas share. Whatever you choose to share will remain anonymous and you are not required to
                     provide any personal information.
