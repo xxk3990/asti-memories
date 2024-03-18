@@ -12,7 +12,7 @@ export default function Tribute() {
     return (
         <div className='Tribute'>
             <p className='tribute-text'>1983, the Wall Street Journal published a front page article “Restaurant becomes a
-                legend by mixing Fettucine with Verdi.” The article is about my brother, Augusto Mariani, and was coincidentally published on his birthday of that year.
+                legend by mixing Fettuccine with Verdi.” The article is about my brother, Augusto Mariani, and was coincidentally published on his birthday of that year.
                 Augusto stepped into our father’s un-fillable shoes when my father passed away in 1980.
                 This is a tribute to my brother Augie, who passed away in 2020, and without whom the
                 Asti legend would not have lived to its 75th year – the year 2000.</p>
