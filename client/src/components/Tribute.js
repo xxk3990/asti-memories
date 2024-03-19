@@ -11,7 +11,7 @@ import "../styles/tribute.css"
 export default function Tribute() {
     return (
         <div className='Tribute'>
-            <p className='tribute-text'>This article, published in 1983 on the front page of the <em>Wall Street Journal</em>, is a tribute to my brother Augusto and was coincidentally published on his birthday of that year. Augusto stepped into our father’s un-fillable shoes when my father passed away. Without Augie the <em>Asti</em> legend would not have lived to its 75th year  
+            <p className='tribute-text'>This article, published in 1983 on the front page of the <em>Wall Street Journal</em>, is a tribute to my brother Augusto. Augusto stepped into our father’s un-fillable shoes when my father passed away. Without Augie the <em>Asti</em> legend would not have lived to its 75th year  
 and I share this in his honor.
 </p>
             <section className='tribute-images'>
