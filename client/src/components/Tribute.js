@@ -11,11 +11,9 @@ import "../styles/tribute.css"
 export default function Tribute() {
     return (
         <div className='Tribute'>
-            <p className='tribute-text'>In 1983, the Wall Street Journal published a front page article titled <em>Restaurant Becomes a
-                Legend by Mixing Fettuccine with Verdi.</em> The article is a tribute about my brother, Augusto Mariani, and was coincidentally published on his birthday of that year.
-                Augusto stepped into our father’s un-fillable shoes when my father passed away in 1980.
-                Augusto passed away in 2020, and without him the
-                <em> Asti</em> legend would not have lived to its 75th year – the year 2000.</p>
+            <p className='tribute-text'>This article, published in 1983 on the front page of the <em>Wall Street Journal</em>, is a tribute to my brother Augusto and was coincidentally published on his birthday of that year. Augusto stepped into our father’s un-fillable shoes when my father passed away. Without Augie the <em>Asti</em> legend would not have lived to its 75th year  
+and I share this in his honor.
+</p>
             <section className='tribute-images'>
                 <img src={astiTributeHeader} className='asti-tribute-header' alt="asti-tribute"/>
                 <section className='tribute-text-images'>
