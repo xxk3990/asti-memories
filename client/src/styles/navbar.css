@@ -56,9 +56,14 @@ a:focus {
         justify-content: space-around;
     }
 
-    .nav {
+    .nav-links {
         display: flex;
         justify-content: space-around;
+    }
+
+    .nav-links li {
+        margin-left: 5px;
+        margin-right: 5px;
     }
     
 }
