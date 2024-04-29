@@ -90,12 +90,12 @@ export default function Memories() {
     }
   }, [])
   
-  const searchForMemoryToDelete = (e) => {
+  const searchForMemory = (e) => {
     setCurrentPage(1)
     setSearchInput(e.target.value);
   }
 
-  const debouncedSearch = useMemo(() => debounce(searchForMemoryToDelete, 250), [])
+  const debouncedSearch = useMemo(() => debounce(searchForMemory, 250), [])
 
   const filteredMemories = memories.filter(m => m.name.toLowerCase().includes(searchInput.toLowerCase().trim()));
   const memoriesPerPage = useMemo(() => {
@@ -183,7 +183,7 @@ export default function Memories() {
   }
 
   /* 
-    This method is called from the ViewComments child-component in MemoryTile.js. 
+    This method is called from the ViewComments child-component in CommentsView.js. 
     The parameters come from there. 
     I wanted to call them here (rather than inside that file) because I wanted the snackbar to work for comments.
   */
