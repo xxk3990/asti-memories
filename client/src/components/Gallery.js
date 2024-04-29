@@ -38,25 +38,48 @@ export default function Gallery() {
             </div>
         )
     } else {
-        return (
-            <div className='Gallery'>
-                <h1 className='gallery-title'><em>Asti</em> Image Gallery</h1>
-                <p className='gallery-verbiage'>Many famous opera singers, musicians, actors, etc. visited the <em>Asti</em> over the years. Some posed for pictures with the staff and some gave Adolfo Mariani an autographed photo. 
-                    Also included are some pics of newspaper articles about the restaurant, photos of the restaurant itself, and photos of staff. 
-                    <br/> Hover over each image to read its caption!</p>
-                {loading ? <p className='gallery-loading'>Loading gallery...</p> : null}
-                <section className='collage-container'>
-                {
-                    randomized.map(img => {
-                        return (
-                            <GalleryTile key={uuidv4()} img={img} onImageLoad={onImageLoad}/>
-                        )
-                    })
+        if(window.screen.width < 600) {
+            return (
+                <div className='Gallery'>
+                    <h1 className='gallery-title'><em>Asti</em> Image Gallery</h1>
+                    <p className='gallery-verbiage'>Many famous opera singers, musicians, actors, etc. visited the <em>Asti</em> over the years. Some posed for pictures with the staff and some gave Adolfo Mariani an autographed photo. 
+                        Also included are some pics of newspaper articles about the restaurant, photos of the restaurant itself, and photos of staff. 
+                        <br/> Tap each image to read its caption!</p>
+                    {loading ? <p className='gallery-loading'>Loading gallery...</p> : null}
+                    <section className='collage-container'>
+                    {
+                        randomized.map(img => {
+                            return (
+                                <GalleryTile key={uuidv4()} img={img} onImageLoad={onImageLoad}/>
+                            )
+                        })
+    
+                    }
+                    </section>
+                </div>
+            )
+        } else {
+            return (
+                <div className='Gallery'>
+                    <h1 className='gallery-title'><em>Asti</em> Image Gallery</h1>
+                    <p className='gallery-verbiage'>Many famous opera singers, musicians, actors, etc. visited the <em>Asti</em> over the years. Some posed for pictures with the staff and some gave Adolfo Mariani an autographed photo. 
+                        Also included are some pics of newspaper articles about the restaurant, photos of the restaurant itself, and photos of staff. 
+                        <br/> Hover over each image to read its caption!</p>
+                    {loading ? <p className='gallery-loading'>Loading gallery...</p> : null}
+                    <section className='collage-container'>
+                    {
+                        randomized.map(img => {
+                            return (
+                                <GalleryTile key={uuidv4()} img={img} onImageLoad={onImageLoad}/>
+                            )
+                        })
 
-                }
-                </section>
-            </div>
-        )
+                    }
+                    </section>
+                </div>
+            )
+        }
     }
+    
     
 }

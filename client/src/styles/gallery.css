@@ -53,7 +53,7 @@ img.gallery-image {
 
 .gallery-image-caption {
     text-align: center;
-    font-size: 18px;
+    font-size: 17px;
     margin-top: 0px;
     margin-bottom: 5px;
     font-family: 'Noto Sans', sans-serif;
@@ -68,15 +68,20 @@ h1 {
 
 @media screen and (max-width: 600px) {
     .Gallery {
-        margin-top: 15%;
+        margin-top: 20%;
     }
 
     .gallery-image-view {
-        width: 85vw;
+        width: 95vw;
     }
 
     .collage-container {
         display: grid;
         grid-template-columns: 1fr;
+        width: 95vw;
+    }
+    
+    img.gallery-image {
+        padding-left: 15px;
     }
 }
