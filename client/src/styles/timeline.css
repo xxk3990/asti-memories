@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;300;400&display=swap');
+.Timeline {
+  display: flex;
+  justify-content: center;
+  margin: 7% 20px 0 20px;
+}
+
+.timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.timeline-view {
+    font-family: 'Noto Sans', 'sans-serif';
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: darkred;
+    color: white;
+    text-align: center;
+    border: 1px solid white;
+}
+
+.timeline-data {
+    padding: 10px;
+    text-align: center;
+}
+
+.timeline-data h4 {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+    .Timeline {
+        margin-top: 20%;
+    }
+    .timeline-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        width: 90vw;
+    }
+}

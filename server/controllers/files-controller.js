@@ -12,7 +12,7 @@ const {
 const galleryBucket = process.env.GALLERY_IMAGES_BUCKET;
 //this file handles all requests for files such as images and audio.
 
-//get audio file from s3 for gallery page
+//get audio file from s3 for home page
 const getAudioFromS3 = async(req, res) => {
     const bucketAccessKey = process.env.IMAGE_BUCKET_ACCESS_KEY;
     const bucketSecretKey = process.env.IMAGE_BUCKET_SECRET_KEY;
