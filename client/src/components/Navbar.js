@@ -13,6 +13,7 @@ export default function Navbar() {
                         <li className='nav-item'><Link to='/memoryForm'>Share Memory</Link></li>
                         <li className='nav-item'><Link to='/memories'>View Memories</Link></li>
                         <li className='nav-item'><Link to='/gallery'>Gallery</Link></li>
+                        <li className='nav-item'><Link to='/timeline'>Timeline</Link></li>
                         <li className='nav-item'><Link to='/tribute'>Tribute</Link></li>
                     </ul>
                 </section>
@@ -28,6 +29,7 @@ export default function Navbar() {
                         <li className='nav-item'><Link to='/memoryForm'>Share</Link></li>
                         <li className='nav-item'><Link to='/memories'>Memories</Link></li>
                         <li className='nav-item'><Link to='/gallery'>Gallery</Link></li>
+                        <li className='nav-item'><Link to='/timeline'>Timeline</Link></li>
                         <li className='nav-item'><Link to='/tribute'>Tribute</Link></li>
                     </ul>
                 </section>

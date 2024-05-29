@@ -13,6 +13,8 @@ const {userModel} = require("./user")
 const {commentModel} = require("./comment")
 const {imageModel} = require("./image")
 const {adminModel} = require("./admin")
+const {eventsModel} = require("./event");
+const { eventModel } = require('./event');
 const rdsCa = fs.readFileSync(path.resolve(`${__dirname}`, "../us-east-2-bundle.pem"))
 
 const connectionOptions = {
@@ -63,7 +65,8 @@ const models = {
   User: userModel(sequelize, Sequelize.DataTypes),
   Comment: commentModel(sequelize, Sequelize.DataTypes),
   Image: imageModel(sequelize, Sequelize.DataTypes),
-  Admin: adminModel(sequelize, Sequelize.DataTypes)
+  Admin: adminModel(sequelize, Sequelize.DataTypes),
+  Event: eventModel(sequelize, Sequelize.DataTypes)
 }
 
 fs

@@ -4,6 +4,7 @@ const admin = require("./controllers/admin-controller")
 const recap = require("./middleware/recaptcha")
 const user = require("./controllers/users-controller")
 const file = require("./controllers/files-controller")
+const evt = require("./controllers/events-controller")
 
 const router = (app) => {
    app.get("/memories", mem.getMemories)
@@ -27,6 +28,7 @@ const router = (app) => {
    app.get("/gallery", file.getGalleryImages)
    app.post("/gallery", file.saveGalleryImage)
    app.get("/randomize", file.createUniqueFileName)
+   app.get("/timeline", evt.getEvents)
 }
 
 module.exports = router;
