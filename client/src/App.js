@@ -12,6 +12,7 @@ import GalleryImageUploader from './components/admin/GalleryImageUploader';
 import Tribute from './components/Tribute';
 import { ApproveMemories } from './components/admin/ApproveMemories';
 import DeleteMemories from './components/admin/DeleteMemories';
+import Timeline from './components/Timeline';
 function App() {
   return (
     <Routes>
@@ -26,6 +27,7 @@ function App() {
         <Route path="/deleteMemories" element={<DeleteMemories/>}/>
         <Route path="/galleryUpload" element={<GalleryImageUploader/>}/>
         <Route path="/approveMemories" element={<ApproveMemories/>}/>
+        <Route path="/timeline" element={<Timeline/>}/>
       </Route>
       
     </Routes>   
