@@ -9,6 +9,8 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^29.5.12",
+    "@types/react-dom": "^18.3.0",
     "aws-sdk": "^2.1542.0",
     "axios": "^1.6.5",
     "classnames": "^2.5.1",
@@ -25,8 +27,12 @@
     "react-scripts": "^5.0.1",
     "reaptcha": "^1.12.1",
     "testing-library": "^0.0.2",
+    "typescript": "^5.5.2",
     "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
+  },
+  "overrides": {
+    "typescript": "^5.5.2"
   },
   "scripts": {
     "start": "PORT=3001 react-scripts start",
@@ -51,5 +57,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.8",
+    "@types/react": "^18.3.3",
+    "@types/react-google-recaptcha": "^2.1.9",
+    "@types/uuid": "^10.0.0"
   }
 }

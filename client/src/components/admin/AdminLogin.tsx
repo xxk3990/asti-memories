@@ -1,6 +1,5 @@
-import logo from '../../logo.svg';
 import '../../styles/admin-login.css'
-import React, { useState, useMemo, useEffect}  from 'react';
+import { useState, useMemo, useEffect}  from 'react';
 import { Snackbar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { handleAdminLogin } from '../../services/admin-service';
@@ -13,13 +12,13 @@ export default function AdminLogin() {
     formState: {errors}
 } = useForm()
 
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
 
   useEffect(() => {
     document.title = "Admin Login"
   })
   
-  const submitLogin = async (data) => {
+  const submitLogin = async (data: {email: string, password: string}) => {
     const postURL = `adminLogin`
     const requestBody = {
       email: data.email,

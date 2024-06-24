@@ -1,6 +1,6 @@
-import {React, useState} from 'react'
-export const GalleryTile = (props) => {
-  const [showCaption, setShowCaption] = useState(false)
+import {useState} from 'react'
+export const GalleryTile = (props: { img: any; onImageLoad: any; }) => {
+  const [showCaption, setShowCaption] = useState<boolean>(false)
   const img = props.img;
   const onImageLoad = props.onImageLoad;
   return (

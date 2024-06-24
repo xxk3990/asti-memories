@@ -1,12 +1,13 @@
 import '../styles/gallery.css'
-import {React, useState, useEffect, useRef} from 'react'
+import * as React from 'react'
+import {useState, useEffect, useRef} from 'react'
 import { handleGet } from '../services/requests-service'
 import { GalleryTile } from './child-components/GalleryTile'
 import {v4 as uuidv4} from 'uuid'
 
 export default function Gallery() {
-    const [gallery, setGallery] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [gallery, setGallery] = useState<any>([])
+    const [loading, setLoading] = useState<boolean>(false)
     const imageCounter = useRef(0)
     const getImages = async () => {
         setLoading(true)
@@ -48,7 +49,7 @@ export default function Gallery() {
                     {loading ? <p className='gallery-loading'>Loading gallery...</p> : null}
                     <section className='collage-container'>
                     {
-                        randomized.map(img => {
+                        randomized.map((img: any) => {
                             return (
                                 <GalleryTile key={uuidv4()} img={img} onImageLoad={onImageLoad}/>
                             )
@@ -68,7 +69,7 @@ export default function Gallery() {
                     {loading ? <p className='gallery-loading'>Loading gallery...</p> : null}
                     <section className='collage-container'>
                     {
-                        randomized.map(img => {
+                        randomized.map((img: any) => {
                             return (
                                 <GalleryTile key={uuidv4()} img={img} onImageLoad={onImageLoad}/>
                             )

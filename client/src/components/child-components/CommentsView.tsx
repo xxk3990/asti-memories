@@ -1,12 +1,13 @@
-import { React, useState, useEffect} from 'react'
+import * as React from 'react'
+import {useState, useEffect} from 'react'
 import {v4 as uuidv4} from 'uuid'
 import { handleGet } from '../../services/requests-service';
 import "../../styles/memories.css"
 import axios from 'axios'
-export const CommentsView = (props) => {
+export const CommentsView = (props: {m: any, commentUser: string, setCommentUser: any, submitComment: any}) => {
   const {m, commentUser, setCommentUser, submitComment} = props;
   const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
-  const [comments, setComments] = useState([])
+  const [comments, setComments] = useState<any>([])
   const getComments = async() => {
     const endpoint = `comments?memory_uuid=${m.uuid}`
     await handleGet(endpoint, setComments)
@@ -15,7 +16,7 @@ export const CommentsView = (props) => {
     getComments();
     checkForUser();
   }, [])
-  const handleChange = (name, value) => {
+  const handleChange = (name: string, value: string) => {
     setNewComment({...newComment, [name]:value})
   }
   const user = sessionStorage.getItem("user_uuid")
@@ -39,7 +40,7 @@ export const CommentsView = (props) => {
     }
   }
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     //if they hit submit but haven't entered a comment, don't do anything
     e.preventDefault();
     if(newComment.comment_text === "") { 
