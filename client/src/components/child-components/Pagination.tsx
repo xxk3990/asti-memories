@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import classnames from 'classnames';
 import { usePagination, DOTS } from '../../hooks/usePagination.js'
 import '../../styles/memories.css'
 import {v4 as uuidv4} from 'uuid'
 //tutorial followed: https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/
-export const Pagination = props => {
+export const Pagination = (props: { onPageChange: any; totalCount: any; siblingCount?: 1; currentPage: any; pageSize: any; className: any; }) => {
   const {
     onPageChange,
     totalCount,
@@ -43,7 +43,7 @@ export const Pagination = props => {
         onClick={onPrevious}>
         <div className="arrow left" />
       </li>
-      {paginationRange.map(pageNumber => {
+      {paginationRange.map((pageNumber: any) => {
         if (pageNumber === DOTS) {
           return <li key={uuidv4()} className="pagination-item dots">&#8230;</li>;
         }

@@ -1,8 +1,8 @@
-import { React, useState, useEffect} from 'react'
+import { useState, useEffect} from 'react'
 import { handleGet } from '../../services/requests-service'
 import "../../styles/approval.css"
-export const UnapprovedMemoryTile = (props) => {
-    const [image, setImage] = useState()
+export const UnapprovedMemoryTile = (props: { um: any; approveMemory: any; deleteMemory: any }) => {
+    const [image, setImage] = useState<any>()
     const {um, approveMemory, deleteMemory} = props;
     const handleApprove = () => {
         approveMemory(um.uuid);

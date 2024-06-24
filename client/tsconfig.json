@@ -1,0 +1,13 @@
+{
+    "exclude": [
+        "typings/browser.d.ts",
+        "typings/browser",
+        "node_modules"
+    ],
+    "compilerOptions": {
+      "typeRoots": [
+        "./node_modules/@types"
+      ],
+      "jsx": "react-jsx",
+    }
+}

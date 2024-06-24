@@ -1,16 +1,16 @@
-import { React, useState, useEffect} from 'react'
+import { useState, useEffect} from 'react'
 import {v4 as uuidv4} from 'uuid'
 import { handleGet } from '../../services/requests-service';
 //child component for each memory
-export const DeleteMemoryTile = (props) => {
+export const DeleteMemoryTile = (props: { m: any; deleteMemory: any; deleteComment: any; deleteImage: any; }) => {
   const {m, deleteMemory, deleteComment, deleteImage} = props;
-  const [showComments, setShowComments] = useState(false); //show and hide comment view
-  const [showImage, setShowImage] = useState(false);
-  const [image, setImage] = useState(null)
+  const [showComments, setShowComments] = useState<boolean>(false); //show and hide comment view
+  const [showImage, setShowImage] = useState<boolean>(false);
+  const [image, setImage] = useState<any>(null)
   const handleDelete = () => {
     deleteMemory(m.uuid)
   }
-  const [comments, setComments] = useState([])
+  const [comments, setComments] = useState<any>([])
   const getComments = async() => {
     const endpoint = `comments?memory_uuid=${m.uuid}`
     await handleGet(endpoint, setComments)

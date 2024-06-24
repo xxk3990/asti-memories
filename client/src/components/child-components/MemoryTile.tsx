@@ -1,4 +1,4 @@
-import { React, useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import { handleGet, handlePost } from '../../services/requests-service';
 import axios from 'axios';
 import "../../styles/memories.css"
@@ -6,18 +6,18 @@ import { CommentsView } from './CommentsView';
 import { ImageView } from './ImageView';
 const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
 //child component for each memory
-export const MemoryTile = (props) => {
+export const MemoryTile = (props: { m: any; likePost: any; submitComment: any; }) => {
  
   const m = props.m;
   const likePost = props.likePost;
-  const [image, setImage] = useState();
-  const [likeDisabled, setLikeDisabled] = useState(false)
-  const [showComments, setShowComments] = useState(false); //show and hide comment view
-  const [showImage, setShowImage] = useState(false); //show and hide image view
-  const [commentUser, setCommentUser] = useState("");
-  const [commentsLength, setCommentsLength] = useState(0)
-  let likeAmt;
-  let commentAmt;
+  const [image, setImage] = useState<any>();
+  const [likeDisabled, setLikeDisabled] = useState<boolean>(false)
+  const [showComments, setShowComments] = useState<boolean>(false); //show and hide comment view
+  const [showImage, setShowImage] = useState<boolean>(false); //show and hide image view
+  const [commentUser, setCommentUser] = useState<string>("");
+  const [commentsLength, setCommentsLength] = useState<number>(0)
+  let likeAmt: any
+  let commentAmt: any
   const submitComment = props.submitComment;
   const handleClick = () => {
     likePost(m, setLikeDisabled);

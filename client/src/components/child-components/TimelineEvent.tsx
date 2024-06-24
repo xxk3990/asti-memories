@@ -1,4 +1,4 @@
-export const TimelineEvent = (props) => {
+export const TimelineEvent = (props: { tm: any; }) => {
     const tm = props.tm;
     return (
       <section className='timeline-view'>

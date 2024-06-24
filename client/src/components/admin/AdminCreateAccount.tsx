@@ -1,6 +1,5 @@
-import logo from '../../logo.svg';
 import "../../styles/admin-create-account.css"
-import React, { useState, useMemo, useEffect}  from 'react';
+import { useState, useMemo, useEffect}  from 'react';
 import { useNavigate } from 'react-router';
 import {useForm} from "react-hook-form"
 import { handlePost } from '../../services/requests-service';
@@ -16,7 +15,7 @@ export default function AdminCreateAccount() {
         formState: {errors}
     } = useForm()
   
-    const postAdmin = async (data) => {
+    const postAdmin = async (data: { display_name: any; email: any; password: any; }) => {
         const endpoint = `admin`
         const requestBody = {
             display_name: data.display_name,
