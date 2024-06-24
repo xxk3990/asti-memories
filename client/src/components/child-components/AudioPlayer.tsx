@@ -1,9 +1,9 @@
-import {React, useState, useRef, useEffect} from "react"
+import {useState, useRef, useEffect} from "react"
 import "../../styles/home.css"
 import { handleGet } from "../../services/requests-service"
 export const AudioPlayer = () => {
-    const [audioSource, setAudioSource] = useState("")
-    const audioRef = useRef(null)
+    const [audioSource, setAudioSource] = useState<string>("")
+    const audioRef = useRef<any>(null)
     const getAudio = async () => {
         const endpoint = 'audio'
         await handleGet(endpoint, setAudioSource)
