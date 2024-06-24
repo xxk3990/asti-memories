@@ -1,11 +1,12 @@
-import styles from '../styles/memory-form.css'
-import {React, useState, useEffect, useRef} from 'react'
+import '../styles/memory-form.css'
+import * as React from 'react'
+import {useState, useEffect, useRef} from 'react'
 import {handleGet, handlePost} from '../services/requests-service'
 import { useNavigate } from 'react-router-dom'
 import {Snackbar} from '@mui/material'
 import {useForm} from "react-hook-form"
 import ReCAPTCHA from "react-google-recaptcha"
-import AWS from "aws-sdk"
+import * as AWS from "aws-sdk"
 import axios from 'axios'
 export default function MemoryForm() {
     const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
@@ -14,13 +15,13 @@ export default function MemoryForm() {
     const bucketAccessKey = process.env.REACT_APP_IMAGE_BUCKET_ACCESS_KEY;
     const bucketSecretKey = process.env.REACT_APP_IMAGE_BUCKET_SECRET_KEY;
     const SITE_KEY = '6LffBlMpAAAAADK37hlL29ERh8ba5EMhRtPCli6o'
-    const [recaptchaValue, setRecaptchaValue] = useState(null);
-    const [imageToUpload, setImageToUpload] = useState(null);
-    const [caption, setCaption] = useState("");
+    const [recaptchaValue, setRecaptchaValue] = useState<any>(null);
+    const [imageToUpload, setImageToUpload] = useState<any>(null);
+    const [caption, setCaption] = useState<string>("");
     const navigate = useNavigate();
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState("")
-    const [formUser, setFormUser] = useState("")
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+    const [snackbarMessage, setSnackbarMessage] = useState<string>("")
+    const [formUser, setFormUser] = useState<string>("")
 
     const {
         register,
@@ -85,7 +86,7 @@ export default function MemoryForm() {
         };
         
         const imageResponse = s3Object.putObject(imagePayload);
-        await imageResponse.on('success', (e) => {
+        await imageResponse.on('success', (e: any) => {
             console.log(e)
         }).promise();
         await imageResponse.on("error", (e) => {
@@ -95,7 +96,7 @@ export default function MemoryForm() {
         //add .on error
     }
 
-    const submitMemory = async(data) => {
+    const submitMemory = async(data: any) => {
         const token = recaptchaValue;
         const recaptchaEndpoint = `recaptcha`
         const recaptchaBody = {

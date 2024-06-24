@@ -1,21 +1,21 @@
-import { React, useState, useEffect, useRef} from 'react'
+import { useState, useEffect, useRef} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { handlePost } from '../../services/requests-service';
-import AWS from "aws-sdk"
+import * as AWS from "aws-sdk"
 import {Snackbar} from '@mui/material'
 import "../../styles/gallery-uploader.css"
 
 export default function GalleryImageUploader() {
-    const imageRef = useRef();
-    const captionRef = useRef();
+    const imageRef = useRef<any>();
+    const captionRef = useRef<any>();
     const bucketName = process.env.REACT_APP_GALLERY_IMAGES_BUCKET;
     const bucketRegion = `us-east-1` //different to memory images region
     const bucketAccessKey = process.env.REACT_APP_IMAGE_BUCKET_ACCESS_KEY;
     const bucketSecretKey = process.env.REACT_APP_IMAGE_BUCKET_SECRET_KEY;
-    const [caption, setCaption] = useState("");
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState("")
-    const [imageToUpload, setImageToUpload] = useState(null);
+    const [caption, setCaption] = useState<string>("");
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+    const [snackbarMessage, setSnackbarMessage] = useState<string>("")
+    const [imageToUpload, setImageToUpload] = useState<any>(null);
     const navigate = useNavigate();
     useEffect(() => {
         //prevents access to this page without logging in!
@@ -93,7 +93,7 @@ export default function GalleryImageUploader() {
                     Upload an image to the gallery: <input type ="file" ref={imageRef} title=" " name='image' className='gallery-upload-image' onChange={e => setImageToUpload(e.target.files[0])} />
                 </span>
                 <span className='gallery-form-caption'>
-                    <label for="gallery-img-caption">Add Caption:</label> <input type="text" ref={captionRef} id="gallery-img-caption" name="caption" onChange={e => setCaption(e.target.value)}/>
+                    <label htmlFor="gallery-img-caption">Add Caption:</label> <input type="text" ref={captionRef} id="gallery-img-caption" name="caption" onChange={e => setCaption(e.target.value)}/>
                 </span>
                 <button className='submit-btn' onClick={submitImageToDB}>Submit</button>
             </section>

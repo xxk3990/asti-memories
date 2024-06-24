@@ -1,4 +1,4 @@
-export const ImageView = (props) => {
+export const ImageView = (props: { image: any; }) => {
     const image = props.image;
     console.log("image:", image)
     return (

@@ -1,5 +1,6 @@
 import '../styles/memories.css'
-import { React, useState, useEffect, useMemo, useRef} from 'react'
+import * as React from 'react'
+import {useState, useEffect, useMemo, useRef, SetStateAction} from 'react'
 import { handlePost, handlePut } from '../services/requests-service'
 import {Snackbar} from '@mui/material'
 import { MemoryTile } from './child-components/MemoryTile'
@@ -10,21 +11,21 @@ import { debounce } from "../utils"
 import ReCAPTCHA from "react-google-recaptcha"
 export default function Memories() {
   const SITE_KEY = '6LffBlMpAAAAADK37hlL29ERh8ba5EMhRtPCli6o'
-  const [memories, setMemories] = useState([]);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [sortedByNewest, setSortedByNewest] = useState(true); //starts out true because this is default
-  const [sortedByOldest, setSortedByOldest] = useState(false);
-  const [sortedBylikes, setSortedByLikes] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("")
-  const [defaultSortBtnText, setDefaultSortBtnText] = useState("Newest First (default)");
+  const [memories, setMemories] = useState<any[]>([]);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [sortedByNewest, setSortedByNewest] = useState<boolean>(true); //starts out true because this is default
+  const [sortedByOldest, setSortedByOldest] = useState<boolean>(false);
+  const [sortedBylikes, setSortedByLikes] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("")
+  const [defaultSortBtnText, setDefaultSortBtnText] = useState<string>("Newest First (default)");
   const user = sessionStorage.getItem("user_uuid")
-  const [currentPage, setCurrentPage] = useState(1)
-  const [searchInput, setSearchInput] = useState("");
-  const recaptchaRef = useRef(null);
-  const [temporaryUsername, setTemporaryUsername] = useState("")
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [searchInput, setSearchInput] = useState<string>("");
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const [temporaryUsername, setTemporaryUsername] = useState<string>("")
   let PageSize = 8;
   
-  const getMemories = async(sortMethod) => {
+  const getMemories = async(sortMethod: string) => {
     const NODE_URL = process.env.REACT_APP_NODE_LOCAL || process.env.REACT_APP_NODE_PROD
     const url = `${NODE_URL}/memories`
     await axios.get(url).then(response => {
@@ -32,15 +33,15 @@ export default function Memories() {
         //sort data based on current sort method
         switch(sortMethod) {
           case "newest": {
-            setMemories(response.data.sort((x, y) => new Date(y.createdAt) - new Date(x.createdAt)))
+            setMemories(response.data.sort((x: any, y: any) => new Date(y.createdAt).getTime() - new Date(x.createdAt).getTime()))
             break;
           } 
           case 'oldest' : {
-            setMemories(response.data.sort((x, y) => new Date(x.createdAt) - new Date(y.createdAt)))
+            setMemories(response.data.sort((x: any, y:any) => new Date(x.createdAt).getTime() - new Date(y.createdAt).getTime()))
             break;
           }
           case 'likes': {
-            setMemories(response.data.sort((x, y) => new Date(y.num_likes) - new Date(x.num_likes)))
+            setMemories(response.data.sort((x:any, y:any) => y.num_likes - x.num_likes))
             break;
           }
           default: {
@@ -64,7 +65,7 @@ export default function Memories() {
   const verifyRecaptcha = async() => {
     const recaptchaEndpoint = `recaptcha`
     const recaptchaBody = {
-      recaptcha_token: recaptchaRef.current.getValue()
+      recaptcha_token: recaptchaRef?.current?.getValue()
     }
     const recaptchaResponse = await handlePost(recaptchaEndpoint, recaptchaBody)
     const recaptchaData = await recaptchaResponse.data;
@@ -90,7 +91,7 @@ export default function Memories() {
     }
   }, [])
   
-  const searchForMemory = (e) => {
+  const searchForMemory = (e: { target: { value: SetStateAction<string> } }) => {
     setCurrentPage(1)
     setSearchInput(e.target.value);
   }
@@ -104,7 +105,7 @@ export default function Memories() {
     return filteredMemories.slice(firstPageIndex, lastPageIndex)
   }, [currentPage, filteredMemories])
 
-  const likePost = async(memory, setLikeDisabled) => {
+  const likePost = async(memory: any, setLikeDisabled: (arg0: boolean) => void) => {
     const endpoint = `memories`;
     const requestBody = {
       memory_uuid: memory.uuid,
@@ -167,8 +168,7 @@ export default function Memories() {
 
         //clear recaptcha before all other stuff, this prevents TIMEOUT!
         setTimeout(async() => {
-          const widget = recaptchaRef.current.getWidgetId(0) //since there is only one captcha widget, grab first!
-          recaptchaRef.current.reset(widget)
+          recaptchaRef.current?.reset()
         }, 1000)
         setTimeout(async() => {
           setOpenSnackbar(false);
@@ -187,7 +187,7 @@ export default function Memories() {
     The parameters come from there. 
     I wanted to call them here (rather than inside that file) because I wanted the snackbar to work for comments.
   */
-  const submitComment = async (comment, commentUser, setNewComment, getComments) => {
+  const submitComment = async (comment: any, commentUser: any, setNewComment: (arg0: { comment_text: string }) => void, getComments: () => void) => {
     console.log('comment:',comment)
     const endpoint = `comments`
     const requestBody = {
@@ -310,7 +310,7 @@ export default function Memories() {
             currentPage={currentPage}
             totalCount={memories.length} 
             pageSize={PageSize}
-            onPageChange={page => setCurrentPage(page)}
+            onPageChange={(page: SetStateAction<number>) => setCurrentPage(page)}
           />
           <section className='textfield-container'>
             <p>Check the activity on your shared memory</p>

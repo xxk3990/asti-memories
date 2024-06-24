@@ -1,4 +1,4 @@
-import { React, useState, useEffect} from 'react'
+import { useState, useEffect} from 'react'
 import { handleGet, handlePut } from '../../services/requests-service';
 import {Snackbar} from '@mui/material'
 import "../../styles/approval.css"
@@ -6,9 +6,9 @@ import { handleAdminDelete } from '../../services/admin-service';
 import { UnapprovedMemoryTile } from './UnapprovedMemoryTile';
 import { useNavigate } from 'react-router-dom';
 export const ApproveMemories = () => {
-    const [unapprovedMemories, setUnapprovedMemories] = useState([])
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState("")
+    const [unapprovedMemories, setUnapprovedMemories] = useState<any>([])
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+    const [snackbarMessage, setSnackbarMessage] = useState<string>("")
     const adminID = sessionStorage.getItem("admin_uuid")
     const navigate = useNavigate();
     const getMemoriesToApprove = async() => {
@@ -20,7 +20,7 @@ export const ApproveMemories = () => {
         }
     }
 
-    const approveMemory = async(memoryUUID) => {
+    const approveMemory = async(memoryUUID: string) => {
         const endpoint = `approve`
         const body = {
             memory_uuid: memoryUUID
@@ -38,7 +38,7 @@ export const ApproveMemories = () => {
         }
     }
 
-    const deleteMemory = async(memoryUUID) => {
+    const deleteMemory = async(memoryUUID:string) => {
         const endpoint = `memories?memory_uuid=${memoryUUID}`
         const response = await handleAdminDelete(endpoint)
         if(response.status === 200) {

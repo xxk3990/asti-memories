@@ -1,5 +1,5 @@
 import "../../styles/delete-memories.css"
-import { React, useState, useEffect, useMemo} from 'react'
+import { useState, useEffect, useMemo, SetStateAction} from 'react'
 import { handleGet } from '../../services/requests-service'
 import {Snackbar} from '@mui/material'
 import {useNavigate} from "react-router-dom"
@@ -8,11 +8,11 @@ import {handleAdminDelete} from "../../services/admin-service"
 import TextField from "@mui/material/TextField";
 import { debounce } from "../../utils"
 export default function  DeleteMemories() {
-    const [memories, setMemories] = useState([]);
+    const [memories, setMemories] = useState<any>([]);
     const navigate = useNavigate();
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState("")
-    const [searchInput, setSearchInput] = useState("");
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+    const [snackbarMessage, setSnackbarMessage] = useState<string>("")
+    const [searchInput, setSearchInput] = useState<string>("");
     const getMemories = async() => {
         const adminID = sessionStorage.getItem("admin_uuid");
         if(adminID === null || adminID === "" || adminID === undefined) {
@@ -26,15 +26,13 @@ export default function  DeleteMemories() {
     useEffect(() => {
         getMemories()
     }, [])
-    const searchForMemoryToDelete = (e) => {
+    const searchForMemoryToDelete = (e: { target: { value: SetStateAction<string> } }) => {
         setSearchInput(e.target.value);
     }
 
     const debouncedSearch = useMemo(() => debounce(searchForMemoryToDelete, 250), [])
-  
-    
 
-    const deleteMemory = async(memory_uuid) => {
+    const deleteMemory = async(memory_uuid: string) => {
         const endpoint = `memories?memory_uuid=${memory_uuid}`
         const response = await handleAdminDelete(endpoint)
         if(response.status === 200) {

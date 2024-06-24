@@ -1,9 +1,8 @@
-import {React} from 'react'
 import { useNavigate } from 'react-router-dom'
 import "../styles/home.css"
 import astiQuartet from "../images-static/asti-quartet.png"
 import astiMenu from "../images-static/asti-menu-1960s.jpg"
-import astiPostcard from "../images-static/asti-postcard.PNG"
+import astiPostcard from "../images-static/asti-postcard.png"
 import astiFront from "../images-static/asti-front.jpeg"
 import {AudioPlayer} from './child-components/AudioPlayer'
 export default function Home() {

@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import '../styles/timeline.css'
 import { handleGet } from "../services/requests-service";
 import { TimelineEvent } from "./child-components/TimelineEvent";
 export default function Timeline() {
-    const [timeline, setTimeline] = useState([])
+    const [timeline, setTimeline] = useState<any>([])
     const getEventsForTimeline = async () => {
         const endpoint = `timeline`
         await handleGet(endpoint, setTimeline)

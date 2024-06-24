@@ -1,4 +1,3 @@
-import {React} from 'react'
 import "../styles/home.css"
 import astiTributeHeader from "../images-static/asti-tribute-header.jpeg"
 import tributePart1 from "../images-static/asti-tribute-column1.jpeg"
