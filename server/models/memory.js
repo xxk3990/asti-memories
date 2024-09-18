@@ -10,7 +10,7 @@ const memoryModel = (sequelize, DataTypes) => {
         },
         user_uuid: DataTypes.UUID,
         occasion: DataTypes.STRING,
-        experience: DataTypes.STRING,
+        experience: DataTypes.TEXT,
         num_likes: DataTypes.INTEGER,
         approved: DataTypes.BOOLEAN,
         },

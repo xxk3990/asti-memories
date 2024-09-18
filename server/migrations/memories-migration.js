@@ -11,7 +11,7 @@ module.exports = {
       },
       user_uuid: Sequelize.STRING,
       occasion: Sequelize.STRING,
-      experience: Sequelize.STRING,
+      experience: Sequelize.TEXT,
       num_likes: Sequelize.INTEGER,
       approved: Sequelize.BOOLEAN,
       created_at: {

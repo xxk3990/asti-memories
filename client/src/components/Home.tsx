@@ -24,7 +24,7 @@ export default function Home() {
                 
                    
                 <p className='asti-verbiage'>
-                This is Angela Mariani, Adolfo’s youngest daughter and I’m writing a memoir about the <em>Asti</em>. A family saga, a story of creativity and invention in pursuit of a dream, and a chronicle of a magical time in New York City.
+                The Mariani Family is writing a memoir about the <em>Asti</em>. A family saga, a story of creativity and invention in pursuit of a dream, and a chronicle of a magical time in New York City.
 By sharing your own <em>Asti</em> memories you will help me bring the <em>Asti</em> story to life. You are not required to provide any personal information and can remain anonymous. 
 
                 </p>
